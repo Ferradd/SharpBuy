@@ -1,0 +1,1931 @@
+[
+  {
+    "orderId": "PROOF-TON-2186",
+    "email": "customer_ton@gmail.com",
+    "productId": "knife",
+    "productName": "CS2 ★ Ursus Knife + AWP Printstream ($258 Inventory)",
+    "quantity": 1,
+    "amountRub": 12990,
+    "cryptoAmount": "24.5",
+    "currency": "TON (The Open Network)",
+    "txHash": "ton_tx_e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7",
+    "tokens": [
+      "76561199222229128----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIyMjIyOTEyOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTMzNjkyNjcsICJuYmYiOiAxNzE0MjQ2MjkyLCAiaWF0IjogMTcyMjg4NjI5MiwgImp0aSI6ICIwRjdCXzI0RDMwQzNGX0VBN0VFIiwgIm9hdCI6IDE3MjI4ODYyOTIsICJnZW4iOiA0LCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMjEzLjE0Mi45Ny42MSIsICJpcF9jb25maXJtZXIiOiAiMjEzLjE0Mi45Ny42MSIgfQ.EUGCq4QxZQvowVxh5GWVwg6zLiVIeTzS0xXjnc8jjzRlOANB4in9t3fr6ia9_HQScmpdzs-0MQZqto8xeiYrDQ"
+    ],
+    "createdAt": "2026-08-25T19:39:02.188Z",
+    "paidAt": "2026-08-25T19:39:02.188Z",
+    "warrantyExpiresAt": "2026-08-25T22:39:02.188Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 143,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (143ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (143ч)]",
+    "estimatedWorthUsd": 8.04,
+    "suggestedSalePriceRub": 724
+  },
+  {
+    "orderId": "PROOF-BEP20-2180",
+    "email": "customer_bep20@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant",
+    "quantity": 1,
+    "amountRub": 165,
+    "cryptoAmount": "1.79",
+    "currency": "USDT (BEP-20 / BSC)",
+    "txHash": "0x3a9f8b7c6d5e4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b",
+    "tokens": [
+      "76561199773433845----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc3MzQzMzg0NSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ0NDEzODMsICJuYmYiOiAxNzc3NTE4NzIzLCAiaWF0IjogMTc4NjE1ODcyMywgImp0aSI6ICIwMDBDXzI4OUMwQTY4X0U3RjIxIiwgIm9hdCI6IDE3ODYxNTg3MjMsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODUuMTczLjIwNC4zMiIsICJpcF9jb25maXJtZXIiOiAiMTg1LjE3My4yMDQuMzIiIH0.T8XJnxGnAtTk2u867aW63D672c7F0yvmH-NgoWOaUo-w2Rpnd3Xy8b_t-zms7q7S-zIPRcALPZ33lahff10gCQ"
+    ],
+    "createdAt": "2026-08-25T19:39:02.184Z",
+    "paidAt": "2026-08-25T19:39:02.184Z",
+    "warrantyExpiresAt": "2026-08-25T22:39:02.184Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 0,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status]",
+    "estimatedWorthUsd": 1,
+    "suggestedSalePriceRub": 90
+  },
+  {
+    "orderId": "SHARP-MT7XH3A1-714",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5487,
+    "currency": "USDT",
+    "txHash": "0xBSC_MAIN_SHARP-MT7XH3A1-714",
+    "tokens": [
+      "76561199001354473----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTAwMTM1NDQ3MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQzMjAyMTQsICJuYmYiOiAxNzc3NDA1MjM4LCAiaWF0IjogMTc4NjA0NTIzOCwgImp0aSI6ICIwMDBDXzI4OUMwQTUxX0QxOTRBIiwgIm9hdCI6IDE3ODYwNDUyMzgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxOTMuMTY4LjE3OC4yMTYiLCAiaXBfY29uZmlybWVyIjogIjE5My4xNjguMTc4LjIxNiIgfQ.MdBjdsyhtj2Hgsqhg0V1dErTfFDK9F27Wu1ZVeMHfw-Wh8ZXGLsH10IHfVWwOJK33T-1nmLBXFqJWZ1wC2WqCQ"
+    ],
+    "createdAt": "2026-08-25T00:31:12.463Z",
+    "paidAt": "2026-08-25T00:31:12.463Z",
+    "warrantyExpiresAt": "2026-08-25T03:31:12.463Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 551,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "239140",
+        "name": "Dying Light",
+        "genre": "Action Zombie RPG",
+        "tier": "CLASSIC_HIT",
+        "hours": 125,
+        "basePriceUsd": 19.99,
+        "basePriceRub": 1299,
+        "resaleValueUsd": 6,
+        "badgeTag": "DYING-LIGHT",
+        "badgeLabel": "🧟 Dying Light",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (551ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "DYING-LIGHT",
+        "label": "🧟 Dying Light (125ч)",
+        "color": "amber",
+        "tier": "CLASSIC_HIT",
+        "appid": "239140"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 676ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "DYING-LIGHT",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 34.98,
+    "commercialResaleUsd": 12.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (551ч)] [🧟 Dying Light (125ч)] [⏳ 676ч геймплея]",
+    "estimatedWorthUsd": 14.04,
+    "suggestedSalePriceRub": 1264
+  },
+  {
+    "orderId": "SHARP-MT7WY6L1-328",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5496,
+    "currency": "USDT",
+    "txHash": "0xBSC_MAIN_SHARP-MT7WY6L1-328",
+    "tokens": [
+      "76561198920828576----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODkyMDgyODU3NiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTgzMjg5OTUsICJuYmYiOiAxNzU4MzkyMDA1LCAiaWF0IjogMTc2NzAzMjAwNSwgImp0aSI6ICIwMDE5XzI3NkI4RjQyX0NGNUY2IiwgIm9hdCI6IDE3NjcwMzIwMDUsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiODIuMzEuMjM1LjIxNSIsICJpcF9jb25maXJtZXIiOiAiODIuMzEuMjM1LjIxNSIgfQ.XmEuRkfWDi8cDJG43OFxrdd6NfH57Fm6OScSNKCIGl7Skvmdl7G6Xs18k7KdISTqXOuZfRgvQ2qgo8Ctr1e-Bw"
+    ],
+    "createdAt": "2026-08-25T00:23:28.685Z",
+    "paidAt": "2026-08-25T00:23:28.685Z",
+    "warrantyExpiresAt": "2026-08-25T03:23:28.685Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 48,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "105600",
+        "name": "Terraria",
+        "genre": "Sandbox Adventure",
+        "tier": "CLASSIC_HIT",
+        "hours": 369,
+        "basePriceUsd": 9.99,
+        "basePriceRub": 699,
+        "resaleValueUsd": 4,
+        "badgeTag": "TERRARIA",
+        "badgeLabel": "⛏️ Terraria",
+        "badgeColor": "emerald",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (48ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "TERRARIA",
+        "label": "⛏️ Terraria (369ч)",
+        "color": "emerald",
+        "tier": "CLASSIC_HIT",
+        "appid": "105600"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "TERRARIA"
+    ],
+    "commercialRetailUsd": 24.98,
+    "commercialResaleUsd": 10.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (48ч)] [⛏️ Terraria (369ч)]",
+    "estimatedWorthUsd": 12.04,
+    "suggestedSalePriceRub": 1084
+  },
+  {
+    "orderId": "SHARP-MT7T5QPC-417",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5435,
+    "currency": "USDT",
+    "txHash": "0xBSC_BAL_0xbb6e060751bc190b07fe54da637f816746c050f1",
+    "tokens": [
+      "76561199813196211----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTgxMzE5NjIxMSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDMxOTQwMTUsICJuYmYiOiAxNzYyOTAzNDYxLCAiaWF0IjogMTc3MTU0MzQ2MSwgImp0aSI6ICIwMDEwXzI3QkU5QkNFX0JFMTdEIiwgIm9hdCI6IDE3NzE1NDM0NjEsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTgxLjE3NC4xMDQuMTYwIiwgImlwX2NvbmZpcm1lciI6ICIxOTAuMTQ4LjI1Mi4xMTQiIH0.26MdOg8uHSBPKuIM_ewbvjdg879_rwzWaS6tTm6PpVpL6JPfIzi213m4gOU0msY0UKvZRK1YyObFeMbaAgEeAw"
+    ],
+    "createdAt": "2026-08-24T22:30:50.668Z",
+    "paidAt": "2026-08-24T22:30:50.668Z",
+    "warrantyExpiresAt": "2026-08-25T01:30:50.668Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 170,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "1551360",
+        "name": "Forza Horizon 5",
+        "genre": "Racing",
+        "tier": "AAA_PREMIUM",
+        "hours": 17.4,
+        "basePriceUsd": 59.99,
+        "basePriceRub": 3599,
+        "resaleValueUsd": 15,
+        "badgeTag": "FORZA-HORIZON-5",
+        "badgeLabel": "🏎️ Forza Horizon 5",
+        "badgeColor": "orange",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_AAA_WHALE",
+        "label": "🔥 AAA-WHALE ($100+ Игры)",
+        "color": "amber",
+        "tier": "VIP"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (170ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "FORZA-HORIZON-5",
+        "label": "🏎️ Forza Horizon 5 (17ч)",
+        "color": "orange",
+        "tier": "AAA_PREMIUM",
+        "appid": "1551360"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_AAA_WHALE",
+      "CS2-PRIME",
+      "FORZA-HORIZON-5"
+    ],
+    "commercialRetailUsd": 74.98,
+    "commercialResaleUsd": 21.54,
+    "commercialMarksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (170ч)] [🏎️ Forza Horizon 5 (17ч)]",
+    "estimatedWorthUsd": 29.04,
+    "suggestedSalePriceRub": 2614
+  },
+  {
+    "orderId": "SHARP-MT7SC5WK-564",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5435,
+    "currency": "USDT",
+    "txHash": "0xBSC_BAL_0x01bb177fd575361ba672b6480fe2f8c76242d534",
+    "tokens": [
+      "76561199787712068----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc4NzcxMjA2OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQwODU0NDEsICJuYmYiOiAxNzc3MTMyNjk3LCAiaWF0IjogMTc4NTc3MjY5NywgImp0aSI6ICIwMDE4XzI4OTJDRkQwX0JCRUZGIiwgIm9hdCI6IDE3ODU3NzI2OTcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODguMjQyLjE4NS40NyIsICJpcF9jb25maXJtZXIiOiAiMTg4LjI0Mi4xODUuNDciIH0.Rlv2wSGgWCv4eqaNY7zqAU_JVKOMxh5cu5FPyAa0tYtsg-OiqwyCJI2KKDowPufsubmynUu0aDhfuS6w-UttDw"
+    ],
+    "createdAt": "2026-08-24T22:09:16.787Z",
+    "paidAt": "2026-08-24T22:09:16.787Z",
+    "warrantyExpiresAt": "2026-08-25T01:09:16.787Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "arbitrageChecked": true,
+    "arbitrageCheckedAt": "2026-08-25T04:03:03.633Z",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 639,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "268910",
+        "name": "Cuphead",
+        "genre": "Classic Run and Gun",
+        "tier": "CLASSIC_HIT",
+        "hours": 1.6,
+        "basePriceUsd": 19.99,
+        "basePriceRub": 1199,
+        "resaleValueUsd": 6,
+        "badgeTag": "CUPHEAD",
+        "badgeLabel": "☕ Cuphead",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (639ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "CUPHEAD",
+        "label": "☕ Cuphead (2ч)",
+        "color": "amber",
+        "tier": "CLASSIC_HIT",
+        "appid": "268910"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 641ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "CUPHEAD",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 34.98,
+    "commercialResaleUsd": 12.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (639ч)] [☕ Cuphead (2ч)] [⏳ 641ч геймплея]",
+    "estimatedWorthUsd": 13.54,
+    "suggestedSalePriceRub": 1219
+  },
+  {
+    "orderId": "SHARP-MT7S0C21-517",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5435,
+    "currency": "USDT",
+    "txHash": "0xBSC_BAL_0x89841da614ba48681201621fcf9e8e16f889cf74",
+    "tokens": [
+      "76561199773433845----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc3MzQzMzg0NSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ0NDEzODMsICJuYmYiOiAxNzc3NTE4NzIzLCAiaWF0IjogMTc4NjE1ODcyMywgImp0aSI6ICIwMDBDXzI4OUMwQTY4X0U3RjIxIiwgIm9hdCI6IDE3ODYxNTg3MjMsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODUuMTczLjIwNC4zMiIsICJpcF9jb25maXJtZXIiOiAiMTg1LjE3My4yMDQuMzIiIH0.T8XJnxGnAtTk2u867aW63D672c7F0yvmH-NgoWOaUo-w2Rpnd3Xy8b_t-zms7q7S-zIPRcALPZ33lahff10gCQ"
+    ],
+    "createdAt": "2026-08-24T21:58:55.566Z",
+    "paidAt": "2026-08-24T21:58:55.566Z",
+    "warrantyExpiresAt": "2026-08-25T00:58:55.566Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "arbitrageChecked": true,
+    "arbitrageCheckedAt": "2026-08-25T03:53:04.065Z",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 0,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status]",
+    "estimatedWorthUsd": 1,
+    "suggestedSalePriceRub": 90
+  },
+  {
+    "orderId": "SHARP-MT7QH9LV-213",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.5435,
+    "currency": "USDT",
+    "txHash": "0xBSC_BAL_0xa5f047edea0b1a715df3d9fa0f97c5e12103274e",
+    "tokens": [
+      "76561199697754827----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTY5Nzc1NDgyNyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ4OTAxOTMsICJuYmYiOiAxNzYzNjgxNDcwLCAiaWF0IjogMTc3MjMyMTQ3MCwgImp0aSI6ICIwMDAxXzI3QzdENjc1X0Y4NDI1IiwgIm9hdCI6IDE3NzIzMjE0NzAsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTc4LjIzLjE4Ni4xOTAiLCAiaXBfY29uZmlybWVyIjogIjE3OC4yMy4xODYuMTkwIiB9.JqoedesCSzaRBQvduMSpv9BstUaE90SM6rOrGrrHjhwD0VrA0IIZ19h4wxJ45uwFmlCa1YMalaEeU_pGTmq_DQ"
+    ],
+    "createdAt": "2026-08-24T21:16:30.311Z",
+    "paidAt": "2026-08-24T21:16:30.311Z",
+    "warrantyExpiresAt": "2026-08-25T00:16:30.311Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "arbitrageChecked": true,
+    "arbitrageCheckedAt": "2026-08-25T03:08:00.793Z",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 494,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (494ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (494ч)]",
+    "estimatedWorthUsd": 7.54,
+    "suggestedSalePriceRub": 679
+  },
+  {
+    "orderId": "SHARP-MT7NV13O-922",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000002",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.9674,
+    "currency": "USDT",
+    "txHash": "0xBSC_BAL_0x8bb1928425f483525155c9339d10a5e595039112",
+    "tokens": [
+      "76561199124966651----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTEyNDk2NjY1MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTkyNDUxNDQsICJuYmYiOiAxNzcyMzc0ODI0LCAiaWF0IjogMTc4MTAxNDgyNCwgImp0aSI6ICIwMDAzXzI4NDhGQzFGXzhGRTNGIiwgIm9hdCI6IDE3ODEwMTQ4MjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI0Ni4yMzMuMjE4LjIzOSIsICJpcF9jb25maXJtZXIiOiAiNDYuMjMzLjIxOC4yMzkiIH0.BBi2tL6cugyvERvzqDeDCKfvrPViiDhyHpRtjAiKqLk-bhNycVeDwoL5UOh-Geyy9vxd4R62qwUtcoexUkk5Ag"
+    ],
+    "createdAt": "2026-08-24T20:06:00.467Z",
+    "paidAt": "2026-08-24T20:06:00.467Z",
+    "warrantyExpiresAt": "2026-08-24T23:06:00.467Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "arbitrageChecked": true,
+    "arbitrageCheckedAt": "2026-08-25T02:00:55.256Z",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 654,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "322170",
+        "name": "Geometry Dash",
+        "genre": "Rhythm Platformer",
+        "tier": "CLASSIC_HIT",
+        "hours": 72,
+        "basePriceUsd": 3.99,
+        "basePriceRub": 249,
+        "resaleValueUsd": 2,
+        "badgeTag": "GEOMETRY-DASH",
+        "badgeLabel": "🟦 Geometry Dash",
+        "badgeColor": "cyan",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (654ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "GEOMETRY-DASH",
+        "label": "🟦 Geometry Dash (72ч)",
+        "color": "cyan",
+        "tier": "CLASSIC_HIT",
+        "appid": "322170"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 726ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "GEOMETRY-DASH",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 18.98,
+    "commercialResaleUsd": 8.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (654ч)] [🟦 Geometry Dash (72ч)] [⏳ 726ч геймплея]",
+    "estimatedWorthUsd": 10.04,
+    "suggestedSalePriceRub": 904
+  },
+  {
+    "orderId": "SHARP-MT7JPK3J-668",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready (Открыт Премьер)",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": 0.9766,
+    "currency": "USDT",
+    "txHash": "0xBSC_CONFIRMED_1a034f86374_7d46F8e2",
+    "tokens": [
+      "76561199166963438----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE2Njk2MzQzOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTUzNzg1OTIsICJuYmYiOiAxNzU1NTkwNDUwLCAiaWF0IjogMTc2NDIzMDQ1MCwgImp0aSI6ICIwMDE4XzI3NEZEREEwXzY5MEE2IiwgIm9hdCI6IDE3NjQyMzA0NTAsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTk1LjY0LjIzOS4xNTciLCAiaXBfY29uZmlybWVyIjogIjE5NS42NC4yMzkuMTU3IiB9.BWN1aAqLU4sQJInUojitiQAhHC-yBw4C5mKdUd5gYQ66s6KiZKLLhO3UIomtREDbggLq4hsXUaRir3-xQX6JCA"
+    ],
+    "createdAt": "2026-08-24T18:11:28.761Z",
+    "paidAt": "2026-08-24T18:11:28.761Z",
+    "warrantyExpiresAt": "2026-08-24T21:11:28.761Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 487,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (487ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (487ч)]",
+    "estimatedWorthUsd": 8.04,
+    "suggestedSalePriceRub": 724
+  },
+  {
+    "orderId": "SHARP-PREMIER-MT7JJ5ES",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready (Открыт Премьер)",
+    "steamId": "76561199489633318",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERC0UX01B6DYRUHRUGX2Z6",
+    "tokens": [
+      "76561199489633318----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTQ4OTYzMzMxOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTgwMzk3NDIsICJuYmYiOiAxNzcxMjM5NzgwLCAiaWF0IjogMTc3OTg3OTc4MCwgImp0aSI6ICIwMDA3XzI4M0ZDMTNBXzlERUFFIiwgIm9hdCI6IDE3Nzk4Nzk3ODAsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMDkuNjguMTEzLjEzMiIsICJpcF9jb25maXJtZXIiOiAiOTQuMTQzLjIzMS40MyIgfQ.-qiujmIdIlb77y67R4pIGfdULiyS-B0D2_yHR_FiSGEjk2wmY5jQLrPdsMUbFvgEUOx7ShJpRMD-nZnnYyI7AA"
+    ],
+    "createdAt": "2026-08-24T17:59:27.268Z",
+    "paidAt": "2026-08-24T17:59:27.268Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "252490",
+        "name": "Rust",
+        "genre": "Survival Multiplayer",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 19.5,
+        "basePriceUsd": 39.99,
+        "basePriceRub": 2499,
+        "resaleValueUsd": 14,
+        "badgeTag": "RUST",
+        "badgeLabel": "🎮 Rust",
+        "badgeColor": "rose",
+        "source": "library_xml"
+      },
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 869,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "RUST",
+        "label": "🎮 Rust (20ч)",
+        "color": "rose",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "252490"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (869ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 889ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "RUST",
+      "CS2-PRIME",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 54.98,
+    "commercialResaleUsd": 20.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [🎮 Rust (20ч)] [⭐ CS2 Prime Status (869ч)] [⏳ 889ч геймплея]",
+    "estimatedWorthUsd": 23.04,
+    "suggestedSalePriceRub": 2074
+  },
+  {
+    "orderId": "SHARP-PREMIER-MT7JJ37R",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready (Открыт Премьер)",
+    "steamId": "76561199492828421",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERN24UTWUP2XF5AFZF50W6",
+    "tokens": [
+      "76561199492828421----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTQ5MjgyODQyMSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDIyMzIzNTMsICJuYmYiOiAxNzc1NDE0MzY5LCAiaWF0IjogMTc4NDA1NDM2OSwgImp0aSI6ICIwMDA0XzI4NzlDNDkwX0Q4Q0Y1IiwgIm9hdCI6IDE3ODQwNTQzNjksICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIyMTIuMTY0LjI3LjE5NyIsICJpcF9jb25maXJtZXIiOiAiMTg1LjIzNy4yMjAuMjYiIH0.F0n0EN0ee2D5C26n8XQsMij2oHWqcZL3W8CeA7tflIbqJA8X6bzAVCcoE10k7ifgdJARfQrXhX7NFos75xsTCA"
+    ],
+    "createdAt": "2026-08-24T17:59:24.423Z",
+    "paidAt": "2026-08-24T17:59:24.432Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 0,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status]",
+    "estimatedWorthUsd": 2.5,
+    "suggestedSalePriceRub": 225
+  },
+  {
+    "orderId": "SHARP-PREMIER-MT7JCJIE",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready (Открыт Премьер)",
+    "steamId": "76561199501030638",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIER3HNGJHLGPFXZOF452NRC",
+    "tokens": [
+      "76561199501030638----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTUwMTAzMDYzOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUwNDQyMTcsICJuYmYiOiAxNzc4MTg3NTQ3LCAiaWF0IjogMTc4NjgyNzU0NywgImp0aSI6ICIwMDEyXzI4QTZCOUY4X0ZGM0I1IiwgIm9hdCI6IDE3ODY4Mjc1NDcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzguMTQxLjI4LjciLCAiaXBfY29uZmlybWVyIjogIjE3OC4xNDEuMjguNyIgfQ.N0or86Jcodk7gbnxGleIlOr1w7WmFJoztu7DR0ROjiIluuBvf8v7ZLZUO203yb29GN6KQNKP99TmoLoM9AMXBQ"
+    ],
+    "createdAt": "2026-08-24T17:54:18.950Z",
+    "paidAt": "2026-08-24T17:54:18.961Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 128,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (128ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (128ч)]",
+    "estimatedWorthUsd": 7.54,
+    "suggestedSalePriceRub": 679
+  },
+  {
+    "orderId": "SHARP-ACC-9861",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready • Instant Competitive",
+    "steamId": "76561199168590117",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERVHZV29SBAV5P56F76MIX",
+    "tokens": [
+      "76561199168590117----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE2ODU5MDExNyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDMwMzQ0MzUsICJuYmYiOiAxNzM2Nzc5MDUwLCAiaWF0IjogMTc0NTQxOTA1MCwgImp0aSI6ICIwMDBEXzI2MzFCQkQxXzUzMEYwIiwgIm9hdCI6IDE3NDU0MTkwNTAsICJnZW4iOiAzLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTQ2LjEyMC4xNzUuMjEwIiwgImlwX2NvbmZpcm1lciI6ICIxNDYuMTIwLjE3NS4yMTAiIH0.jmBv3rst1JTELgAeS5xDZxrKZY5eECqe8ef7gmVk37i39rohp5gApJe_RLHg04r_gMhhwMpKsyCq9Qt1voxPCw"
+    ],
+    "createdAt": "2026-08-24T14:39:25.390Z",
+    "paidAt": "2026-08-24T14:39:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 696,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (696ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 696ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (696ч)] [⏳ 696ч геймплея]",
+    "estimatedWorthUsd": 8.04,
+    "suggestedSalePriceRub": 724
+  },
+  {
+    "orderId": "SHARP-ACC-9864",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready • Replacement Verified",
+    "steamId": "76561199151675753",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "N/A",
+    "tokens": [
+      "76561199151675753----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE1MTY3NTc1MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDE1NzQyNTIsICJuYmYiOiAxNzc0Nzg4MTY0LCAiaWF0IjogMTc4MzQyODE2NCwgImp0aSI6ICIwMDAyXzI4NjRBRkEwX0RGQzYyIiwgIm9hdCI6IDE3ODM0MjgxNjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIzMS4xODUuOS4xMjQiLCAiaXBfY29uZmlybWVyIjogIjMxLjE4NS45LjEyNCIgfQ.CfBcoxpNxrwg2DCzdMI_PnGkhb3EswzZHrtnksGINXja5KvysADX1zPvWRm1ArzcJa-_G7ZiNS39ffYTe8U2BA"
+    ],
+    "createdAt": "2026-08-24T14:54:25.391Z",
+    "paidAt": "2026-08-24T14:54:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "322170",
+        "name": "Geometry Dash",
+        "genre": "Rhythm Platformer",
+        "tier": "CLASSIC_HIT",
+        "hours": 3.4,
+        "basePriceUsd": 3.99,
+        "basePriceRub": 249,
+        "resaleValueUsd": 2,
+        "badgeTag": "GEOMETRY-DASH",
+        "badgeLabel": "🟦 Geometry Dash",
+        "badgeColor": "cyan",
+        "source": "library_xml"
+      },
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 960,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "GEOMETRY-DASH",
+        "label": "🟦 Geometry Dash (3ч)",
+        "color": "cyan",
+        "tier": "CLASSIC_HIT",
+        "appid": "322170"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (960ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 963ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "GEOMETRY-DASH",
+      "CS2-PRIME",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 18.98,
+    "commercialResaleUsd": 8.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [🟦 Geometry Dash (3ч)] [⭐ CS2 Prime Status (960ч)] [⏳ 963ч геймплея]",
+    "estimatedWorthUsd": 11.04,
+    "suggestedSalePriceRub": 994
+  },
+  {
+    "orderId": "SHARP-ACC-9865",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "3044740344",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "DESKTOP_SAVED",
+    "tokens": [
+      "3044740344----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODk4NTc4MjIzMCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDM3MjQyNzQsICJuYmYiOiAxNzc2ODUzNzk4LCAiaWF0IjogMTc4NTQ5Mzc5OCwgImp0aSI6ICIwMDAyXzI4OTJDRjk0XzgxMTgwIiwgIm9hdCI6IDE3ODU0OTM3OTgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMjIuMjI2LjE0OC4xNzQiLCAiaXBfY29uZmlybWVyIjogIjIwNi4yMzcuMTE0LjEwMCIgfQ.NW4t61zSJK92lCn_JUkqMztNo5ksCcikk4iwcwW0AW6w5y3_aIl5594gD-S587wk-nPAL1amRj2ECSU2xw8HAQ"
+    ],
+    "createdAt": "2026-08-24T14:59:25.391Z",
+    "paidAt": "2026-08-24T14:59:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 0,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status]",
+    "estimatedWorthUsd": 1,
+    "suggestedSalePriceRub": 90
+  },
+  {
+    "orderId": "SHARP-ACC-9866",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561197994572241",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "DESKTOP_SAVED",
+    "tokens": [
+      "76561197994572241----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5Nzk5NDU3MjI0MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTQ2OTIxODgsICJuYmYiOiAxNzU0OTA0Mjg2LCAiaWF0IjogMTc2MzU0NDI4NiwgImp0aSI6ICIwMDE3XzI3NDZBMUY5XzRFQ0UwIiwgIm9hdCI6IDE3NjM1NDQyODYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiNzguMTU3LjIzMS4xNTMiLCAiaXBfY29uZmlybWVyIjogIjQ2LjQyLjE0OS4xODgiIH0.x6S82SI7D7skdQhQkkqPttbwKcmzC7aZgvZvp-JxcdbcLjwSw8m_6aqJCzKoUBBieaN_-QPTO7_oPjHPL82RCA"
+    ],
+    "createdAt": "2026-08-24T15:04:25.391Z",
+    "paidAt": "2026-08-24T15:04:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 350,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (350ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (350ч)]",
+    "estimatedWorthUsd": 9.04,
+    "suggestedSalePriceRub": 814
+  },
+  {
+    "orderId": "SHARP-ACC-9867",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561198001838422",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "DESKTOP_SAVED",
+    "tokens": [
+      "76561198001838422----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODAwMTgzODQyMiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUyMTkzODEsICJuYmYiOiAxNzY1MjAzMjI2LCAiaWF0IjogMTc3Mzg0MzIyNiwgImp0aSI6ICIwMDEwXzI3RTM3NkQxXzY0REJBIiwgIm9hdCI6IDE3NzM4NDMyMjYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiNS4zNS4zNi4zNiIsICJpcF9jb25maXJtZXIiOiAiODIuMjcuMC4yMzgiIH0.Wt9wsDepcI8YiX-59T4uukKaAg963awi1k4TMKPoS8tpZDdMroJ9jIJpMJZd6d3MNd0_LfOSE0tig3Uyx9rIDA"
+    ],
+    "createdAt": "2026-08-24T15:09:25.391Z",
+    "paidAt": "2026-08-24T15:09:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "284160",
+        "name": "BeamNG.drive",
+        "genre": "Vehicle Physics Simulation",
+        "tier": "CLASSIC_HIT",
+        "hours": 520,
+        "basePriceUsd": 24.99,
+        "basePriceRub": 1499,
+        "resaleValueUsd": 8,
+        "badgeTag": "BEAMNG",
+        "badgeLabel": "🚗 BeamNG.drive",
+        "badgeColor": "orange",
+        "source": "library_xml"
+      },
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 5.6,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "BEAMNG",
+        "label": "🚗 BeamNG.drive (520ч)",
+        "color": "orange",
+        "tier": "CLASSIC_HIT",
+        "appid": "284160"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (6ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 520ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "BEAMNG",
+      "CS2-PRIME",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 39.98,
+    "commercialResaleUsd": 14.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [🚗 BeamNG.drive (520ч)] [⭐ CS2 Prime Status (6ч)] [⏳ 520ч геймплея]",
+    "estimatedWorthUsd": 10.5,
+    "suggestedSalePriceRub": 945
+  },
+  {
+    "orderId": "SHARP-ACC-9868",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561198077834073",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "DESKTOP_SAVED",
+    "tokens": [
+      "76561198077834073----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODA3NzgzNDA3MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTkwNTUzNjYsICJuYmYiOiAxNzcyMTAzODI0LCAiaWF0IjogMTc4MDc0MzgyNCwgImp0aSI6ICIwMDA0XzI4NDhGQkU1XzQyNENEIiwgIm9hdCI6IDE3ODA3NDM4MjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODguMjQzLjE4My4yMTciLCAiaXBfY29uZmlybWVyIjogIjE4OC4yNDMuMTgzLjIxNyIgfQ.zSlLFM0hKi-O6R9IDuJwenHfZOzTRlaAZNYW4R1T6ZbWDkj5b-MHWrZoM3Q84Mwsc_i6-_rway4GfSQZfuGVBA"
+    ],
+    "createdAt": "2026-08-24T15:14:25.391Z",
+    "paidAt": "2026-08-24T15:14:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 798,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "271590",
+        "name": "Grand Theft Auto V",
+        "genre": "Open World Action",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 223,
+        "basePriceUsd": 29.99,
+        "basePriceRub": 1999,
+        "resaleValueUsd": 9,
+        "badgeTag": "GTA-5",
+        "badgeLabel": "🚗 GTA V",
+        "badgeColor": "emerald",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (798ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "GTA-5",
+        "label": "🚗 GTA V (223ч)",
+        "color": "emerald",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "271590"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 1021ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "GTA-5",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 44.98,
+    "commercialResaleUsd": 15.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (798ч)] [🚗 GTA V (223ч)] [⏳ 1021ч геймплея]",
+    "estimatedWorthUsd": 18.04,
+    "suggestedSalePriceRub": 1624
+  },
+  {
+    "orderId": "SHARP-ACC-9869",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199188317738",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "DESKTOP_SAVED",
+    "tokens": [
+      "76561199188317738----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE4ODMxNzczOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUxMjEwNzksICJuYmYiOiAxNzc4MTU5MDQ3LCAiaWF0IjogMTc4Njc5OTA0NywgImp0aSI6ICIwMDBFXzI4QTU0M0I0X0FCNzg0IiwgIm9hdCI6IDE3ODY3OTkwNDcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI0Ni4xNzIuMjIzLjg4IiwgImlwX2NvbmZpcm1lciI6ICI0Ni4xNzIuMjIzLjg4IiB9.cJmOdU3bVGXmyfJ2YVmmoBh8CUdYhMaZYZogsjx8A87cPnHLSy8w_GngfKzFIDzjhWfWQINDNhd_SCfuFUc9Cw"
+    ],
+    "createdAt": "2026-08-24T15:19:25.391Z",
+    "paidAt": "2026-08-24T15:19:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 891,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "393380",
+        "name": "Squad",
+        "genre": "Tactical MilSim FPS",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 0.3,
+        "basePriceUsd": 49.99,
+        "basePriceRub": 2999,
+        "resaleValueUsd": 14,
+        "badgeTag": "SQUAD",
+        "badgeLabel": "🎖️ Squad",
+        "badgeColor": "sky",
+        "source": "library_xml"
+      },
+      {
+        "appid": "1091500",
+        "name": "Cyberpunk 2077",
+        "genre": "Open World RPG",
+        "tier": "AAA_PREMIUM",
+        "hours": 5.5,
+        "basePriceUsd": 59.99,
+        "basePriceRub": 3599,
+        "resaleValueUsd": 16,
+        "badgeTag": "CYBERPUNK",
+        "badgeLabel": "💥 Cyberpunk 2077",
+        "badgeColor": "yellow",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_AAA_WHALE",
+        "label": "🔥 AAA-WHALE ($100+ Игры)",
+        "color": "amber",
+        "tier": "VIP"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (891ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "SQUAD",
+        "label": "🎖️ Squad (0ч)",
+        "color": "sky",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "393380"
+      },
+      {
+        "id": "CYBERPUNK",
+        "label": "💥 Cyberpunk 2077 (6ч)",
+        "color": "yellow",
+        "tier": "AAA_PREMIUM",
+        "appid": "1091500"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 897ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_AAA_WHALE",
+      "CS2-PRIME",
+      "SQUAD",
+      "CYBERPUNK",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 124.97,
+    "commercialResaleUsd": 36.54,
+    "commercialMarksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (891ч)] [🎖️ Squad (0ч)] [💥 Cyberpunk 2077 (6ч)] [⏳ 897ч геймплея]",
+    "estimatedWorthUsd": 39.04,
+    "suggestedSalePriceRub": 3514
+  },
+  {
+    "orderId": "SHARP-ACC-9870",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199216635588",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERRDOSPIISX51760HH5RTC",
+    "tokens": [
+      "76561199216635588----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIxNjYzNTU4OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDIzMjAxNjEsICJuYmYiOiAxNzc1NDg4NTExLCAiaWF0IjogMTc4NDEyODUxMSwgImp0aSI6ICIwMDE4XzI4ODA1OTBCX0MwMjlGIiwgIm9hdCI6IDE3ODQxMjg1MTEsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMzQuMTkuMTU1LjE1OCIsICJpcF9jb25maXJtZXIiOiAiMTM0LjE5LjE1NS4xNTgiIH0.8BYxXcDcZa5t9G8sbAQREFv1CyJq-mtwsLnz2E2kzABTskClRJlen6nbseeoUYz5_SGdDtBK7t8G_NRGfUh4AQ"
+    ],
+    "createdAt": "2026-08-24T15:24:25.391Z",
+    "paidAt": "2026-08-24T15:24:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 942,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "221100",
+        "name": "DayZ",
+        "genre": "Hardcore Survival",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 2442,
+        "basePriceUsd": 44.99,
+        "basePriceRub": 2799,
+        "resaleValueUsd": 15,
+        "badgeTag": "DAYZ",
+        "badgeLabel": "🧟 DayZ",
+        "badgeColor": "green",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_PAID_TITLE",
+        "label": "🎮 Платная игра",
+        "color": "emerald",
+        "tier": "STANDARD"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (942ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "DAYZ",
+        "label": "🧟 DayZ (2442ч)",
+        "color": "green",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "221100"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 3384ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_PAID_TITLE",
+      "CS2-PRIME",
+      "DAYZ",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 59.98,
+    "commercialResaleUsd": 21.54,
+    "commercialMarksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (942ч)] [🧟 DayZ (2442ч)] [⏳ 3384ч геймплея]",
+    "estimatedWorthUsd": 24.04,
+    "suggestedSalePriceRub": 2164
+  },
+  {
+    "orderId": "SHARP-ACC-9871",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199230983883",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERDB6VDF5MIBOW1P8OROC8",
+    "tokens": [
+      "76561199230983883----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIzMDk4Mzg4MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDI3NTMzNjYsICJuYmYiOiAxNzc1ODQyNjgyLCAiaWF0IjogMTc4NDQ4MjY4MiwgImp0aSI6ICIwMDAxXzI4ODA1OTVDXzk1MDM2IiwgIm9hdCI6IDE3ODQ0ODI2ODIsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzMuNDguMTc5LjE4NyIsICJpcF9jb25maXJtZXIiOiAiMTczLjQ4LjE3OS4xODciIH0.TPBuO2jUgr5fEL_ENPgnrI2IxpRyMA9LrjjVETEk1vwMELoUI4xMG1Xp0obGDMUOVFoAcogpIqn9GU9WntLMDA"
+    ],
+    "createdAt": "2026-08-24T15:29:25.391Z",
+    "paidAt": "2026-08-24T15:29:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 172,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "805550",
+        "name": "Assetto Corsa Competizione",
+        "genre": "GT Racing Simulation",
+        "tier": "AAA_PREMIUM",
+        "hours": 0.8,
+        "basePriceUsd": 39.99,
+        "basePriceRub": 2499,
+        "resaleValueUsd": 11,
+        "badgeTag": "ASSETTO-COMPETIZIONE",
+        "badgeLabel": "🏎️ Assetto Corsa Comp",
+        "badgeColor": "red",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_AAA_WHALE",
+        "label": "🔥 AAA-WHALE ($100+ Игры)",
+        "color": "amber",
+        "tier": "VIP"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (172ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "ASSETTO-COMPETIZIONE",
+        "label": "🏎️ Assetto Corsa Comp (1ч)",
+        "color": "red",
+        "tier": "AAA_PREMIUM",
+        "appid": "805550"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_AAA_WHALE",
+      "CS2-PRIME",
+      "ASSETTO-COMPETIZIONE"
+    ],
+    "commercialRetailUsd": 54.98,
+    "commercialResaleUsd": 17.54,
+    "commercialMarksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (172ч)] [🏎️ Assetto Corsa Comp (1ч)]",
+    "estimatedWorthUsd": 19.04,
+    "suggestedSalePriceRub": 1714
+  },
+  {
+    "orderId": "SHARP-ACC-9872",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199231692149",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIER4L8A8REBPEN67PPPZA23",
+    "tokens": [
+      "76561199231692149----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIzMTY5MjE0OSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDM3NDYxODIsICJuYmYiOiAxNzc2OTU3NzQ0LCAiaWF0IjogMTc4NTU5Nzc0NCwgImp0aSI6ICIwMDE3XzI4OTJDRkFCXzREODdGIiwgIm9hdCI6IDE3ODU1OTc3NDQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNDUuMjU1LjMuMTk1IiwgImlwX2NvbmZpcm1lciI6ICIxNDUuMjU1LjMuMTk1IiB9.jqDqXvo58BPWVWNHdj3M9Utv6UjWVGVJL0NnwCkdgla3D96FhVvldN00Ur_35HH-wHQFetCjw98eYr-iuRBiAw"
+    ],
+    "createdAt": "2026-08-24T15:34:25.391Z",
+    "paidAt": "2026-08-24T15:34:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 0,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "cs2_prime_status"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status]",
+    "estimatedWorthUsd": 1,
+    "suggestedSalePriceRub": 90
+  },
+  {
+    "orderId": "SHARP-ACC-9873",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199241484983",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERCIAPMNS47V1IAD7HWBDD",
+    "tokens": [
+      "76561199241484983----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTI0MTQ4NDk4MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTQ1OTYzMjUsICJuYmYiOiAxNzY3NzI2NDg5LCAiaWF0IjogMTc3NjM2NjQ4OSwgImp0aSI6ICIwMDEyXzI4MDlDMUI2XzExMUI4IiwgIm9hdCI6IDE3NzYzNjY0ODksICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzYuMjEzLjI0Ni44OSIsICJpcF9jb25maXJtZXIiOiAiMTQ2LjEwMy40My41OCIgfQ.d-W7c0ZBPKiR4gvr1NLY6rEMWZ-yFEyh01tApxd1qW5aimaJlDJdyFULEyM0BolgWXEemASp47AxikyyR1KFAw"
+    ],
+    "createdAt": "2026-08-24T15:39:25.391Z",
+    "paidAt": "2026-08-24T15:39:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 308,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      },
+      {
+        "appid": "952060",
+        "name": "Resident Evil 3",
+        "genre": "Survival Horror Action",
+        "tier": "AAA_PREMIUM",
+        "hours": 9.4,
+        "basePriceUsd": 39.99,
+        "basePriceRub": 2499,
+        "resaleValueUsd": 12,
+        "badgeTag": "RESIDENT-EVIL-3",
+        "badgeLabel": "🧟 Resident Evil 3",
+        "badgeColor": "rose",
+        "source": "library_xml"
+      },
+      {
+        "appid": "431960",
+        "name": "Wallpaper Engine",
+        "genre": "Utility / Software",
+        "tier": "CLASSIC_HIT",
+        "hours": 26,
+        "basePriceUsd": 3.99,
+        "basePriceRub": 249,
+        "resaleValueUsd": 2,
+        "badgeTag": "WALLPAPER-ENGINE",
+        "badgeLabel": "🎨 Wallpaper Engine",
+        "badgeColor": "blue",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_AAA_WHALE",
+        "label": "🔥 AAA-WHALE ($100+ Игры)",
+        "color": "amber",
+        "tier": "VIP"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (308ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "RESIDENT-EVIL-3",
+        "label": "🧟 Resident Evil 3 (9ч)",
+        "color": "rose",
+        "tier": "AAA_PREMIUM",
+        "appid": "952060"
+      },
+      {
+        "id": "WALLPAPER-ENGINE",
+        "label": "🎨 Wallpaper Engine (26ч)",
+        "color": "blue",
+        "tier": "CLASSIC_HIT",
+        "appid": "431960"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_AAA_WHALE",
+      "CS2-PRIME",
+      "RESIDENT-EVIL-3",
+      "WALLPAPER-ENGINE"
+    ],
+    "commercialRetailUsd": 58.97,
+    "commercialResaleUsd": 20.54,
+    "commercialMarksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (308ч)] [🧟 Resident Evil 3 (9ч)] [🎨 Wallpaper Engine (26ч)]",
+    "estimatedWorthUsd": 22.04,
+    "suggestedSalePriceRub": 1984
+  },
+  {
+    "orderId": "SHARP-ACC-9874",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199250626158",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIER41FKSGH6ELOO7S5IQMJP",
+    "tokens": [
+      "76561199250626158----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTI1MDYyNjE1OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ1MDI2NDgsICJuYmYiOiAxNzc3NTc0NzQ0LCAiaWF0IjogMTc4NjIxNDc0NCwgImp0aSI6ICIwMDBDXzI4OUMwQTc1XzQ5M0RFIiwgIm9hdCI6IDE3ODYyMTQ3NDQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI3Ny44Ny45OS4xMjQiLCAiaXBfY29uZmlybWVyIjogIjUuMjMxLjQ1LjM0IiB9.zXKAZFGXKgwWaKDN7lAyjT7g-V7V9JwO9lGuXdQM7amDcB5dxeQ3IcsvXkImVw-J1O4phPNYNYRXNWR9iYR1CA"
+    ],
+    "createdAt": "2026-08-24T15:44:25.391Z",
+    "paidAt": "2026-08-24T15:44:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "271590",
+        "name": "Grand Theft Auto V",
+        "genre": "Open World Action",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 33,
+        "basePriceUsd": 29.99,
+        "basePriceRub": 1999,
+        "resaleValueUsd": 9,
+        "badgeTag": "GTA-5",
+        "badgeLabel": "🚗 GTA V",
+        "badgeColor": "emerald",
+        "source": "library_xml"
+      },
+      {
+        "appid": "381210",
+        "name": "Dead by Daylight",
+        "genre": "Asymmetric Horror",
+        "tier": "POPULAR_MULTIPLAYER",
+        "hours": 151,
+        "basePriceUsd": 19.99,
+        "basePriceRub": 1299,
+        "resaleValueUsd": 6.5,
+        "badgeTag": "DEAD-BY-DAYLIGHT",
+        "badgeLabel": "🔪 Dead by Daylight",
+        "badgeColor": "red",
+        "source": "library_xml"
+      },
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 420,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "COMMERCIAL_MULTI_PAID",
+        "label": "⭐ 2 Платные игры",
+        "color": "blue",
+        "tier": "MEDIUM"
+      },
+      {
+        "id": "GTA-5",
+        "label": "🚗 GTA V (33ч)",
+        "color": "emerald",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "271590"
+      },
+      {
+        "id": "DEAD-BY-DAYLIGHT",
+        "label": "🔪 Dead by Daylight (151ч)",
+        "color": "red",
+        "tier": "POPULAR_MULTIPLAYER",
+        "appid": "381210"
+      },
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (420ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      },
+      {
+        "id": "COMMERCIAL_HIGH_HOURS",
+        "label": "⏳ 604ч геймплея",
+        "color": "cyan",
+        "tier": "INFO"
+      }
+    ],
+    "commercialTags": [
+      "COMMERCIAL_MULTI_PAID",
+      "GTA-5",
+      "DEAD-BY-DAYLIGHT",
+      "CS2-PRIME",
+      "COMMERCIAL_HIGH_HOURS"
+    ],
+    "commercialRetailUsd": 64.97,
+    "commercialResaleUsd": 22.04,
+    "commercialMarksSummary": "[⭐ 2 Платные игры] [🚗 GTA V (33ч)] [🔪 Dead by Daylight (151ч)] [⭐ CS2 Prime Status (420ч)] [⏳ 604ч геймплея]",
+    "estimatedWorthUsd": 24.54,
+    "suggestedSalePriceRub": 2209
+  },
+  {
+    "orderId": "SHARP-ACC-9875",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "premier",
+    "productName": "CS2 Premier Ready Instant Competitive",
+    "steamId": "76561199388981206",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "0.97",
+    "currency": "USDT (BEP-20)",
+    "licenseKey": "PREMIERIN5PVVYY2B2MLP1MAYHI",
+    "tokens": [
+      "76561199388981206----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTM4ODk4MTIwNiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUyNTUxODgsICJuYmYiOiAxNzc4MzA4MDU0LCAiaWF0IjogMTc4Njk0ODA1NCwgImp0aSI6ICIwMDEzXzI4QTZCQTExXzU3NEFDIiwgIm9hdCI6IDE3ODY5NDgwNTQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI4NS4xNzQuMTgwLjU2IiwgImlwX2NvbmZpcm1lciI6ICIxNjMuNTMuMjQ0LjIwMSIgfQ.Lg6nP1giDda2k6BfO34jIZow_MZ2s9kCnp0Ni6ZIIhMsok9c_mQIyDT0ZFOyKnUHq0JXXuxcNpCiP0ju9Le_Ag"
+    ],
+    "createdAt": "2026-08-24T15:49:25.391Z",
+    "paidAt": "2026-08-24T15:49:30.391Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "commercialTitles": [
+      {
+        "appid": "730",
+        "name": "Counter-Strike 2 (Prime Status Upgrade)",
+        "genre": "Competitive FPS",
+        "tier": "COMMERCIAL_PRIME",
+        "hours": 310,
+        "basePriceUsd": 14.99,
+        "basePriceRub": 1400,
+        "resaleValueUsd": 6.54,
+        "badgeTag": "CS2-PRIME",
+        "badgeLabel": "⭐ CS2 Prime Status",
+        "badgeColor": "amber",
+        "source": "library_xml"
+      }
+    ],
+    "commercialMarks": [
+      {
+        "id": "CS2-PRIME",
+        "label": "⭐ CS2 Prime Status (310ч)",
+        "color": "amber",
+        "tier": "COMMERCIAL_PRIME",
+        "appid": "730"
+      }
+    ],
+    "commercialTags": [
+      "CS2-PRIME"
+    ],
+    "commercialRetailUsd": 14.99,
+    "commercialResaleUsd": 6.54,
+    "commercialMarksSummary": "[⭐ CS2 Prime Status (310ч)]",
+    "estimatedWorthUsd": 9.04,
+    "suggestedSalePriceRub": 814
+  }
+]

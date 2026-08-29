@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>SharpBuy Batch Steam Token Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0d14;
+      --card-bg: rgba(21, 25, 38, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00f2fe;
+      --accent-blue: #4facfe;
+      --accent-green: #00e676;
+      --accent-red: #ff1744;
+      --accent-yellow: #ffc107;
+      --text-main: #f0f4fd;
+      --text-muted: #8a99ad;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.05) 0%, transparent 40%);
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 20px;
+      gap: 16px;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 22px;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+
+    .logo-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-speed {
+      background: rgba(0, 230, 118, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* INPUT SECTION */
+    .input-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(12px);
+    }
+
+    .input-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    textarea {
+      width: 100%;
+      height: 95px;
+      background: rgba(10, 12, 20, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: #7dd3fc;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      padding: 10px 14px;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.2s;
+      user-select: text;
+    }
+
+    textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      color: #000;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: rgba(0, 230, 118, 0.15);
+      border: 1px solid rgba(0, 230, 118, 0.4);
+      color: var(--accent-green);
+    }
+
+    .btn-success:hover {
+      background: rgba(0, 230, 118, 0.25);
+    }
+
+    .btn-danger {
+      background: rgba(255, 23, 68, 0.15);
+      border: 1px solid rgba(255, 23, 68, 0.4);
+      color: var(--accent-red);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 23, 68, 0.25);
+    }
+
+    .btn-warning {
+      background: rgba(255, 193, 7, 0.15);
+      border: 1px solid rgba(255, 193, 7, 0.4);
+      color: var(--accent-yellow);
+    }
+
+    .btn-warning:hover {
+      background: rgba(255, 193, 7, 0.25);
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .stat-val-total { color: var(--text-main); }
+    .stat-val-valid { color: var(--accent-green); }
+    .stat-val-dead { color: var(--accent-red); }
+    .stat-val-banned { color: var(--accent-yellow); }
+
+    /* PROGRESS BAR */
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    /* FILTER TABS & ACTIONS */
+    .tabs-actions-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(10, 12, 20, 0.6);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tab {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    /* RESULTS LIST */
+    .results-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .results-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .results-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+    }
+
+    .account-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .account-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(2px);
+    }
+
+    .acc-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .acc-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #1a1e2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      border: 1px solid var(--border-color);
+    }
+
+    .acc-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .acc-title {
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .acc-steamid {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      user-select: text;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-valid {
+      background: rgba(0, 230, 118, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .badge-dead {
+      background: rgba(255, 23, 68, 0.12);
+      color: var(--accent-red);
+      border: 1px solid rgba(255, 23, 68, 0.3);
+    }
+
+    .badge-banned {
+      background: rgba(255, 193, 7, 0.12);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      gap: 10px;
+      text-align: center;
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo-icon">SB</div>
+        <div>
+          <div class="logo-title">SharpBuy Batch Steam Token Checker & Cleaner v1.0</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Массовая проверка и очистка невалида из файлов steam.txt</div>
+        </div>
+      </div>
+      <div class="badge-speed">⚡ WEBSOCKET CM ENGINE</div>
+    </div>
+
+    <!-- INPUT SECTION -->
+    <div class="input-section">
+      <textarea id="tokenInput" placeholder="Вставьте список токенов (например, SteamID----JWT...) или нажмите «Загрузить steam.txt»..."></textarea>
+      
+      <div class="input-controls">
+        <button class="btn" id="btnOpenFile">📁 Загрузить steam.txt</button>
+        <button class="btn" id="btnExtractTokens">🔍 Найти токены в тексте</button>
+        <button class="btn btn-danger" id="btnRemoveDead" style="display: none;">🗑️ Очистить невалид из поля</button>
+        <button class="btn btn-warning" id="btnRecheck" style="display: none;">🔄 Повторный прогон (Пасс #2)</button>
+        <div style="flex: 1;"></div>
+        <button class="btn btn-primary" id="btnStartCheck">⚡ ЗАПУСТИТЬ ПРОВЕРКУ (<span id="tokenCountBadge">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-container">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <span class="stat-label">Всего токенов</span>
+        <span class="stat-value stat-val-total" id="statTotal">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">🟢 Валидные (Живые)</span>
+        <span class="stat-value stat-val-valid" id="statValid">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">🔴 Сброшены / Мертвые</span>
+        <span class="stat-value stat-val-dead" id="statDead">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">⚠️ Бан сообщества</span>
+        <span class="stat-value stat-val-banned" id="statBanned">0</span>
+      </div>
+    </div>
+
+    <!-- TABS & ACTIONS -->
+    <div class="tabs-actions-bar">
+      <div class="tabs">
+        <div class="tab active" data-filter="all" id="tabAll">Все (<span id="countAll">0</span>)</div>
+        <div class="tab" data-filter="valid" id="tabValid">🟢 Только Валид (<span id="countValid">0</span>)</div>
+        <div class="tab" data-filter="dead" id="tabDead">🔴 Мертвые (<span id="countDead">0</span>)</div>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-success" id="btnCopyValid">📋 Скопировать только ВАЛИД</button>
+        <button class="btn btn-primary" id="btnOverwriteDesktop" style="font-size: 12px;">💾 Перезаписать steam.txt</button>
+        <button class="btn" id="btnExportValid">💾 Сохранить в .txt...</button>
+      </div>
+    </div>
+
+    <!-- RESULTS LIST -->
+    <div class="results-container" id="resultsContainer">
+      <div class="empty-state">
+        <div style="font-size: 32px;">🔍</div>
+        <div>Вставьте токены или загрузите файл для начала массовой проверки</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let rawTokens = [];
+    let checkedResults = [];
+    let activeFilter = 'all';
+    let passCount = 1;
+
+    const tokenInput = document.getElementById('tokenInput');
+    const tokenCountBadge = document.getElementById('tokenCountBadge');
+    const btnStartCheck = document.getElementById('btnStartCheck');
+    const btnOpenFile = document.getElementById('btnOpenFile');
+    const btnExtractTokens = document.getElementById('btnExtractTokens');
+    const btnRemoveDead = document.getElementById('btnRemoveDead');
+    const btnRecheck = document.getElementById('btnRecheck');
+    const btnCopyValid = document.getElementById('btnCopyValid');
+    const btnOverwriteDesktop = document.getElementById('btnOverwriteDesktop');
+    const btnExportValid = document.getElementById('btnExportValid');
+    const progressFill = document.getElementById('progressFill');
+    const resultsContainer = document.getElementById('resultsContainer');
+
+    const statTotal = document.getElementById('statTotal');
+    const statValid = document.getElementById('statValid');
+    const statDead = document.getElementById('statDead');
+    const statBanned = document.getElementById('statBanned');
+
+    const tabAll = document.getElementById('tabAll');
+    const tabValid = document.getElementById('tabValid');
+    const tabDead = document.getElementById('tabDead');
+
+    // Parse input tokens
+    function parseTokens() {
+      const text = tokenInput.value;
+      const matches = text.match(/7656119\d+----ey[A-Za-z0-9_\-.]+/g) || 
+                      text.match(/\d+----ey[A-Za-z0-9_\-.]+/g) || [];
+      
+      rawTokens = [...new Set(matches)];
+      tokenCountBadge.textContent = rawTokens.length;
+      return rawTokens;
+    }
+
+    tokenInput.addEventListener('input', parseTokens);
+
+    // Open file
+    btnOpenFile.addEventListener('click', async () => {
+      if (window.chrome?.webview?.hostObjects?.bridge) {
+        const content = await window.chrome.webview.hostObjects.bridge.OpenFileDialog();
+        if (content && !content.startsWith('ERROR:')) {
+          tokenInput.value = content;
+          parseTokens();
+        }
+      }
+    });
+
+    btnExtractTokens.addEventListener('click', () => {
+      const tokens = parseTokens();
+      if (tokens.length > 0) {
+        tokenInput.value = tokens.join('\n');
+      }
+    });
+
+    // Start Batch Verification
+    btnStartCheck.addEventListener('click', async () => {
+      await runVerificationPass();
+    });
+
+    async function runVerificationPass() {
+      const tokens = parseTokens();
+      if (tokens.length === 0) {
+        alert('Пожалуйста, вставьте токены Steam (в формате SteamID----JWT)!');
+        return;
+      }
+
+      checkedResults = [];
+      btnStartCheck.disabled = true;
+      btnStartCheck.textContent = `⏳ ПРОВЕРКА (ПАСС #${passCount})...`;
+      progressFill.style.width = '0%';
+      renderResults();
+
+      statTotal.textContent = tokens.length;
+      let validCount = 0;
+      let deadCount = 0;
+      let bannedCount = 0;
+
+      // Sequential / batch execution
+      const CONCURRENCY = 3;
+      let completed = 0;
+
+      async function worker(tokenList) {
+        for (const tok of tokenList) {
+          try {
+            let resJson = null;
+            if (window.chrome?.webview?.hostObjects?.bridge) {
+              resJson = await window.chrome.webview.hostObjects.bridge.CheckSingleToken(tok);
+            }
+            
+            const res = typeof resJson === 'string' ? JSON.parse(resJson) : resJson || {
+              steamId: tok.split('----')[0],
+              token: tok,
+              isAlive: false,
+              reason: 'Error'
+            };
+
+            checkedResults.push(res);
+
+            if (res.isAlive) validCount++;
+            else if (res.isBanned) bannedCount++;
+            else deadCount++;
+
+            completed++;
+            progressFill.style.width = `${Math.round((completed / tokens.length) * 100)}%`;
+
+            statValid.textContent = validCount;
+            statDead.textContent = deadCount;
+            statBanned.textContent = bannedCount;
+            updateTabCounts();
+            renderResults();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+
+      const chunks = Array.from({ length: CONCURRENCY }, () => []);
+      tokens.forEach((tok, idx) => chunks[idx % CONCURRENCY].push(tok));
+
+      await Promise.all(chunks.map(chunk => worker(chunk)));
+
+      btnStartCheck.disabled = false;
+      btnStartCheck.textContent = `⚡ ЗАПУСТИТЬ ПРОВЕРКУ (${tokens.length})`;
+      btnRemoveDead.style.display = 'inline-flex';
+      btnRecheck.style.display = 'inline-flex';
+    }
+
+    // Clean dead tokens from input box
+    btnRemoveDead.addEventListener('click', () => {
+      const validTokens = checkedResults.filter(r => r.isAlive).map(r => r.token);
+      if (validTokens.length === 0) {
+        alert('Нет валидных токенов в результатах!');
+        return;
+      }
+      tokenInput.value = validTokens.join('\n');
+      parseTokens();
+      alert(`🗑️ Поле очищено! Остались только ${validTokens.length} валидных токенов.`);
+    });
+
+    // Recheck / Pass 2
+    btnRecheck.addEventListener('click', async () => {
+      const validTokens = checkedResults.filter(r => r.isAlive).map(r => r.token);
+      if (validTokens.length === 0) {
+        alert('Нет валидных токенов для повторной проверки!');
+        return;
+      }
+      tokenInput.value = validTokens.join('\n');
+      parseTokens();
+      passCount++;
+      btnRecheck.textContent = `🔄 Повторный прогон (Пасс #${passCount + 1})`;
+      await runVerificationPass();
+    });
+
+    function updateTabCounts() {
+      const valid = checkedResults.filter(r => r.isAlive).length;
+      const dead = checkedResults.filter(r => !r.isAlive).length;
+      document.getElementById('countAll').textContent = checkedResults.length;
+      document.getElementById('countValid').textContent = valid;
+      document.getElementById('countDead').textContent = dead;
+    }
+
+    // Tab switching
+    [tabAll, tabValid, tabDead].forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.dataset.filter;
+        renderResults();
+      });
+    });
+
+    // Render results list
+    function renderResults() {
+      if (checkedResults.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 32px;">🔍</div>
+            <div>Вставьте токены или загрузите файл для начала массовой проверки</div>
+          </div>
+        `;
+        return;
+      }
+
+      const filtered = checkedResults.filter(r => {
+        if (activeFilter === 'valid') return r.isAlive;
+        if (activeFilter === 'dead') return !r.isAlive;
+        return true;
+      });
+
+      resultsContainer.innerHTML = filtered.map((r, idx) => `
+        <div class="account-card">
+          <div class="acc-info">
+            <div class="acc-avatar">${(r.personaName || 'U').substring(0, 2).toUpperCase()}</div>
+            <div class="acc-details">
+              <div class="acc-title">
+                ${escapeHtml(r.personaName || 'Steam User')}
+                ${r.level ? `<span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">(Lv ${r.level})</span>` : ''}
+              </div>
+              <div class="acc-steamid">${r.steamId}</div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="status-badge ${r.isAlive ? 'badge-valid' : (r.isBanned ? 'badge-banned' : 'badge-dead')}">
+              ${escapeHtml(r.reason)}
+            </div>
+
+            ${r.isAlive ? `
+              <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;" onclick="launchSteam('${r.token}')">
+                ⚡ ВОЙТИ
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    async function launchSteam(tokenStr) {
+      if (window.chrome?.webview?.hostObjects?.bridge) {
+        const ok = await window.chrome.webview.hostObjects.bridge.LaunchSteamAccount(tokenStr);
+        if (ok) alert('🚀 Steam перезапущен! Вход выполнен!');
+        else alert('❌ Не удалось запустить Steam!');
+      }
+    }
+
+    // Copy Valid
+    btnCopyValid.addEventListener('click', async () => {
+      const validTokens = checkedResults.filter(r => r.isAlive).map(r => r.token);
+      if (validTokens.length === 0) {
+        alert('Нет валидных токенов для копирования!');
+        return;
+      }
+      const text = validTokens.join('\n');
+      if (window.chrome?.webview?.hostObjects?.bridge) {
+        await window.chrome.webview.hostObjects.bridge.CopyToClipboard(text);
+        alert(`✅ Скопировано ${validTokens.length} валидных токенов в буфер обмена!`);
+      }
+    });
+
+    // Overwrite Desktop steam.txt directly
+    btnOverwriteDesktop.addEventListener('click', async () => {
+      const validTokens = checkedResults.filter(r => r.isAlive).map(r => r.token);
+      if (validTokens.length === 0) {
+        alert('Нет валидных токенов для записи!');
+        return;
+      }
+      const text = validTokens.join('\n');
+      if (window.chrome?.webview?.hostObjects?.bridge) {
+        const ok = await window.chrome.webview.hostObjects.bridge.OverwriteDesktopSteamTxt(text);
+        if (ok) alert(`💾 Файл steam.txt на Рабочем столе успешно ПЕРЕЗАПИСАН!\nОсталось ${validTokens.length} валидных токенов.`);
+        else {
+          await window.chrome.webview.hostObjects.bridge.SaveTextFile('steam.txt', text);
+        }
+      }
+    });
+
+    // Export Valid to TXT
+    btnExportValid.addEventListener('click', async () => {
+      const validTokens = checkedResults.filter(r => r.isAlive).map(r => r.token);
+      if (validTokens.length === 0) {
+        alert('Нет валидных токенов для сохранения!');
+        return;
+      }
+      const text = validTokens.join('\n');
+      if (window.chrome?.webview?.hostObjects?.bridge) {
+        await window.chrome.webview.hostObjects.bridge.SaveTextFile('valid_steam_tokens.txt', text);
+      }
+    });
+  </script>
+</body>
+</html>

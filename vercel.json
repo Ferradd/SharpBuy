@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "functions": {
+    "api/steam-verify.js": {
+      "maxDuration": 30,
+      "includeFiles": "node_modules/lzma/**"
+    },
+    "api/account-library.js": {
+      "maxDuration": 60,
+      "includeFiles": "node_modules/lzma/**"
+    },
+    "api/warranty-check.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/arbitrage-cron",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

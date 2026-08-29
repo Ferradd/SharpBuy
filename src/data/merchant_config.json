@@ -1,0 +1,37 @@
+{
+  "wallets": {
+    "USDT_BEP20": {
+      "address": "0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9",
+      "network": "BSC (BEP-20)",
+      "symbol": "USDT",
+      "name": "USDT (BEP-20 / BSC)",
+      "explorerUrl": "https://bscscan.com/address/0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9"
+    },
+    "USDT_POLYGON": {
+      "address": "0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9",
+      "network": "Polygon",
+      "symbol": "USDT",
+      "name": "USDT (Polygon)",
+      "explorerUrl": "https://polygonscan.com/address/0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9"
+    },
+    "LTC": {
+      "address": "Lg3tZk9Y7Fh8M2j1X4vBnKpQmRsTvW5xYa",
+      "network": "Litecoin",
+      "symbol": "LTC",
+      "name": "Litecoin (LTC)",
+      "explorerUrl": "https://live.blockcypher.com/ltc/address/Lg3tZk9Y7Fh8M2j1X4vBnKpQmRsTvW5xYa/"
+    },
+    "BTC": {
+      "address": "bc1qsharpbuy82k9m4v1x7f3j5n8p0w2y4z6t9r1e3s",
+      "network": "Bitcoin",
+      "symbol": "BTC",
+      "name": "Bitcoin (BTC)",
+      "explorerUrl": "https://mempool.space/address/bc1qsharpbuy82k9m4v1x7f3j5n8p0w2y4z6t9r1e3s"
+    }
+  },
+  "rates": {
+    "USDT_RUB": 92,
+    "LTC_USD": 72,
+    "BTC_USD": 66000
+  }
+}

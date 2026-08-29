@@ -1,0 +1,29 @@
+{
+  "financialLedger": {
+    "currencyBase": "USD",
+    "lastUpdated": "2026-08-25T02:49:00.000Z",
+    "totalSpentBreakdown": {
+      "domainDonDominioEur": 22.00,
+      "domainDonDominioUsd": 23.76,
+      "mexcUsdtWithdrawalsTotal": 22.7846,
+      "mexcBnbGasWithdrawalsUsd": 1.62,
+      "mexcLtcWithdrawalUsd": 1.20,
+      "totalCryptoOutflowUsd": 25.61,
+      "globalTotalExpensesUsd": 49.37,
+      "globalTotalExpensesEur": 45.71
+    },
+    "currentAssets": {
+      "merchantWalletLiquidUsdt": 6.3471,
+      "merchantWalletLiquidBnbUsd": 1.62,
+      "totalLiquidCryptoBalanceUsd": 7.97,
+      "netCashOutflowUsd": 41.40,
+      "netCashOutflowEur": 38.33
+    },
+    "inventoryAssets": {
+      "verifiedAccountsCount": 24,
+      "costPriceTotalUsd": 6.54,
+      "retailMarketValueRub": 2136.00,
+      "retailMarketValueUsd": 23.20
+    }
+  }
+}

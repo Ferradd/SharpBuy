@@ -1,0 +1,35 @@
+================================================================================
+  🦅 SHARPBUY STEAM AUDITOR — ПРАЙС-ЛИСТ И АУДИТ ТОКЕНОВ
+  Всего аккаунтов: 5 | Сгенерировано: 2026-08-25T09:16:59.063Z
+================================================================================
+
+[#1] SteamID: 76561199001354473 | Ник: "1"
+     💵 Оценка: $1.28 USD  ➔  Рекомендуемая цена: 115 ₽
+     🏷️ Теги: Обычный NFA Prime
+     📊 Данные: Баланс: $0 | CS2 Инв: $0 (0 шт, 0 медалей) | Игр: 0
+     🔑 Токен: 76561199001354473----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTAwMTM1NDQ3MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQzMjAyMTQsICJuYmYiOiAxNzc3NDA1MjM4LCAiaWF0IjogMTc4NjA0NTIzOCwgImp0aSI6ICIwMDBDXzI4OUMwQTUxX0QxOTRBIiwgIm9hdCI6IDE3ODYwNDUyMzgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxOTMuMTY4LjE3OC4yMTYiLCAiaXBfY29uZmlybWVyIjogIjE5My4xNjguMTc4LjIxNiIgfQ.MdBjdsyhtj2Hgsqhg0V1dErTfFDK9F27Wu1ZVeMHfw-Wh8ZXGLsH10IHfVWwOJK33T-1nmLBXFqJWZ1wC2WqCQ
+
+[#2] SteamID: 76561198920828576 | Ник: "GrenGrezz"
+     💵 Оценка: $1 USD  ➔  Рекомендуемая цена: 90 ₽
+     🏷️ Теги: Обычный NFA Prime
+     📊 Данные: Баланс: $0 | CS2 Инв: $0 (0 шт, 0 медалей) | Игр: 0
+     🔑 Токен: 76561198920828576----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODkyMDgyODU3NiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTgzMjg5OTUsICJuYmYiOiAxNzU4MzkyMDA1LCAiaWF0IjogMTc2NzAzMjAwNSwgImp0aSI6ICIwMDE5XzI3NkI4RjQyX0NGNUY2IiwgIm9hdCI6IDE3NjcwMzIwMDUsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiODIuMzEuMjM1LjIxNSIsICJpcF9jb25maXJtZXIiOiAiODIuMzEuMjM1LjIxNSIgfQ.XmEuRkfWDi8cDJG43OFxrdd6NfH57Fm6OScSNKCIGl7Skvmdl7G6Xs18k7KdISTqXOuZfRgvQ2qgo8Ctr1e-Bw
+
+[#3] SteamID: 76561199813196211 | Ник: "GA$$ER_11"
+     💵 Оценка: $1 USD  ➔  Рекомендуемая цена: 90 ₽
+     🏷️ Теги: Обычный NFA Prime
+     📊 Данные: Баланс: $0 | CS2 Инв: $0 (0 шт, 0 медалей) | Игр: 0
+     🔑 Токен: 76561199813196211----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTgxMzE5NjIxMSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDMxOTQwMTUsICJuYmYiOiAxNzYyOTAzNDYxLCAiaWF0IjogMTc3MTU0MzQ2MSwgImp0aSI6ICIwMDEwXzI3QkU5QkNFX0JFMTdEIiwgIm9hdCI6IDE3NzE1NDM0NjEsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTgxLjE3NC4xMDQuMTYwIiwgImlwX2NvbmZpcm1lciI6ICIxOTAuMTQ4LjI1Mi4xMTQiIH0.26MdOg8uHSBPKuIM_ewbvjdg879_rwzWaS6tTm6PpVpL6JPfIzi213m4gOU0msY0UKvZRK1YyObFeMbaAgEeAw
+
+[#4] SteamID: 76561199787712068 | Ник: "@₽₽(Sn1perX)@₽₽"
+     💵 Оценка: $1 USD  ➔  Рекомендуемая цена: 90 ₽
+     🏷️ Теги: Обычный NFA Prime
+     📊 Данные: Баланс: $0 | CS2 Инв: $0 (0 шт, 0 медалей) | Игр: 0
+     🔑 Токен: 76561199787712068----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc4NzcxMjA2OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQwODU0NDEsICJuYmYiOiAxNzc3MTMyNjk3LCAiaWF0IjogMTc4NTc3MjY5NywgImp0aSI6ICIwMDE4XzI4OTJDRkQwX0JCRUZGIiwgIm9hdCI6IDE3ODU3NzI2OTcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODguMjQyLjE4NS40NyIsICJpcF9jb25maXJtZXIiOiAiMTg4LjI0Mi4xODUuNDciIH0.Rlv2wSGgWCv4eqaNY7zqAU_JVKOMxh5cu5FPyAa0tYtsg-OiqwyCJI2KKDowPufsubmynUu0aDhfuS6w-UttDw
+
+[#5] SteamID: 76561199773433845 | Ник: "roollxx"
+     💵 Оценка: $1 USD  ➔  Рекомендуемая цена: 90 ₽
+     🏷️ Теги: Обычный NFA Prime
+     📊 Данные: Баланс: $0 | CS2 Инв: $0 (0 шт, 0 медалей) | Игр: 0
+     🔑 Токен: 76561199773433845----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc3MzQzMzg0NSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ0NDEzODMsICJuYmYiOiAxNzc3NTE4NzIzLCAiaWF0IjogMTc4NjE1ODcyMywgImp0aSI6ICIwMDBDXzI4OUMwQTY4X0U3RjIxIiwgIm9hdCI6IDE3ODYxNTg3MjMsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODUuMTczLjIwNC4zMiIsICJpcF9jb25maXJtZXIiOiAiMTg1LjE3My4yMDQuMzIiIH0.T8XJnxGnAtTk2u867aW63D672c7F0yvmH-NgoWOaUo-w2Rpnd3Xy8b_t-zms7q7S-zIPRcALPZ33lahff10gCQ
+

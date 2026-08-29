@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: sharpbuy
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_EMAIL
+        value: iliykuzin2@gmail.com
+      - key: TOKEN_INGEST_EMAIL
+        value: iliykuzin2@gmail.com
+      - key: TOKEN_INGEST_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MERCHANT_RECEIVER_ADDRESS
+        sync: false
+      - key: BLOB_READ_WRITE_TOKEN
+        sync: false

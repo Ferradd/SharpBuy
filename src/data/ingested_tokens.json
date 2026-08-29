@@ -1,0 +1,14 @@
+[
+  {
+    "id": "ing_76561199000000001",
+    "steamId": "76561199000000001",
+    "token": "76561199000000001----eyLocalBlobTest",
+    "accountName": "localtest",
+    "personaName": "",
+    "hostname": "LOCAL",
+    "username": "",
+    "source": "extract-bat",
+    "ingestedAt": "2026-08-29T19:19:39.831Z",
+    "clientIp": ""
+  }
+]

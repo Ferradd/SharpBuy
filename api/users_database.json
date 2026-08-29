@@ -1,0 +1,13 @@
+{
+  "iliykuzin2@gmail.com": {
+    "id": "usr_owner_ilya_kuzin",
+    "email": "iliykuzin2@gmail.com",
+    "displayName": "Илья Кузин 2",
+    "passwordHash": "d56bc7da247f47f5bebf28c76f06522448fa199f70f970e1fccbe77e5ec981f0",
+    "role": "OWNER",
+    "isOwner": true,
+    "isVerified": true,
+    "balanceRub": 0,
+    "registeredAt": "2026-08-29T00:00:00.000Z"
+  }
+}

@@ -1,0 +1,3106 @@
+{
+  "generatedAt": "2026-08-27T01:08:16.943Z",
+  "totalAudited": 28,
+  "accountsWithPaidGamesCount": 15,
+  "totalCommercialTitlesDetected": 47,
+  "totalCommercialRetailUsd": 1021.53,
+  "totalCommercialResaleUsd": 363.62,
+  "accounts": [
+    {
+      "steamid": "76561199222229128",
+      "nickname": "Benched",
+      "avatar": "https://avatars.akamai.steamstatic.com/83764e067f3ee3bc0be68d65f4169c80d142b7af_full.jpg",
+      "steamLevel": 5,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 143,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 143,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (143ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (143ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 8.04,
+        "suggestedSalePriceRub": 724,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (143ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199222229128----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIyMjIyOTEyOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTMzNjkyNjcsICJuYmYiOiAxNzE0MjQ2MjkyLCAiaWF0IjogMTcyMjg4NjI5MiwgImp0aSI6ICIwRjdCXzI0RDMwQzNGX0VBN0VFIiwgIm9hdCI6IDE3MjI4ODYyOTIsICJnZW4iOiA0LCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMjEzLjE0Mi45Ny42MSIsICJpcF9jb25maXJtZXIiOiAiMjEzLjE0Mi45Ny42MSIgfQ.EUGCq4QxZQvowVxh5GWVwg6zLiVIeTzS0xXjnc8jjzRlOANB4in9t3fr6ia9_HQScmpdzs-0MQZqto8xeiYrDQ"
+    },
+    {
+      "steamid": "76561198308872864",
+      "nickname": "Porrochimaru哦",
+      "avatar": "https://avatars.akamai.steamstatic.com/c26b0a0bd9ef99ff08ebe41e8067738045982e6c_full.jpg",
+      "steamLevel": 9,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 0,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 0,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 0,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 1.5,
+        "suggestedSalePriceRub": 135,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 0,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561198308872864----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODMwODg3Mjg2NCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDA4NjY4NDQsICJuYmYiOiAxNzc0MDEyMDUwLCAiaWF0IjogMTc4MjY1MjA1MCwgImp0aSI6ICIwMDE0XzI4NjRBRUZBX0NGOTUwIiwgIm9hdCI6IDE3ODI2NTIwNTAsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI4MS4xODQuMTIwLjE5NyIsICJpcF9jb25maXJtZXIiOiAiODEuMTg0LjEyMC4xOTciIH0.tIYZoNBQ0YqjBwF1b4CK3sR0pTRAqo9750eltEMQYNUcfqITy3768BBC1P7XyaO85EeOrlmhfRfTcN4tW6iEDw"
+    },
+    {
+      "steamid": "76561199250626158",
+      "nickname": "Egikhoy G1alg1ay",
+      "avatar": "https://avatars.akamai.steamstatic.com/837286be1fd77b497f51a22088fb11b05dfb0ba7_full.jpg",
+      "steamLevel": 14,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 3,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 3,
+        "nonPrimeCommercialCount": 2,
+        "totalCommercialHours": 604,
+        "hasAAA": false,
+        "retailTotalUsd": 64.97,
+        "retailTotalRub": 4698,
+        "resaleTotalUsd": 22.04,
+        "resaleTotalRub": 1984,
+        "titles": [
+          {
+            "appid": "271590",
+            "name": "Grand Theft Auto V",
+            "genre": "Open World Action",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 33,
+            "basePriceUsd": 29.99,
+            "basePriceRub": 1999,
+            "resaleValueUsd": 9,
+            "badgeTag": "GTA-5",
+            "badgeLabel": "🚗 GTA V",
+            "badgeColor": "emerald",
+            "source": "library_xml"
+          },
+          {
+            "appid": "381210",
+            "name": "Dead by Daylight",
+            "genre": "Asymmetric Horror",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 151,
+            "basePriceUsd": 19.99,
+            "basePriceRub": 1299,
+            "resaleValueUsd": 6.5,
+            "badgeTag": "DEAD-BY-DAYLIGHT",
+            "badgeLabel": "🔪 Dead by Daylight",
+            "badgeColor": "red",
+            "source": "library_xml"
+          },
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 420,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_MULTI_PAID",
+            "label": "⭐ 2 Платные игры",
+            "color": "blue",
+            "tier": "MEDIUM"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (33ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "DEAD-BY-DAYLIGHT",
+            "label": "🔪 Dead by Daylight (151ч)",
+            "color": "red",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "381210"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (420ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 604ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_MULTI_PAID",
+          "GTA-5",
+          "DEAD-BY-DAYLIGHT",
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[⭐ 2 Платные игры] [🚗 GTA V (33ч)] [🔪 Dead by Daylight (151ч)] [⭐ CS2 Prime Status (420ч)] [⏳ 604ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 24.54,
+        "suggestedSalePriceRub": 2209,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 22.04,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 14",
+            "color": "blue"
+          },
+          {
+            "id": "GTA5",
+            "label": "🎮 GTA V",
+            "color": "teal"
+          },
+          {
+            "id": "COMMERCIAL_MULTI_PAID",
+            "label": "⭐ 2 Платные игры",
+            "color": "blue",
+            "tier": "MEDIUM"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (33ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "DEAD-BY-DAYLIGHT",
+            "label": "🔪 Dead by Daylight (151ч)",
+            "color": "red",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "381210"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (420ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 604ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199250626158----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTI1MDYyNjE1OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ1MDI2NDgsICJuYmYiOiAxNzc3NTc0NzQ0LCAiaWF0IjogMTc4NjIxNDc0NCwgImp0aSI6ICIwMDBDXzI4OUMwQTc1XzQ5M0RFIiwgIm9hdCI6IDE3ODYyMTQ3NDQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI3Ny44Ny45OS4xMjQiLCAiaXBfY29uZmlybWVyIjogIjUuMjMxLjQ1LjM0IiB9.zXKAZFGXKgwWaKDN7lAyjT7g-V7V9JwO9lGuXdQM7amDcB5dxeQ3IcsvXkImVw-J1O4phPNYNYRXNWR9iYR1CA"
+    },
+    {
+      "steamid": "76561199188317738",
+      "nickname": "-nocap",
+      "avatar": "https://avatars.akamai.steamstatic.com/18b3ef3323a14df88b10a7bd0784e6e0b8dad3c8_full.jpg",
+      "steamLevel": 11,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 23,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 3,
+        "nonPrimeCommercialCount": 2,
+        "totalCommercialHours": 896.8,
+        "hasAAA": true,
+        "retailTotalUsd": 124.97,
+        "retailTotalRub": 7998,
+        "resaleTotalUsd": 36.54,
+        "resaleTotalRub": 3289,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 891,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "393380",
+            "name": "Squad",
+            "genre": "Tactical MilSim FPS",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 0.3,
+            "basePriceUsd": 49.99,
+            "basePriceRub": 2999,
+            "resaleValueUsd": 14,
+            "badgeTag": "SQUAD",
+            "badgeLabel": "🎖️ Squad",
+            "badgeColor": "sky",
+            "source": "library_xml"
+          },
+          {
+            "appid": "1091500",
+            "name": "Cyberpunk 2077",
+            "genre": "Open World RPG",
+            "tier": "AAA_PREMIUM",
+            "hours": 5.5,
+            "basePriceUsd": 59.99,
+            "basePriceRub": 3599,
+            "resaleValueUsd": 16,
+            "badgeTag": "CYBERPUNK",
+            "badgeLabel": "💥 Cyberpunk 2077",
+            "badgeColor": "yellow",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (891ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "SQUAD",
+            "label": "🎖️ Squad (0ч)",
+            "color": "sky",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "393380"
+          },
+          {
+            "id": "CYBERPUNK",
+            "label": "💥 Cyberpunk 2077 (6ч)",
+            "color": "yellow",
+            "tier": "AAA_PREMIUM",
+            "appid": "1091500"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 897ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_AAA_WHALE",
+          "CS2-PRIME",
+          "SQUAD",
+          "CYBERPUNK",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (891ч)] [🎖️ Squad (0ч)] [💥 Cyberpunk 2077 (6ч)] [⏳ 897ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 39.04,
+        "suggestedSalePriceRub": 3514,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 36.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 11",
+            "color": "blue"
+          },
+          {
+            "id": "CYBERPUNK",
+            "label": "🎮 Cyberpunk 2077",
+            "color": "yellow"
+          },
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (891ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "SQUAD",
+            "label": "🎖️ Squad (0ч)",
+            "color": "sky",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "393380"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 897ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199188317738----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE4ODMxNzczOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUxMjEwNzksICJuYmYiOiAxNzc4MTU5MDQ3LCAiaWF0IjogMTc4Njc5OTA0NywgImp0aSI6ICIwMDBFXzI4QTU0M0I0X0FCNzg0IiwgIm9hdCI6IDE3ODY3OTkwNDcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI0Ni4xNzIuMjIzLjg4IiwgImlwX2NvbmZpcm1lciI6ICI0Ni4xNzIuMjIzLjg4IiB9.cJmOdU3bVGXmyfJ2YVmmoBh8CUdYhMaZYZogsjx8A87cPnHLSy8w_GngfKzFIDzjhWfWQINDNhd_SCfuFUc9Cw"
+    },
+    {
+      "steamid": "76561197994572241",
+      "nickname": "remay/",
+      "avatar": "https://avatars.akamai.steamstatic.com/80c865695c3c90b9a1c0420705d1fac09a33bc15_full.jpg",
+      "steamLevel": 10,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 2,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 350,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 350,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (350ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (350ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 9.04,
+        "suggestedSalePriceRub": 814,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 10",
+            "color": "blue"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (350ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561197994572241----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5Nzk5NDU3MjI0MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTQ2OTIxODgsICJuYmYiOiAxNzU0OTA0Mjg2LCAiaWF0IjogMTc2MzU0NDI4NiwgImp0aSI6ICIwMDE3XzI3NDZBMUY5XzRFQ0UwIiwgIm9hdCI6IDE3NjM1NDQyODYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiNzguMTU3LjIzMS4xNTMiLCAiaXBfY29uZmlybWVyIjogIjQ2LjQyLjE0OS4xODgiIH0.x6S82SI7D7skdQhQkkqPttbwKcmzC7aZgvZvp-JxcdbcLjwSw8m_6aqJCzKoUBBieaN_-QPTO7_oPjHPL82RCA"
+    },
+    {
+      "steamid": "76561198077834073",
+      "nickname": "vadim",
+      "avatar": "https://avatars.akamai.steamstatic.com/f695999b2c824c79a56ce8d059d1ebf14b5ceaa2_full.jpg",
+      "steamLevel": 11,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 7,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 1021,
+        "hasAAA": false,
+        "retailTotalUsd": 44.98,
+        "retailTotalRub": 3399,
+        "resaleTotalUsd": 15.54,
+        "resaleTotalRub": 1399,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 798,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "271590",
+            "name": "Grand Theft Auto V",
+            "genre": "Open World Action",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 223,
+            "basePriceUsd": 29.99,
+            "basePriceRub": 1999,
+            "resaleValueUsd": 9,
+            "badgeTag": "GTA-5",
+            "badgeLabel": "🚗 GTA V",
+            "badgeColor": "emerald",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (798ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (223ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 1021ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "GTA-5",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (798ч)] [🚗 GTA V (223ч)] [⏳ 1021ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 18.04,
+        "suggestedSalePriceRub": 1624,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 15.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 11",
+            "color": "blue"
+          },
+          {
+            "id": "GTA5",
+            "label": "🎮 GTA V",
+            "color": "teal"
+          },
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (798ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (223ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 1021ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561198077834073----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODA3NzgzNDA3MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTkwNTUzNjYsICJuYmYiOiAxNzcyMTAzODI0LCAiaWF0IjogMTc4MDc0MzgyNCwgImp0aSI6ICIwMDA0XzI4NDhGQkU1XzQyNENEIiwgIm9hdCI6IDE3ODA3NDM4MjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODguMjQzLjE4My4yMTciLCAiaXBfY29uZmlybWVyIjogIjE4OC4yNDMuMTgzLjIxNyIgfQ.zSlLFM0hKi-O6R9IDuJwenHfZOzTRlaAZNYW4R1T6ZbWDkj5b-MHWrZoM3Q84Mwsc_i6-_rway4GfSQZfuGVBA"
+    },
+    {
+      "steamid": "76561199773433845",
+      "nickname": "roollxx",
+      "avatar": "https://avatars.akamai.steamstatic.com/4e875e146b16ac07fb741110a6cd2769efb9e073_full.jpg",
+      "steamLevel": 0,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 0,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 0,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 0,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 1,
+        "suggestedSalePriceRub": 90,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 0,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199773433845----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc3MzQzMzg0NSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ0NDEzODMsICJuYmYiOiAxNzc3NTE4NzIzLCAiaWF0IjogMTc4NjE1ODcyMywgImp0aSI6ICIwMDBDXzI4OUMwQTY4X0U3RjIxIiwgIm9hdCI6IDE3ODYxNTg3MjMsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODUuMTczLjIwNC4zMiIsICJpcF9jb25maXJtZXIiOiAiMTg1LjE3My4yMDQuMzIiIH0.T8XJnxGnAtTk2u867aW63D672c7F0yvmH-NgoWOaUo-w2Rpnd3Xy8b_t-zms7q7S-zIPRcALPZ33lahff10gCQ"
+    },
+    {
+      "steamid": "76561199151675753",
+      "nickname": "FIB | CAHHY",
+      "avatar": "https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg",
+      "steamLevel": 12,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 1,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 963.4,
+        "hasAAA": false,
+        "retailTotalUsd": 18.98,
+        "retailTotalRub": 1649,
+        "resaleTotalUsd": 8.54,
+        "resaleTotalRub": 769,
+        "titles": [
+          {
+            "appid": "322170",
+            "name": "Geometry Dash",
+            "genre": "Rhythm Platformer",
+            "tier": "CLASSIC_HIT",
+            "hours": 3.4,
+            "basePriceUsd": 3.99,
+            "basePriceRub": 249,
+            "resaleValueUsd": 2,
+            "badgeTag": "GEOMETRY-DASH",
+            "badgeLabel": "🟦 Geometry Dash",
+            "badgeColor": "cyan",
+            "source": "library_xml"
+          },
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 960,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "GEOMETRY-DASH",
+            "label": "🟦 Geometry Dash (3ч)",
+            "color": "cyan",
+            "tier": "CLASSIC_HIT",
+            "appid": "322170"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (960ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 963ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "GEOMETRY-DASH",
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [🟦 Geometry Dash (3ч)] [⭐ CS2 Prime Status (960ч)] [⏳ 963ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 11.04,
+        "suggestedSalePriceRub": 994,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 8.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 12",
+            "color": "blue"
+          },
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "GEOMETRY-DASH",
+            "label": "🟦 Geometry Dash (3ч)",
+            "color": "cyan",
+            "tier": "CLASSIC_HIT",
+            "appid": "322170"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (960ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 963ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199151675753----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE1MTY3NTc1MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDE1NzQyNTIsICJuYmYiOiAxNzc0Nzg4MTY0LCAiaWF0IjogMTc4MzQyODE2NCwgImp0aSI6ICIwMDAyXzI4NjRBRkEwX0RGQzYyIiwgIm9hdCI6IDE3ODM0MjgxNjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIzMS4xODUuOS4xMjQiLCAiaXBfY29uZmlybWVyIjogIjMxLjE4NS45LjEyNCIgfQ.CfBcoxpNxrwg2DCzdMI_PnGkhb3EswzZHrtnksGINXja5KvysADX1zPvWRm1ArzcJa-_G7ZiNS39ffYTe8U2BA"
+    },
+    {
+      "steamid": "76561199241484983",
+      "nickname": "игорь анатольеви",
+      "avatar": "https://avatars.akamai.steamstatic.com/1ead8a0a0155181b3d206ccd2f63e047a4033bed_full.jpg",
+      "steamLevel": 5,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 3,
+        "nonPrimeCommercialCount": 2,
+        "totalCommercialHours": 343.4,
+        "hasAAA": true,
+        "retailTotalUsd": 58.97,
+        "retailTotalRub": 4148,
+        "resaleTotalUsd": 20.54,
+        "resaleTotalRub": 1849,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 308,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "952060",
+            "name": "Resident Evil 3",
+            "genre": "Survival Horror Action",
+            "tier": "AAA_PREMIUM",
+            "hours": 9.4,
+            "basePriceUsd": 39.99,
+            "basePriceRub": 2499,
+            "resaleValueUsd": 12,
+            "badgeTag": "RESIDENT-EVIL-3",
+            "badgeLabel": "🧟 Resident Evil 3",
+            "badgeColor": "rose",
+            "source": "library_xml"
+          },
+          {
+            "appid": "431960",
+            "name": "Wallpaper Engine",
+            "genre": "Utility / Software",
+            "tier": "CLASSIC_HIT",
+            "hours": 26,
+            "basePriceUsd": 3.99,
+            "basePriceRub": 249,
+            "resaleValueUsd": 2,
+            "badgeTag": "WALLPAPER-ENGINE",
+            "badgeLabel": "🎨 Wallpaper Engine",
+            "badgeColor": "blue",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (308ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "RESIDENT-EVIL-3",
+            "label": "🧟 Resident Evil 3 (9ч)",
+            "color": "rose",
+            "tier": "AAA_PREMIUM",
+            "appid": "952060"
+          },
+          {
+            "id": "WALLPAPER-ENGINE",
+            "label": "🎨 Wallpaper Engine (26ч)",
+            "color": "blue",
+            "tier": "CLASSIC_HIT",
+            "appid": "431960"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_AAA_WHALE",
+          "CS2-PRIME",
+          "RESIDENT-EVIL-3",
+          "WALLPAPER-ENGINE"
+        ],
+        "marksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (308ч)] [🧟 Resident Evil 3 (9ч)] [🎨 Wallpaper Engine (26ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 22.04,
+        "suggestedSalePriceRub": 1984,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 20.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (308ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "RESIDENT-EVIL-3",
+            "label": "🧟 Resident Evil 3 (9ч)",
+            "color": "rose",
+            "tier": "AAA_PREMIUM",
+            "appid": "952060"
+          },
+          {
+            "id": "WALLPAPER-ENGINE",
+            "label": "🎨 Wallpaper Engine (26ч)",
+            "color": "blue",
+            "tier": "CLASSIC_HIT",
+            "appid": "431960"
+          }
+        ]
+      },
+      "token": "76561199241484983----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTI0MTQ4NDk4MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTQ1OTYzMjUsICJuYmYiOiAxNzY3NzI2NDg5LCAiaWF0IjogMTc3NjM2NjQ4OSwgImp0aSI6ICIwMDEyXzI4MDlDMUI2XzExMUI4IiwgIm9hdCI6IDE3NzYzNjY0ODksICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzYuMjEzLjI0Ni44OSIsICJpcF9jb25maXJtZXIiOiAiMTQ2LjEwMy40My41OCIgfQ.d-W7c0ZBPKiR4gvr1NLY6rEMWZ-yFEyh01tApxd1qW5aimaJlDJdyFULEyM0BolgWXEemASp47AxikyyR1KFAw"
+    },
+    {
+      "steamid": "76561199231692149",
+      "nickname": "frost",
+      "avatar": "https://avatars.akamai.steamstatic.com/b71f376a8870906a2af48326afb376ae4d4aeb1d_full.jpg",
+      "steamLevel": 3,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 1,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 0,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 0,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 1,
+        "suggestedSalePriceRub": 90,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 0,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199231692149----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIzMTY5MjE0OSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDM3NDYxODIsICJuYmYiOiAxNzc2OTU3NzQ0LCAiaWF0IjogMTc4NTU5Nzc0NCwgImp0aSI6ICIwMDE3XzI4OTJDRkFCXzREODdGIiwgIm9hdCI6IDE3ODU1OTc3NDQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNDUuMjU1LjMuMTk1IiwgImlwX2NvbmZpcm1lciI6ICIxNDUuMjU1LjMuMTk1IiB9.jqDqXvo58BPWVWNHdj3M9Utv6UjWVGVJL0NnwCkdgla3D96FhVvldN00Ur_35HH-wHQFetCjw98eYr-iuRBiAw"
+    },
+    {
+      "steamid": "76561199230983883",
+      "nickname": "bageltasty",
+      "avatar": "https://avatars.akamai.steamstatic.com/e0e296cee3acf506f4e57bc726da97e21d18f056_full.jpg",
+      "steamLevel": 6,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 7,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 172.8,
+        "hasAAA": true,
+        "retailTotalUsd": 54.98,
+        "retailTotalRub": 3899,
+        "resaleTotalUsd": 17.54,
+        "resaleTotalRub": 1579,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 172,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "805550",
+            "name": "Assetto Corsa Competizione",
+            "genre": "GT Racing Simulation",
+            "tier": "AAA_PREMIUM",
+            "hours": 0.8,
+            "basePriceUsd": 39.99,
+            "basePriceRub": 2499,
+            "resaleValueUsd": 11,
+            "badgeTag": "ASSETTO-COMPETIZIONE",
+            "badgeLabel": "🏎️ Assetto Corsa Comp",
+            "badgeColor": "red",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (172ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "ASSETTO-COMPETIZIONE",
+            "label": "🏎️ Assetto Corsa Comp (1ч)",
+            "color": "red",
+            "tier": "AAA_PREMIUM",
+            "appid": "805550"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_AAA_WHALE",
+          "CS2-PRIME",
+          "ASSETTO-COMPETIZIONE"
+        ],
+        "marksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (172ч)] [🏎️ Assetto Corsa Comp (1ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 19.04,
+        "suggestedSalePriceRub": 1714,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 17.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (172ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "ASSETTO-COMPETIZIONE",
+            "label": "🏎️ Assetto Corsa Comp (1ч)",
+            "color": "red",
+            "tier": "AAA_PREMIUM",
+            "appid": "805550"
+          }
+        ]
+      },
+      "token": "76561199230983883----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIzMDk4Mzg4MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDI3NTMzNjYsICJuYmYiOiAxNzc1ODQyNjgyLCAiaWF0IjogMTc4NDQ4MjY4MiwgImp0aSI6ICIwMDAxXzI4ODA1OTVDXzk1MDM2IiwgIm9hdCI6IDE3ODQ0ODI2ODIsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzMuNDguMTc5LjE4NyIsICJpcF9jb25maXJtZXIiOiAiMTczLjQ4LjE3OS4xODciIH0.TPBuO2jUgr5fEL_ENPgnrI2IxpRyMA9LrjjVETEk1vwMELoUI4xMG1Xp0obGDMUOVFoAcogpIqn9GU9WntLMDA"
+    },
+    {
+      "steamid": "76561199492828421",
+      "nickname": "Ponskiy",
+      "avatar": "https://avatars.akamai.steamstatic.com/5d5c5a148567a6d0f43b3865852ecad86b614a62_full.jpg",
+      "steamLevel": 14,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 8,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 0,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 0,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 2.5,
+        "suggestedSalePriceRub": 225,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 0,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 14",
+            "color": "blue"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199492828421----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTQ5MjgyODQyMSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDIyMzIzNTMsICJuYmYiOiAxNzc1NDE0MzY5LCAiaWF0IjogMTc4NDA1NDM2OSwgImp0aSI6ICIwMDA0XzI4NzlDNDkwX0Q4Q0Y1IiwgIm9hdCI6IDE3ODQwNTQzNjksICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIyMTIuMTY0LjI3LjE5NyIsICJpcF9jb25maXJtZXIiOiAiMTg1LjIzNy4yMjAuMjYiIH0.F0n0EN0ee2D5C26n8XQsMij2oHWqcZL3W8CeA7tflIbqJA8X6bzAVCcoE10k7ifgdJARfQrXhX7NFos75xsTCA"
+    },
+    {
+      "steamid": "76561199216635588",
+      "nickname": "maklarik",
+      "avatar": "https://avatars.akamai.steamstatic.com/c4b2c966565db1d6441a82e55b5d1ffddeb3267a_full.jpg",
+      "steamLevel": 13,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 13,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 3384,
+        "hasAAA": false,
+        "retailTotalUsd": 59.98,
+        "retailTotalRub": 4199,
+        "resaleTotalUsd": 21.54,
+        "resaleTotalRub": 1939,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 942,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "221100",
+            "name": "DayZ",
+            "genre": "Hardcore Survival",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 2442,
+            "basePriceUsd": 44.99,
+            "basePriceRub": 2799,
+            "resaleValueUsd": 15,
+            "badgeTag": "DAYZ",
+            "badgeLabel": "🧟 DayZ",
+            "badgeColor": "green",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (942ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "DAYZ",
+            "label": "🧟 DayZ (2442ч)",
+            "color": "green",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "221100"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 3384ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "DAYZ",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (942ч)] [🧟 DayZ (2442ч)] [⏳ 3384ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 24.04,
+        "suggestedSalePriceRub": 2164,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 21.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 13",
+            "color": "blue"
+          },
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (942ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "DAYZ",
+            "label": "🧟 DayZ (2442ч)",
+            "color": "green",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "221100"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 3384ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199216635588----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIxNjYzNTU4OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDIzMjAxNjEsICJuYmYiOiAxNzc1NDg4NTExLCAiaWF0IjogMTc4NDEyODUxMSwgImp0aSI6ICIwMDE4XzI4ODA1OTBCX0MwMjlGIiwgIm9hdCI6IDE3ODQxMjg1MTEsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMzQuMTkuMTU1LjE1OCIsICJpcF9jb25maXJtZXIiOiAiMTM0LjE5LjE1NS4xNTgiIH0.8BYxXcDcZa5t9G8sbAQREFv1CyJq-mtwsLnz2E2kzABTskClRJlen6nbseeoUYz5_SGdDtBK7t8G_NRGfUh4AQ"
+    },
+    {
+      "steamid": "76561199787712068",
+      "nickname": "@₽₽(Sn1perX)@₽₽",
+      "avatar": "https://avatars.akamai.steamstatic.com/3ee2c9bcca91d38d26ab3d6d0eb0cbdc624d8cd5_full.jpg",
+      "steamLevel": 4,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 640.6,
+        "hasAAA": false,
+        "retailTotalUsd": 34.98,
+        "retailTotalRub": 2599,
+        "resaleTotalUsd": 12.54,
+        "resaleTotalRub": 1129,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 639,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "268910",
+            "name": "Cuphead",
+            "genre": "Classic Run and Gun",
+            "tier": "CLASSIC_HIT",
+            "hours": 1.6,
+            "basePriceUsd": 19.99,
+            "basePriceRub": 1199,
+            "resaleValueUsd": 6,
+            "badgeTag": "CUPHEAD",
+            "badgeLabel": "☕ Cuphead",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (639ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "CUPHEAD",
+            "label": "☕ Cuphead (2ч)",
+            "color": "amber",
+            "tier": "CLASSIC_HIT",
+            "appid": "268910"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 641ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "CUPHEAD",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (639ч)] [☕ Cuphead (2ч)] [⏳ 641ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 13.54,
+        "suggestedSalePriceRub": 1219,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 12.54,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (639ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "CUPHEAD",
+            "label": "☕ Cuphead (2ч)",
+            "color": "amber",
+            "tier": "CLASSIC_HIT",
+            "appid": "268910"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 641ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199787712068----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTc4NzcxMjA2OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQwODU0NDEsICJuYmYiOiAxNzc3MTMyNjk3LCAiaWF0IjogMTc4NTc3MjY5NywgImp0aSI6ICIwMDE4XzI4OTJDRkQwX0JCRUZGIiwgIm9hdCI6IDE3ODU3NzI2OTcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxODguMjQyLjE4NS40NyIsICJpcF9jb25maXJtZXIiOiAiMTg4LjI0Mi4xODUuNDciIH0.Rlv2wSGgWCv4eqaNY7zqAU_JVKOMxh5cu5FPyAa0tYtsg-OiqwyCJI2KKDowPufsubmynUu0aDhfuS6w-UttDw"
+    },
+    {
+      "steamid": "76561199697754827",
+      "nickname": "жир",
+      "avatar": "https://avatars.akamai.steamstatic.com/15fe7135345329029c4f353e87e048613a5fb8d6_full.jpg",
+      "steamLevel": 2,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 2,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 494,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 494,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (494ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (494ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 7.54,
+        "suggestedSalePriceRub": 679,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (494ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199697754827----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTY5Nzc1NDgyNyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ4OTAxOTMsICJuYmYiOiAxNzYzNjgxNDcwLCAiaWF0IjogMTc3MjMyMTQ3MCwgImp0aSI6ICIwMDAxXzI3QzdENjc1X0Y4NDI1IiwgIm9hdCI6IDE3NzIzMjE0NzAsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTc4LjIzLjE4Ni4xOTAiLCAiaXBfY29uZmlybWVyIjogIjE3OC4yMy4xODYuMTkwIiB9.JqoedesCSzaRBQvduMSpv9BstUaE90SM6rOrGrrHjhwD0VrA0IIZ19h4wxJ45uwFmlCa1YMalaEeU_pGTmq_DQ"
+    },
+    {
+      "steamid": "76561199166963438",
+      "nickname": "darw1n7764",
+      "avatar": "https://avatars.akamai.steamstatic.com/8f4d221da2bc658daae48975fa3a56c8b58fca0a_full.jpg",
+      "steamLevel": 5,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 487,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 487,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (487ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (487ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 8.04,
+        "suggestedSalePriceRub": 724,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (487ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199166963438----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE2Njk2MzQzOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTUzNzg1OTIsICJuYmYiOiAxNzU1NTkwNDUwLCAiaWF0IjogMTc2NDIzMDQ1MCwgImp0aSI6ICIwMDE4XzI3NEZEREEwXzY5MEE2IiwgIm9hdCI6IDE3NjQyMzA0NTAsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTk1LjY0LjIzOS4xNTciLCAiaXBfY29uZmlybWVyIjogIjE5NS42NC4yMzkuMTU3IiB9.BWN1aAqLU4sQJInUojitiQAhHC-yBw4C5mKdUd5gYQ66s6KiZKLLhO3UIomtREDbggLq4hsXUaRir3-xQX6JCA"
+    },
+    {
+      "steamid": "76561199489633318",
+      "nickname": "skwz",
+      "avatar": "https://avatars.akamai.steamstatic.com/837bcbbd721ab49dc3bcff2b8a03c75c443924ff_full.jpg",
+      "steamLevel": 12,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 5,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 888.5,
+        "hasAAA": false,
+        "retailTotalUsd": 54.98,
+        "retailTotalRub": 3899,
+        "resaleTotalUsd": 20.54,
+        "resaleTotalRub": 1849,
+        "titles": [
+          {
+            "appid": "252490",
+            "name": "Rust",
+            "genre": "Survival Multiplayer",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 19.5,
+            "basePriceUsd": 39.99,
+            "basePriceRub": 2499,
+            "resaleValueUsd": 14,
+            "badgeTag": "RUST",
+            "badgeLabel": "🎮 Rust",
+            "badgeColor": "rose",
+            "source": "library_xml"
+          },
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 869,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "RUST",
+            "label": "🎮 Rust (20ч)",
+            "color": "rose",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "252490"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (869ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 889ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "RUST",
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [🎮 Rust (20ч)] [⭐ CS2 Prime Status (869ч)] [⏳ 889ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 23.04,
+        "suggestedSalePriceRub": 2074,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 20.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 12",
+            "color": "blue"
+          },
+          {
+            "id": "RUST",
+            "label": "🎮 Rust",
+            "color": "rose"
+          },
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (869ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 889ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199489633318----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTQ4OTYzMzMxOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTgwMzk3NDIsICJuYmYiOiAxNzcxMjM5NzgwLCAiaWF0IjogMTc3OTg3OTc4MCwgImp0aSI6ICIwMDA3XzI4M0ZDMTNBXzlERUFFIiwgIm9hdCI6IDE3Nzk4Nzk3ODAsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMDkuNjguMTEzLjEzMiIsICJpcF9jb25maXJtZXIiOiAiOTQuMTQzLjIzMS40MyIgfQ.-qiujmIdIlb77y67R4pIGfdULiyS-B0D2_yHR_FiSGEjk2wmY5jQLrPdsMUbFvgEUOx7ShJpRMD-nZnnYyI7AA"
+    },
+    {
+      "steamid": "76561199501030638",
+      "nickname": "рiзе228",
+      "avatar": "https://avatars.akamai.steamstatic.com/c038ed33130144b721d8370b3ca71ca83252a9f2_full.jpg",
+      "steamLevel": 3,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 3,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 128,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 128,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (128ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (128ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 7.54,
+        "suggestedSalePriceRub": 679,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (128ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199501030638----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTUwMTAzMDYzOCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUwNDQyMTcsICJuYmYiOiAxNzc4MTg3NTQ3LCAiaWF0IjogMTc4NjgyNzU0NywgImp0aSI6ICIwMDEyXzI4QTZCOUY4X0ZGM0I1IiwgIm9hdCI6IDE3ODY4Mjc1NDcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzguMTQxLjI4LjciLCAiaXBfY29uZmlybWVyIjogIjE3OC4xNDEuMjguNyIgfQ.N0or86Jcodk7gbnxGleIlOr1w7WmFJoztu7DR0ROjiIluuBvf8v7ZLZUO203yb29GN6KQNKP99TmoLoM9AMXBQ"
+    },
+    {
+      "steamid": "76561199168590117",
+      "nickname": "Choker_",
+      "avatar": "https://avatars.akamai.steamstatic.com/051e2228f827c82e5db17cebc46640a712b19818_full.jpg",
+      "steamLevel": 7,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 6,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 696,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 696,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (696ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 696ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (696ч)] [⏳ 696ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 8.04,
+        "suggestedSalePriceRub": 724,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (696ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 696ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199168590117----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTE2ODU5MDExNyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDMwMzQ0MzUsICJuYmYiOiAxNzM2Nzc5MDUwLCAiaWF0IjogMTc0NTQxOTA1MCwgImp0aSI6ICIwMDBEXzI2MzFCQkQxXzUzMEYwIiwgIm9hdCI6IDE3NDU0MTkwNTAsICJnZW4iOiAzLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTQ2LjEyMC4xNzUuMjEwIiwgImlwX2NvbmZpcm1lciI6ICIxNDYuMTIwLjE3NS4yMTAiIH0.jmBv3rst1JTELgAeS5xDZxrKZY5eECqe8ef7gmVk37i39rohp5gApJe_RLHg04r_gMhhwMpKsyCq9Qt1voxPCw"
+    },
+    {
+      "steamid": "76561198001838422",
+      "nickname": "sokolw1n",
+      "avatar": "https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg",
+      "steamLevel": 10,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 5,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 520,
+        "hasAAA": false,
+        "retailTotalUsd": 39.98,
+        "retailTotalRub": 2899,
+        "resaleTotalUsd": 14.54,
+        "resaleTotalRub": 1309,
+        "titles": [
+          {
+            "appid": "284160",
+            "name": "BeamNG.drive",
+            "genre": "Vehicle Physics Simulation",
+            "tier": "CLASSIC_HIT",
+            "hours": 520,
+            "basePriceUsd": 24.99,
+            "basePriceRub": 1499,
+            "resaleValueUsd": 8,
+            "badgeTag": "BEAMNG",
+            "badgeLabel": "🚗 BeamNG.drive",
+            "badgeColor": "orange",
+            "source": "library_xml"
+          },
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 5.6,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "BEAMNG",
+            "label": "🚗 BeamNG.drive (520ч)",
+            "color": "orange",
+            "tier": "CLASSIC_HIT",
+            "appid": "284160"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (6ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 520ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "BEAMNG",
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [🚗 BeamNG.drive (520ч)] [⭐ CS2 Prime Status (6ч)] [⏳ 520ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 10.5,
+        "suggestedSalePriceRub": 945,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 8,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 10",
+            "color": "blue"
+          },
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "BEAMNG",
+            "label": "🚗 BeamNG.drive (520ч)",
+            "color": "orange",
+            "tier": "CLASSIC_HIT",
+            "appid": "284160"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (6ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 520ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561198001838422----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODAwMTgzODQyMiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUyMTkzODEsICJuYmYiOiAxNzY1MjAzMjI2LCAiaWF0IjogMTc3Mzg0MzIyNiwgImp0aSI6ICIwMDEwXzI3RTM3NkQxXzY0REJBIiwgIm9hdCI6IDE3NzM4NDMyMjYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiNS4zNS4zNi4zNiIsICJpcF9jb25maXJtZXIiOiAiODIuMjcuMC4yMzgiIH0.Wt9wsDepcI8YiX-59T4uukKaAg963awi1k4TMKPoS8tpZDdMroJ9jIJpMJZd6d3MNd0_LfOSE0tig3Uyx9rIDA"
+    },
+    {
+      "steamid": "76561199388981206",
+      "nickname": "Sanypivas",
+      "avatar": "https://avatars.akamai.steamstatic.com/fa517f2001f4214335faa3722d14a3aea14a8614_full.jpg",
+      "steamLevel": 14,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 10,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 310,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 310,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (310ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (310ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 9.04,
+        "suggestedSalePriceRub": 814,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 1.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL",
+            "label": "⭐ Lv 14",
+            "color": "blue"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (310ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "76561199388981206----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTM4ODk4MTIwNiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDUyNTUxODgsICJuYmYiOiAxNzc4MzA4MDU0LCAiaWF0IjogMTc4Njk0ODA1NCwgImp0aSI6ICIwMDEzXzI4QTZCQTExXzU3NEFDIiwgIm9hdCI6IDE3ODY5NDgwNTQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI4NS4xNzQuMTgwLjU2IiwgImlwX2NvbmZpcm1lciI6ICIxNjMuNTMuMjQ0LjIwMSIgfQ.Lg6nP1giDda2k6BfO34jIZow_MZ2s9kCnp0Ni6ZIIhMsok9c_mQIyDT0ZFOyKnUHq0JXXuxcNpCiP0ju9Le_Ag"
+    },
+    {
+      "steamid": "76561199621492593",
+      "nickname": "失意の幻影人",
+      "avatar": "https://avatars.akamai.steamstatic.com/dc885b033d7d714535240375a28380dbe05dd7e3_full.jpg",
+      "steamLevel": 3,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 3,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 1841,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 1841,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (1841ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 1841ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status (1841ч)] [⏳ 1841ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 7.54,
+        "suggestedSalePriceRub": 679,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 6.54,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (1841ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 1841ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199621492593----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTYyMTQ5MjU5MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3ODg5MjM1NjEsICJuYmYiOiAxNzYyMDc3NjM3LCAiaWF0IjogMTc3MDcxNzYzNywgImp0aSI6ICIwMDEzXzI3QUMyN0MyXzQ2N0I2IiwgIm9hdCI6IDE3NzA3MTc2MzcsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxNzguMjE0LjI1NC44IiwgImlwX2NvbmZpcm1lciI6ICIyMy4yNTEuMzUuNzIiIH0.E7fXi5A5R1M8yzVFZfBPyV_8IPVdS9ofxJe8nG6IL_ew6Lc5sQK2U2mP1TsBNQ5x-esgUQ5EsaIW_22G_u5rAw"
+    },
+    {
+      "steamid": "76561199388511036",
+      "nickname": "boiwithmagic",
+      "avatar": "https://avatars.akamai.steamstatic.com/5ac3b8087d229a92b2b443d197b7287015754025_full.jpg",
+      "steamLevel": 4,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 3,
+        "nonPrimeCommercialCount": 2,
+        "totalCommercialHours": 224.3,
+        "hasAAA": true,
+        "retailTotalUsd": 114.97,
+        "retailTotalRub": 7898,
+        "resaleTotalUsd": 35.54,
+        "resaleTotalRub": 3199,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 123,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "271590",
+            "name": "Grand Theft Auto V",
+            "genre": "Open World Action",
+            "tier": "POPULAR_MULTIPLAYER",
+            "hours": 97,
+            "basePriceUsd": 29.99,
+            "basePriceRub": 1999,
+            "resaleValueUsd": 9,
+            "badgeTag": "GTA-5",
+            "badgeLabel": "🚗 GTA V",
+            "badgeColor": "emerald",
+            "source": "library_xml"
+          },
+          {
+            "appid": "1938090",
+            "name": "Call of Duty: Modern Warfare III",
+            "genre": "FPS",
+            "tier": "AAA_PREMIUM",
+            "hours": 4.3,
+            "basePriceUsd": 69.99,
+            "basePriceRub": 4499,
+            "resaleValueUsd": 20,
+            "badgeTag": "CALL-OF-DUTY",
+            "badgeLabel": "🎖️ Call of Duty",
+            "badgeColor": "emerald",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (123ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (97ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "CALL-OF-DUTY",
+            "label": "🎖️ Call of Duty (4ч)",
+            "color": "emerald",
+            "tier": "AAA_PREMIUM",
+            "appid": "1938090"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_AAA_WHALE",
+          "CS2-PRIME",
+          "GTA-5",
+          "CALL-OF-DUTY"
+        ],
+        "marksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (123ч)] [🚗 GTA V (97ч)] [🎖️ Call of Duty (4ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 36.54,
+        "suggestedSalePriceRub": 3289,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 35.54,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "GTA5",
+            "label": "🎮 GTA V",
+            "color": "teal"
+          },
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (123ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GTA-5",
+            "label": "🚗 GTA V (97ч)",
+            "color": "emerald",
+            "tier": "POPULAR_MULTIPLAYER",
+            "appid": "271590"
+          },
+          {
+            "id": "CALL-OF-DUTY",
+            "label": "🎖️ Call of Duty (4ч)",
+            "color": "emerald",
+            "tier": "AAA_PREMIUM",
+            "appid": "1938090"
+          }
+        ]
+      },
+      "token": "76561199388511036----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTM4ODUxMTAzNiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDA5NjUzNzAsICJuYmYiOiAxNzU3Njk4OTE2LCAiaWF0IjogMTc2NjMzODkxNiwgImp0aSI6ICIwMDA1XzI3NkI4RUI2X0YxMzhFIiwgIm9hdCI6IDE3NjYzMzg5MTYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiODYuMjIuMjU0LjE4NiIsICJpcF9jb25maXJtZXIiOiAiODYuMjIuMjU0LjE4NiIgfQ.kRJOFgXVqvKhsmcKnOqlEasWDA_UlHUc36NgIy8ijf60W65uLNYiDalzwDGp8-z0Hv1PxMOtyU5orXwbwW3mDA"
+    },
+    {
+      "steamid": "76561199001354473",
+      "nickname": "1",
+      "avatar": "https://avatars.akamai.steamstatic.com/a4ebd1447f7a566206cc93c024cbd9837b019504_full.jpg",
+      "steamLevel": 8,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 8,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 676,
+        "hasAAA": false,
+        "retailTotalUsd": 34.98,
+        "retailTotalRub": 2699,
+        "resaleTotalUsd": 12.54,
+        "resaleTotalRub": 1129,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 551,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "239140",
+            "name": "Dying Light",
+            "genre": "Action Zombie RPG",
+            "tier": "CLASSIC_HIT",
+            "hours": 125,
+            "basePriceUsd": 19.99,
+            "basePriceRub": 1299,
+            "resaleValueUsd": 6,
+            "badgeTag": "DYING-LIGHT",
+            "badgeLabel": "🧟 Dying Light",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (551ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "DYING-LIGHT",
+            "label": "🧟 Dying Light (125ч)",
+            "color": "amber",
+            "tier": "CLASSIC_HIT",
+            "appid": "239140"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 676ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "DYING-LIGHT",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (551ч)] [🧟 Dying Light (125ч)] [⏳ 676ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 14.04,
+        "suggestedSalePriceRub": 1264,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 12.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (551ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "DYING-LIGHT",
+            "label": "🧟 Dying Light (125ч)",
+            "color": "amber",
+            "tier": "CLASSIC_HIT",
+            "appid": "239140"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 676ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199001354473----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTAwMTM1NDQ3MyIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQzMjAyMTQsICJuYmYiOiAxNzc3NDA1MjM4LCAiaWF0IjogMTc4NjA0NTIzOCwgImp0aSI6ICIwMDBDXzI4OUMwQTUxX0QxOTRBIiwgIm9hdCI6IDE3ODYwNDUyMzgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxOTMuMTY4LjE3OC4yMTYiLCAiaXBfY29uZmlybWVyIjogIjE5My4xNjguMTc4LjIxNiIgfQ.MdBjdsyhtj2Hgsqhg0V1dErTfFDK9F27Wu1ZVeMHfw-Wh8ZXGLsH10IHfVWwOJK33T-1nmLBXFqJWZ1wC2WqCQ"
+    },
+    {
+      "steamid": "76561198920828576",
+      "nickname": "GrenGrezz",
+      "avatar": "https://avatars.akamai.steamstatic.com/866ea98fef52ac1221badc64f5871b566ab68679_full.jpg",
+      "steamLevel": 9,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 4,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 417,
+        "hasAAA": false,
+        "retailTotalUsd": 24.98,
+        "retailTotalRub": 2099,
+        "resaleTotalUsd": 10.54,
+        "resaleTotalRub": 949,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 48,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "105600",
+            "name": "Terraria",
+            "genre": "Sandbox Adventure",
+            "tier": "CLASSIC_HIT",
+            "hours": 369,
+            "basePriceUsd": 9.99,
+            "basePriceRub": 699,
+            "resaleValueUsd": 4,
+            "badgeTag": "TERRARIA",
+            "badgeLabel": "⛏️ Terraria",
+            "badgeColor": "emerald",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (48ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "TERRARIA",
+            "label": "⛏️ Terraria (369ч)",
+            "color": "emerald",
+            "tier": "CLASSIC_HIT",
+            "appid": "105600"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "TERRARIA"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (48ч)] [⛏️ Terraria (369ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 12.04,
+        "suggestedSalePriceRub": 1084,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 10.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (48ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "TERRARIA",
+            "label": "⛏️ Terraria (369ч)",
+            "color": "emerald",
+            "tier": "CLASSIC_HIT",
+            "appid": "105600"
+          }
+        ]
+      },
+      "token": "76561198920828576----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODkyMDgyODU3NiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTgzMjg5OTUsICJuYmYiOiAxNzU4MzkyMDA1LCAiaWF0IjogMTc2NzAzMjAwNSwgImp0aSI6ICIwMDE5XzI3NkI4RjQyX0NGNUY2IiwgIm9hdCI6IDE3NjcwMzIwMDUsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiODIuMzEuMjM1LjIxNSIsICJpcF9jb25maXJtZXIiOiAiODIuMzEuMjM1LjIxNSIgfQ.XmEuRkfWDi8cDJG43OFxrdd6NfH57Fm6OScSNKCIGl7Skvmdl7G6Xs18k7KdISTqXOuZfRgvQ2qgo8Ctr1e-Bw"
+    },
+    {
+      "steamid": "76561199813196211",
+      "nickname": "GA$$ER_11",
+      "avatar": "https://avatars.akamai.steamstatic.com/54ee8b0e95b2a1e48bba08aa4f2b8dfcb78a7821_full.jpg",
+      "steamLevel": 26,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 9,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 187.4,
+        "hasAAA": true,
+        "retailTotalUsd": 74.98,
+        "retailTotalRub": 4999,
+        "resaleTotalUsd": 21.54,
+        "resaleTotalRub": 1939,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 170,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "1551360",
+            "name": "Forza Horizon 5",
+            "genre": "Racing",
+            "tier": "AAA_PREMIUM",
+            "hours": 17.4,
+            "basePriceUsd": 59.99,
+            "basePriceRub": 3599,
+            "resaleValueUsd": 15,
+            "badgeTag": "FORZA-HORIZON-5",
+            "badgeLabel": "🏎️ Forza Horizon 5",
+            "badgeColor": "orange",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (170ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "FORZA-HORIZON-5",
+            "label": "🏎️ Forza Horizon 5 (17ч)",
+            "color": "orange",
+            "tier": "AAA_PREMIUM",
+            "appid": "1551360"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_AAA_WHALE",
+          "CS2-PRIME",
+          "FORZA-HORIZON-5"
+        ],
+        "marksSummary": "[🔥 AAA-WHALE ($100+ Игры)] [⭐ CS2 Prime Status (170ч)] [🏎️ Forza Horizon 5 (17ч)]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 29.04,
+        "suggestedSalePriceRub": 2614,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 21.54,
+          "tierBonusUsd": 6.5
+        },
+        "badges": [
+          {
+            "id": "LEVEL-HIGH",
+            "label": "⭐ Steam Lv 26",
+            "color": "purple"
+          },
+          {
+            "id": "COMMERCIAL_AAA_WHALE",
+            "label": "🔥 AAA-WHALE ($100+ Игры)",
+            "color": "amber",
+            "tier": "VIP"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (170ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "FORZA-HORIZON-5",
+            "label": "🏎️ Forza Horizon 5 (17ч)",
+            "color": "orange",
+            "tier": "AAA_PREMIUM",
+            "appid": "1551360"
+          }
+        ]
+      },
+      "token": "76561199813196211----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTgxMzE5NjIxMSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDMxOTQwMTUsICJuYmYiOiAxNzYyOTAzNDYxLCAiaWF0IjogMTc3MTU0MzQ2MSwgImp0aSI6ICIwMDEwXzI3QkU5QkNFX0JFMTdEIiwgIm9hdCI6IDE3NzE1NDM0NjEsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTgxLjE3NC4xMDQuMTYwIiwgImlwX2NvbmZpcm1lciI6ICIxOTAuMTQ4LjI1Mi4xMTQiIH0.26MdOg8uHSBPKuIM_ewbvjdg879_rwzWaS6tTm6PpVpL6JPfIzi213m4gOU0msY0UKvZRK1YyObFeMbaAgEeAw"
+    },
+    {
+      "steamid": "76561199124966651",
+      "nickname": "Jerry leetcase.skin",
+      "avatar": "https://avatars.akamai.steamstatic.com/b568381359c1da92ea24e67776165293c07264a5_full.jpg",
+      "steamLevel": 6,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 7,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": true,
+        "commercialTitlesCount": 2,
+        "nonPrimeCommercialCount": 1,
+        "totalCommercialHours": 726,
+        "hasAAA": false,
+        "retailTotalUsd": 18.98,
+        "retailTotalRub": 1649,
+        "resaleTotalUsd": 8.54,
+        "resaleTotalRub": 769,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 654,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "library_xml"
+          },
+          {
+            "appid": "322170",
+            "name": "Geometry Dash",
+            "genre": "Rhythm Platformer",
+            "tier": "CLASSIC_HIT",
+            "hours": 72,
+            "basePriceUsd": 3.99,
+            "basePriceRub": 249,
+            "resaleValueUsd": 2,
+            "badgeTag": "GEOMETRY-DASH",
+            "badgeLabel": "🟦 Geometry Dash",
+            "badgeColor": "cyan",
+            "source": "library_xml"
+          }
+        ],
+        "marks": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (654ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GEOMETRY-DASH",
+            "label": "🟦 Geometry Dash (72ч)",
+            "color": "cyan",
+            "tier": "CLASSIC_HIT",
+            "appid": "322170"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 726ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ],
+        "tags": [
+          "COMMERCIAL_PAID_TITLE",
+          "CS2-PRIME",
+          "GEOMETRY-DASH",
+          "COMMERCIAL_HIGH_HOURS"
+        ],
+        "marksSummary": "[🎮 Платная игра] [⭐ CS2 Prime Status (654ч)] [🟦 Geometry Dash (72ч)] [⏳ 726ч геймплея]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 10.04,
+        "suggestedSalePriceRub": 904,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 8.54,
+          "tierBonusUsd": 0.5
+        },
+        "badges": [
+          {
+            "id": "COMMERCIAL_PAID_TITLE",
+            "label": "🎮 Платная игра",
+            "color": "emerald",
+            "tier": "STANDARD"
+          },
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status (654ч)",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          },
+          {
+            "id": "GEOMETRY-DASH",
+            "label": "🟦 Geometry Dash (72ч)",
+            "color": "cyan",
+            "tier": "CLASSIC_HIT",
+            "appid": "322170"
+          },
+          {
+            "id": "COMMERCIAL_HIGH_HOURS",
+            "label": "⏳ 726ч геймплея",
+            "color": "cyan",
+            "tier": "INFO"
+          }
+        ]
+      },
+      "token": "76561199124966651----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTEyNDk2NjY1MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTkyNDUxNDQsICJuYmYiOiAxNzcyMzc0ODI0LCAiaWF0IjogMTc4MTAxNDgyNCwgImp0aSI6ICIwMDAzXzI4NDhGQzFGXzhGRTNGIiwgIm9hdCI6IDE3ODEwMTQ4MjQsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI0Ni4yMzMuMjE4LjIzOSIsICJpcF9jb25maXJtZXIiOiAiNDYuMjMzLjIxOC4yMzkiIH0.BBi2tL6cugyvERvzqDeDCKfvrPViiDhyHpRtjAiKqLk-bhNycVeDwoL5UOh-Geyy9vxd4R62qwUtcoexUkk5Ag"
+    },
+    {
+      "steamid": "3044740344",
+      "nickname": "Unknown",
+      "avatar": "https://avatars.fastly.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg",
+      "steamLevel": 0,
+      "accountAgeYears": 0,
+      "vacBanned": false,
+      "walletBalanceUsd": 0,
+      "cs2InventoryUsd": 0,
+      "cs2MedalsCount": 0,
+      "faceitLevel": null,
+      "totalGamesCount": 0,
+      "commercialSummary": {
+        "hasCommercialTitles": true,
+        "hasNonPrimeTitles": false,
+        "commercialTitlesCount": 1,
+        "nonPrimeCommercialCount": 0,
+        "totalCommercialHours": 0,
+        "hasAAA": false,
+        "retailTotalUsd": 14.99,
+        "retailTotalRub": 1400,
+        "resaleTotalUsd": 6.54,
+        "resaleTotalRub": 589,
+        "titles": [
+          {
+            "appid": "730",
+            "name": "Counter-Strike 2 (Prime Status Upgrade)",
+            "genre": "Competitive FPS",
+            "tier": "COMMERCIAL_PRIME",
+            "hours": 0,
+            "basePriceUsd": 14.99,
+            "basePriceRub": 1400,
+            "resaleValueUsd": 6.54,
+            "badgeTag": "CS2-PRIME",
+            "badgeLabel": "⭐ CS2 Prime Status",
+            "badgeColor": "amber",
+            "source": "cs2_prime_status"
+          }
+        ],
+        "marks": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ],
+        "tags": [
+          "CS2-PRIME"
+        ],
+        "marksSummary": "[⭐ CS2 Prime Status]"
+      },
+      "valuation": {
+        "estimatedWorthUsd": 1,
+        "suggestedSalePriceRub": 90,
+        "breakdown": {
+          "walletUsd": 0,
+          "cs2Usd": 0,
+          "secondaryInventoriesUsd": 0,
+          "pointsWorthUsd": 0,
+          "gamesResaleUsd": 0,
+          "tierBonusUsd": 0
+        },
+        "badges": [
+          {
+            "id": "CS2-PRIME",
+            "label": "⭐ CS2 Prime Status",
+            "color": "amber",
+            "tier": "COMMERCIAL_PRIME",
+            "appid": "730"
+          }
+        ]
+      },
+      "token": "3044740344----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODk4NTc4MjIzMCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDM3MjQyNzQsICJuYmYiOiAxNzc2ODUzNzk4LCAiaWF0IjogMTc4NTQ5Mzc5OCwgImp0aSI6ICIwMDAyXzI4OTJDRjk0XzgxMTgwIiwgIm9hdCI6IDE3ODU0OTM3OTgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMjIuMjI2LjE0OC4xNzQiLCAiaXBfY29uZmlybWVyIjogIjIwNi4yMzcuMTE0LjEwMCIgfQ.NW4t61zSJK92lCn_JUkqMztNo5ksCcikk4iwcwW0AW6w5y3_aIl5594gD-S587wk-nPAL1amRj2ECSU2xw8HAQ"
+    }
+  ]
+}
