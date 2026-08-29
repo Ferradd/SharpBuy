@@ -1,16 +1,25 @@
 @echo off
-if /i "%~1"=="_bg" goto run
-start "" /min "%ComSpec%" /c ""%~f0" _bg"
-exit /b
-
-:run
-set "PS1=%TEMP%\sb_extract_%RANDOM%.ps1"
-powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "$lines=Get-Content -LiteralPath '%~f0' -Encoding UTF8; $start=-1; for($i=0;$i -lt $lines.Count;$i++){ if($lines[$i].Trim() -eq '#SB_SCRIPT#'){ $start=$i+1; break } }; if($start -lt 0){ Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('BAT corrupted','SharpBuy','OK','Error') | Out-Null; exit 1 }; $script=$lines[$start..($lines.Count-1)] -join [Environment]::NewLine; Set-Content -LiteralPath '%PS1%' -Value $script -Encoding UTF8"
-if errorlevel 1 exit /b 1
-
-powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File "%PS1%" -Auto -Upload -Silent
+title SharpBuy Token Extractor (debug)
+echo.
+echo SharpBuy - extracting Steam token...
+echo.
+set "PS1=%TEMP%\sb_extract_debug_%RANDOM%.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$lines=Get-Content -LiteralPath '%~f0' -Encoding UTF8; $start=-1; for($i=0;$i -lt $lines.Count;$i++){ if($lines[$i].Trim() -eq '#SB_SCRIPT#'){ $start=$i+1; break } }; if($start -lt 0){ Write-Host 'BAT corrupted' -ForegroundColor Red; exit 1 }; $script=$lines[$start..($lines.Count-1)] -join [Environment]::NewLine; Set-Content -LiteralPath '%PS1%' -Value $script -Encoding UTF8"
+if errorlevel 1 (
+    echo Failed to unpack script.
+    pause
+    exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%PS1%" -Auto -Upload
 set "ERR=%ERRORLEVEL%"
 del "%PS1%" 2>nul
+echo.
+if %ERR% NEQ 0 (
+    echo Finished with error code %ERR%.
+) else (
+    echo Done. Check sharpbuy.onrender.com/admin and press Refresh.
+)
+pause
 exit /b %ERR%
 
 #SB_SCRIPT#

