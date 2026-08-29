@@ -89,6 +89,24 @@ function sortRecords(records) {
   });
 }
 
+function mergeRecords(blobRecords, localRecords) {
+  const bySteamId = new Map();
+  for (const record of [...localRecords, ...blobRecords]) {
+    if (!record?.steamId && !record?.token) continue;
+    const key = record.steamId || record.id;
+    if (!key) continue;
+    const prev = bySteamId.get(key);
+    if (!prev) {
+      bySteamId.set(key, record);
+      continue;
+    }
+    const prevTime = Date.parse(prev.ingestedAt || 0);
+    const nextTime = Date.parse(record.ingestedAt || 0);
+    if (nextTime >= prevTime) bySteamId.set(key, record);
+  }
+  return sortRecords(Array.from(bySteamId.values()));
+}
+
 async function readBlobDb() {
   if (!hasBlobStorage()) return null;
 
@@ -214,11 +232,12 @@ export async function getIngestEvents(limit = 30) {
 }
 
 export async function getAllIngestedTokens() {
-  if (hasBlobStorage()) {
-    const blobData = await readBlobDb();
-    if (blobData !== null) return blobData;
-  }
-  return sortRecords(readLocalDb());
+  const local = sortRecords(readLocalDb());
+  if (!hasBlobStorage()) return local;
+
+  const blobData = await readBlobDb();
+  if (blobData === null) return local;
+  return mergeRecords(blobData, local);
 }
 
 export async function saveIngestedTokens(records) {
@@ -255,7 +274,7 @@ export async function clearIngestEvents() {
 
 export async function ingestTokenRecords(items, meta = {}) {
   const now = new Date().toISOString();
-  const existing = hasBlobStorage() ? ((await readBlobDb()) || []) : readLocalDb();
+  const existing = await getAllIngestedTokens();
   const bySteamId = new Map(existing.map((r) => [r.steamId, r]));
   let blobSaved = false;
 

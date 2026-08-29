@@ -38,22 +38,26 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
     return data;
   }, [token]);
 
-  const loadTokens = useCallback(async () => {
+  const loadTokens = useCallback(async (silent = false) => {
     if (!user || !token || !isOwner) return;
 
-    setLoading(true);
-    setError('');
+    if (!silent) {
+      setLoading(true);
+      setError('');
+    }
     try {
       const data = await adminFetch('admin-tokens');
       setRecords(Array.isArray(data.records) ? data.records : []);
       setEvents(Array.isArray(data.events) ? data.events : []);
       setLastRefreshedAt(data.fetchedAt || new Date().toISOString());
     } catch (err) {
-      setError(err.message || 'Ошибка загрузки');
-      setRecords([]);
-      setEvents([]);
+      if (!silent) {
+        setError(err.message || 'Ошибка загрузки');
+        setRecords([]);
+        setEvents([]);
+      }
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [user, token, isOwner, adminFetch]);
 
@@ -71,7 +75,17 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
       setLoading(false);
       return;
     }
-    loadTokens();
+    loadTokens(false);
+    const timer = setInterval(() => loadTokens(true), 8000);
+    const onFocus = () => loadTokens(true);
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') loadTokens(true);
+    });
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('focus', onFocus);
+    };
   }, [user, token, isOwner, loadTokens]);
 
   const copyToken = async (record) => {
@@ -96,7 +110,7 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
         method: 'POST',
         body: JSON.stringify({ steamId: id }),
       });
-      await loadTokens();
+      await loadTokens(false);
     } catch (err) {
       setError(err.message || 'Не удалось удалить');
     } finally {
@@ -111,7 +125,7 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
     setError('');
     try {
       await adminFetch('admin-clear-tokens', { method: 'POST', body: '{}' });
-      await loadTokens();
+      await loadTokens(false);
     } catch (err) {
       setError(err.message || 'Не удалось очистить базу');
     } finally {
@@ -126,7 +140,7 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
     setError('');
     try {
       await adminFetch('admin-clear-events', { method: 'POST', body: '{}' });
-      await loadTokens();
+      await loadTokens(false);
     } catch (err) {
       setError(err.message || 'Не удалось очистить лог');
     } finally {
@@ -204,13 +218,13 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
           </p>
           {lastRefreshedAt && (
             <p className="mt-1 text-xs text-white/35">
-              Обновлено: {new Date(lastRefreshedAt).toLocaleString('ru-RU')}
+              Обновлено: {new Date(lastRefreshedAt).toLocaleString('ru-RU')} · авто каждые 8 сек
             </p>
           )}
         </div>
         <div className="flex flex-wrap gap-3">
           <button
-            onClick={loadTokens}
+            onClick={() => loadTokens(false)}
             disabled={loading}
             className="rounded-xl border border-[#e8583a]/40 px-4 py-2 text-sm font-bold text-[#e8583a] disabled:opacity-50"
           >
@@ -246,7 +260,7 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
         {error && (
           <div className="border-b border-red-500/20 bg-red-500/10 px-5 py-3 text-sm text-red-300">
             {error}
-            <button onClick={loadTokens} className="ml-3 underline">Повторить</button>
+            <button onClick={() => loadTokens(false)} className="ml-3 underline">Повторить</button>
           </div>
         )}
 
