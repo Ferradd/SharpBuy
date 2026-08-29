@@ -23,6 +23,7 @@ namespace SharpBuy_Launcher
         public long AddedAt { get; set; } = 0;
         public long WarrantyExpiresAt { get; set; } = 0;
         public long ExpSeconds { get; set; } = 0;
+        public long LastCheckedAt { get; set; } = 0;
         public bool IsAlive { get; set; } = true;
         public string StatusMessage { get; set; } = "";
         public string VacBanned { get; set; } = "0";
@@ -131,7 +132,7 @@ namespace SharpBuy_Launcher
             var p = _steam.ParseToken(rawToken);
             if (!p.Valid || p.SecondsRemaining <= 0)
             {
-                UpdateAccountStatus(steamId, false, "Token expired");
+                UpdateAccountStatus(steamId, false, "Token expired", 0);
                 return JsonSerializer.Serialize(new { isAlive = false, reason = "Token expired", secondsRemaining = 0 });
             }
 
@@ -139,7 +140,7 @@ namespace SharpBuy_Launcher
             var onlineResult = await TryRemoteVerifyAsync(rawToken, p.SecondsRemaining);
             if (onlineResult != null)
             {
-                UpdateAccountStatus(steamId, onlineResult.Value.IsAlive, onlineResult.Value.Reason);
+                UpdateAccountStatus(steamId, onlineResult.Value.IsAlive, onlineResult.Value.Reason, p.SecondsRemaining);
                 return JsonSerializer.Serialize(new
                 {
                     isAlive = onlineResult.Value.IsAlive,
@@ -161,7 +162,7 @@ namespace SharpBuy_Launcher
                     var parsed = ParseVerifyResponse(respBody, p.SecondsRemaining);
                     if (parsed != null)
                     {
-                        UpdateAccountStatus(steamId, parsed.Value.IsAlive, parsed.Value.Reason);
+                        UpdateAccountStatus(steamId, parsed.Value.IsAlive, parsed.Value.Reason, p.SecondsRemaining);
                         return JsonSerializer.Serialize(new
                         {
                             isAlive = parsed.Value.IsAlive,
@@ -177,7 +178,7 @@ namespace SharpBuy_Launcher
             var nodeResult = await TryNodeVerifyAsync(rawToken, p.SecondsRemaining);
             if (nodeResult != null)
             {
-                UpdateAccountStatus(steamId, nodeResult.Value.IsAlive, nodeResult.Value.Reason);
+                UpdateAccountStatus(steamId, nodeResult.Value.IsAlive, nodeResult.Value.Reason, p.SecondsRemaining);
                 return JsonSerializer.Serialize(new
                 {
                     isAlive = nodeResult.Value.IsAlive,
@@ -188,6 +189,7 @@ namespace SharpBuy_Launcher
 
             // JWT still valid — do NOT mark session as dead when check infra is unavailable
             const string fallbackReason = "Token valid (online check temporarily unavailable)";
+            UpdateAccountStatus(steamId, true, fallbackReason, p.SecondsRemaining);
             return JsonSerializer.Serialize(new
             {
                 isAlive = true,
@@ -386,18 +388,19 @@ namespace SharpBuy_Launcher
             return null;
         }
 
-        private void UpdateAccountStatus(string steamId, bool isAlive, string reason)
+        private void UpdateAccountStatus(string steamId, bool isAlive, string reason, long secondsRemaining = 0)
         {
             try
             {
-                if (!File.Exists(_accountsDbPath)) return;
-                string existing = File.ReadAllText(_accountsDbPath);
-                var list = JsonSerializer.Deserialize<List<SavedAccount>>(existing) ?? new List<SavedAccount>();
+                var list = LoadAccountsList();
                 var target = list.Find(a => a.SteamId == steamId);
                 if (target != null)
                 {
                     target.IsAlive = isAlive;
                     target.StatusMessage = reason;
+                    target.LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    if (secondsRemaining > 0)
+                        target.ExpSeconds = secondsRemaining;
                     File.WriteAllText(_accountsDbPath, JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }));
                 }
             }
@@ -451,6 +454,7 @@ namespace SharpBuy_Launcher
                     WarrantyExpiresAt = warrantyExpiresAt,
                     ExpSeconds = exp,
                     IsAlive = true,
+                    LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                     StatusMessage = warranty.Eligible ? "Warranty active" : "Active",
                     VacBanned = vacBanned
                 });
@@ -481,8 +485,6 @@ namespace SharpBuy_Launcher
 
                 if (changed)
                     SaveAccountsList(list);
-                else
-                    _form.Invoke(() => _form.ExecuteScript("loadAccountHistory();"));
             }
             catch { }
         }
@@ -757,6 +759,11 @@ namespace SharpBuy_Launcher
         public bool ResetSteam()
         {
             return _steam.ResetSteamData();
+        }
+
+        public bool ClearAllSteamSessions()
+        {
+            return _steam.ClearAllSteamSessions();
         }
 
         public void KillSteam()

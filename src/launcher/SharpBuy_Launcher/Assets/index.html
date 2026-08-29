@@ -237,7 +237,8 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    transition: all 0.15s;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    contain: layout style;
   }
 
   .acc-card:hover {
@@ -255,11 +256,10 @@
     border-radius: 6px;
     margin: -4px;
     padding: 4px;
-    transition: background 0.15s;
   }
 
-  .acc-header-clickable:hover {
-    background: rgba(249, 115, 22, 0.08);
+  .acc-card:hover .acc-header-clickable {
+    background: rgba(249, 115, 22, 0.06);
   }
 
   .acc-open-hint {
@@ -270,7 +270,6 @@
     display: inline-flex;
     align-items: center;
     gap: 3px;
-  }
   }
 
   .acc-card.dead-session {
@@ -384,6 +383,16 @@
     gap: 6px;
     padding-top: 6px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-acc-login,
+  .btn-acc-check,
+  .btn-acc-claim,
+  .btn-acc-del {
+    position: relative;
+    z-index: 2;
   }
 
   .btn-acc-login {
@@ -1234,6 +1243,19 @@
             </table>
           </td>
         </tr>
+        <tr>
+          <td class="tool-item" colspan="3" onclick="showClearSteamSessionsConfirm()" style="border-top: 1px solid rgba(255,255,255,0.08);">
+            <table cellpadding="0" cellspacing="0" style="width: 100%;">
+              <tr>
+                <td class="tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></td>
+                <td class="tool-content">
+                  <div class="tool-title">CLEAR STEAM ACCOUNTS</div>
+                  <div class="tool-desc">Remove all saved Steam sessions from PC</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
       </table>
 
       <!-- Footer -->
@@ -1361,6 +1383,8 @@
     let passportPaidGames = [];
     let isPassportOpen = false;
     let warrantyTicker = null;
+    let historyLoadInProgress = false;
+    let lastAccountsRenderKey = '';
 
     function getWarrantySecondsLeft(acc) {
       const now = Math.floor(Date.now() / 1000);
@@ -1381,10 +1405,58 @@
       return 'WARRANTY: ' + secs + 's';
     }
 
+    function buildWarrantyBadge(acc) {
+      const warrantySecondsLeft = getWarrantySecondsLeft(acc);
+      let isWarrantyActive = false;
+      let warrantyBadge = '';
+
+      if (acc.IsAlive === false) {
+        warrantyBadge = warrantyBadgeHtml('dead', 'SESSION REVOKED');
+      } else if (warrantySecondsLeft > 0) {
+        isWarrantyActive = true;
+        const label = formatWarrantyBadge(warrantySecondsLeft);
+        warrantyBadge = warrantyBadgeHtml('active', label || 'WARRANTY');
+      } else if (acc.LastCheckedAt && acc.IsAlive !== false) {
+        const tokenOk = (acc.ExpSeconds || 0) > 0;
+        const offlineCheck = String(acc.StatusMessage || '').toLowerCase().includes('unavailable');
+        const label = offlineCheck || !tokenOk ? 'TOKEN OK' : 'ACTIVE';
+        warrantyBadge = warrantyBadgeHtml('active', label);
+      } else if (acc.WarrantyExpiresAt && acc.WarrantyExpiresAt > 0) {
+        warrantyBadge = warrantyBadgeHtml('expired', 'WARRANTY EXPIRED');
+      } else {
+        warrantyBadge = warrantyBadgeHtml('expired', 'NO WARRANTY');
+      }
+
+      return { warrantyBadge, isWarrantyActive };
+    }
+
+    function updateWarrantyBadges() {
+      if (!savedAccountsCache || savedAccountsCache.length === 0) return;
+
+      savedAccountsCache.forEach(function(acc) {
+        const badgeEl = document.getElementById('badge-' + acc.SteamId);
+        if (!badgeEl) return;
+
+        const meta = buildWarrantyBadge(acc);
+        badgeEl.innerHTML = meta.warrantyBadge;
+
+        const claimBtn = document.getElementById('btn-claim-' + acc.SteamId);
+        if (claimBtn) {
+          claimBtn.style.display = (meta.isWarrantyActive || acc.IsAlive === false) ? '' : 'none';
+        }
+
+        const card = document.getElementById('card-' + acc.SteamId);
+        if (card) {
+          if (acc.IsAlive === false) card.classList.add('dead-session');
+          else card.classList.remove('dead-session');
+        }
+      });
+    }
+
     function startWarrantyTicker() {
       if (warrantyTicker) return;
       warrantyTicker = setInterval(function() {
-        if (isDrawerOpen) renderAccountsList();
+        if (isDrawerOpen) updateWarrantyBadges();
       }, 1000);
     }
 
@@ -1459,13 +1531,13 @@
 
       if (isDrawerOpen) {
         drawer.classList.add('active');
+        startWarrantyTicker();
+        await loadAccountHistory();
+        await applyWindowSize(isPassportOpen, true);
         if (bridge) {
           bridge.RefreshAllProfilesAsync();
           bridge.RefreshAllWarrantiesAsync();
         }
-        startWarrantyTicker();
-        await applyWindowSize(isPassportOpen, true);
-        await loadAccountHistory();
       } else {
         drawer.classList.remove('active');
         stopWarrantyTicker();
@@ -1473,23 +1545,38 @@
       }
     }
 
-    async function loadAccountHistory() {
+    function getAccountsRenderKey() {
+      if (!savedAccountsCache || savedAccountsCache.length === 0) return '';
+      return savedAccountsCache.map(function(a) {
+        return [a.SteamId, a.PersonaName, a.AvatarUrl, a.IsAlive, a.AccountName, a.VacBanned, a.LastCheckedAt, a.ExpSeconds, a.StatusMessage].join('|');
+      }).join('||');
+    }
+
+    async function loadAccountHistory(forceRender) {
+      if (historyLoadInProgress) return;
+      historyLoadInProgress = true;
       try {
         const bridge = await getBridge();
         if (!bridge) return;
-        if (bridge.RefreshAllWarrantiesAsync) {
-          await bridge.RefreshAllWarrantiesAsync();
-        }
         const jsonStr = await bridge.GetSavedAccounts();
         savedAccountsCache = JSON.parse(jsonStr || '[]');
-        
         document.getElementById('historyCount').innerText = savedAccountsCache.length;
-        renderAccountsList();
+        renderAccountsList(forceRender === true);
       } catch (e) {}
+      finally {
+        historyLoadInProgress = false;
+      }
     }
 
-    function renderAccountsList() {
+    function renderAccountsList(force) {
       const container = document.getElementById('accountsList');
+      const renderKey = getAccountsRenderKey();
+      if (!force && renderKey === lastAccountsRenderKey && container.querySelector('.acc-card')) {
+        updateWarrantyBadges();
+        return;
+      }
+      lastAccountsRenderKey = renderKey;
+
       if (!savedAccountsCache || savedAccountsCache.length === 0) {
         container.innerHTML = '<div class="empty-history">No saved accounts yet.<br>Log in to any account and it will appear here automatically with a real avatar for one-click login!</div>';
         return;
@@ -1499,22 +1586,9 @@
       let html = '';
 
       savedAccountsCache.forEach((acc, index) => {
-        const warrantySecondsLeft = getWarrantySecondsLeft(acc);
-
-        let warrantyBadge = '';
-        let isWarrantyActive = false;
-
-        if (acc.IsAlive === false) {
-          warrantyBadge = warrantyBadgeHtml('dead', 'SESSION REVOKED');
-        } else if (warrantySecondsLeft > 0) {
-          isWarrantyActive = true;
-          const label = formatWarrantyBadge(warrantySecondsLeft);
-          warrantyBadge = warrantyBadgeHtml('active', label || 'WARRANTY');
-        } else if (acc.WarrantyExpiresAt && acc.WarrantyExpiresAt > 0) {
-          warrantyBadge = warrantyBadgeHtml('expired', 'WARRANTY EXPIRED');
-        } else {
-          warrantyBadge = warrantyBadgeHtml('expired', 'NO WARRANTY');
-        }
+        const meta = buildWarrantyBadge(acc);
+        const warrantyBadge = meta.warrantyBadge;
+        const isWarrantyActive = meta.isWarrantyActive;
 
         const safeToken = encodeURIComponent(acc.Token);
         const displayName = acc.PersonaName && acc.PersonaName !== acc.SteamId 
@@ -1766,6 +1840,14 @@
 
       if (chkBtn) chkBtn.innerText = 'CHECK';
 
+      const acc = savedAccountsCache.find(function(a) { return a.SteamId === steamId; });
+      if (acc) {
+        acc.IsAlive = !!data.isAlive;
+        acc.ExpSeconds = data.secondsRemaining || acc.ExpSeconds || 0;
+        acc.StatusMessage = data.reason || acc.StatusMessage || '';
+        acc.LastCheckedAt = Math.floor(Date.now() / 1000);
+      }
+
       const card = document.getElementById('card-' + steamId);
       const badgeContainer = document.getElementById('badge-' + steamId);
       const claimBtn = document.getElementById('btn-claim-' + steamId);
@@ -1781,16 +1863,19 @@
           : ('Session expires in: ' + days + ' days, ' + hrs + ' hours.');
         setStatus('success', statusTitle, statusDetail);
         if (card) card.classList.remove('dead-session');
-        if (badgeContainer) badgeContainer.innerHTML = warrantyBadgeHtml('active', data.checkUnavailable ? 'TOKEN OK' : 'ACTIVE');
       } else if (data.checkUnavailable) {
         setStatus('success', 'TOKEN VALID', data.reason || 'Online check unavailable, but the token has not expired.');
         if (card) card.classList.remove('dead-session');
-        if (badgeContainer) badgeContainer.innerHTML = warrantyBadgeHtml('active', 'TOKEN OK');
       } else {
         setStatus('error', 'SESSION REVOKED BY OWNER', 'Login impossible: ' + (data.reason || 'Session revoked') + '. Click "REPLACE" for auto-replacement!');
         if (card) card.classList.add('dead-session');
-        if (badgeContainer) badgeContainer.innerHTML = warrantyBadgeHtml('dead', 'SESSION REVOKED');
         if (claimBtn) claimBtn.style.display = 'inline-block';
+      }
+
+      if (acc) {
+        const meta = buildWarrantyBadge(acc);
+        if (badgeContainer) badgeContainer.innerHTML = meta.warrantyBadge;
+        if (claimBtn) claimBtn.style.display = (meta.isWarrantyActive || acc.IsAlive === false) ? '' : 'none';
       }
     }
 
@@ -1822,7 +1907,8 @@
       setStatus('loading', 'CLEARING HISTORY...', 'Removing all saved accounts...');
       bridge.ClearAllSavedAccounts();
       savedAccountsCache = [];
-      renderAccountsList();
+      lastAccountsRenderKey = '';
+      renderAccountsList(true);
       document.getElementById('historyCount').innerText = '0';
       setStatus('success', 'HISTORY CLEARED', 'All accounts removed from history.');
     }
@@ -1953,6 +2039,26 @@
         } else {
           setStatus('error', 'RESET FAILED', 'Could not reset Steam files.');
         }
+      }
+    }
+
+    function showClearSteamSessionsConfirm() {
+      document.getElementById('confirmTitle').innerText = 'Clear all Steam accounts?';
+      document.getElementById('confirmText').innerText = 'This removes every saved Steam session on this PC (loginusers.vdf, session cache, remembered accounts). Launcher history is kept. Steam must be closed.';
+      document.getElementById('confirmOkBtn').onclick = confirmClearSteamSessions;
+      document.getElementById('confirmOverlay').classList.add('active');
+    }
+
+    async function confirmClearSteamSessions() {
+      closeConfirmModal();
+      const bridge = await getBridge();
+      if (!bridge) return;
+      setStatus('loading', 'CLEARING STEAM ACCOUNTS...', 'Removing all saved Steam sessions from this PC...');
+      const ok = await bridge.ClearAllSteamSessions();
+      if (ok) {
+        setStatus('success', 'STEAM ACCOUNTS CLEARED', 'All saved Steam sessions removed. Use LOGIN to enter a fresh account.');
+      } else {
+        setStatus('error', 'CLEAR FAILED', 'Could not remove Steam session files. Close Steam and try again.');
       }
     }
 

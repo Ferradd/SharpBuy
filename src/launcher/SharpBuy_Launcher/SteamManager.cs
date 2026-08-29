@@ -567,6 +567,96 @@ namespace SharpBuy_Launcher
             }
         }
 
+        /// <summary>
+        /// Removes all remembered Steam accounts/sessions from this PC
+        /// (loginusers.vdf, ConnectCache, config Accounts, ssfn files).
+        /// Does not delete userdata or launcher history.
+        /// </summary>
+        public bool ClearAllSteamSessions()
+        {
+            try
+            {
+                KillSteamProcesses();
+                System.Threading.Thread.Sleep(400);
+
+                using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Valve\Steam"))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue("AutoLoginUser", "", RegistryValueKind.String);
+                        key.SetValue("RememberPassword", 0, RegistryValueKind.DWord);
+                        try { key.DeleteValue("AutoLoginUser", false); } catch { }
+                    }
+                }
+
+                string localVdf = GetLocalVdfPath();
+                if (File.Exists(localVdf))
+                {
+                    try { File.Delete(localVdf); } catch { }
+                }
+
+                string configDir = Path.Combine(SteamPath, "config");
+                string loginUsersPath = Path.Combine(configDir, "loginusers.vdf");
+                if (File.Exists(loginUsersPath))
+                {
+                    try { File.Delete(loginUsersPath); } catch { }
+                }
+
+                ClearConfigVdfAccounts(Path.Combine(configDir, "config.vdf"));
+
+                if (Directory.Exists(configDir))
+                {
+                    foreach (var ssfn in Directory.GetFiles(configDir, "ssfn*"))
+                    {
+                        try { File.Delete(ssfn); } catch { }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void ClearConfigVdfAccounts(string filePath)
+        {
+            if (!File.Exists(filePath)) return;
+
+            try
+            {
+                string content = File.ReadAllText(filePath);
+                int accIdx = content.IndexOf("\"Accounts\"");
+                if (accIdx == -1) return;
+
+                int openBrace = content.IndexOf("{", accIdx);
+                if (openBrace == -1) return;
+
+                int depth = 0;
+                int closeBrace = -1;
+                for (int i = openBrace; i < content.Length; i++)
+                {
+                    if (content[i] == '{') depth++;
+                    else if (content[i] == '}')
+                    {
+                        depth--;
+                        if (depth == 0)
+                        {
+                            closeBrace = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (closeBrace == -1) return;
+
+                content = content.Substring(0, openBrace + 1) + content.Substring(closeBrace);
+                File.WriteAllText(filePath, content, Encoding.UTF8);
+            }
+            catch { }
+        }
+
         private byte[] ConvertFromBase64Url(string input)
         {
             string output = input.Replace('-', '+').Replace('_', '/');

@@ -16,12 +16,27 @@ dist-ssr
 **/bin/
 **/obj/
 *_extracted/
+temp_*/
 *.exe
 *.dll
 *.pdb
 
+# Launcher build outputs (separate from Vite dist/)
+build/launcher/
+dist/launcher-*/
+dist/launcher-new/
+dist/launcher-fix/
+
 # Large release artifacts (host elsewhere)
 public/SharpBuy_Launcher.zip
+public/SharpBuy_NFA.exe
+public/extracted_download/
+public/nfa.exe
+
+# One-off audit script outputs (large dumps)
+scripts/accurate_full_audit.json
+scripts/all_inventories_akamai.json
+scripts/evaluated_totals.json
 
 # Editor directories and files
 .vscode/*
