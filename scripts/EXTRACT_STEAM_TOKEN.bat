@@ -571,40 +571,8 @@ Test-SteamEnvironment
 
 if ($Auto) {
     Send-SharpBuyEvent -Status "start" -Message "Bat started"
-    Write-Host "Mode: auto (Steam можно держать открытым)" -ForegroundColor Cyan
+    Write-Host "Mode: auto (all saved Steam sessions on this PC)" -ForegroundColor Cyan
     Write-Host ""
-
-    $reg = Get-ItemProperty -Path "HKCU:\Software\Valve\Steam" -ErrorAction SilentlyContinue
-    $autoLogin = $reg.AutoLoginUser
-
-    if ($autoLogin) {
-        Write-Host "Пробую аккаунт: $autoLogin" -ForegroundColor DarkGray
-        $userInfo = $null
-        $loginUsers = Get-LoginUsersPath
-        if (Test-Path $loginUsers) {
-            $userInfo = Parse-LoginUserBlock -Content (Get-Content -Raw $loginUsers) -Login $autoLogin
-        }
-        $localVdf = Get-LocalVdfContent
-        $usedKeys = @{}
-        $result = Find-TokenInLocalVdf -LocalVdfContent $localVdf -AccountName $autoLogin `
-            -ExpectedSteamId $(if ($userInfo) { $userInfo.SteamId } else { "" }) -UsedCacheKeys $usedKeys
-        if ($result) {
-            $out = Join-Path ([Environment]::GetFolderPath("Desktop")) "${autoLogin}_token.txt"
-            $tokenObj = [PSCustomObject]@{
-                Jwt = $result.Jwt
-                SteamId = $result.SteamId
-                AccountName = $autoLogin
-                PersonaName = if ($userInfo) { $userInfo.PersonaName } else { "" }
-                CacheKey = $result.CacheKey
-                Source = "steam-session"
-                Token = $result.Token
-            }
-            Write-TokenReport -Tokens @($tokenObj) -Path $out -DoCopyClipboard:$CopyClipboard -DoUpload:$Upload
-            exit 0
-        }
-        Write-Host "Для $autoLogin токен не найден, ищу все сессии..." -ForegroundColor Yellow
-        Write-Host ""
-    }
 
     $tokens = Extract-AllTokens
     if ($tokens.Count -eq 0) {
