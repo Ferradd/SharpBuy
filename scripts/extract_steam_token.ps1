@@ -29,13 +29,6 @@ function Stop-Extractor {
     )
     if ($Silent -and $Messages.Count -gt 0) {
         Send-SharpBuyEvent -Status "error" -Message ($Messages -join " | ")
-        Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue | Out-Null
-        [System.Windows.Forms.MessageBox]::Show(
-            ($Messages -join [Environment]::NewLine),
-            "SharpBuy - Steam Token",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
-        ) | Out-Null
     } else {
         foreach ($m in $Messages) {
             if ($m -match '^ОШИБКА') { Write-Host $m -ForegroundColor Red }
@@ -44,18 +37,6 @@ function Stop-Extractor {
         Write-Host ""
     }
     exit $Code
-}
-
-function Show-SilentSuccess {
-    param([string]$Message)
-    if (-not $Silent) { return }
-    Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue | Out-Null
-    [System.Windows.Forms.MessageBox]::Show(
-        $Message,
-        "SharpBuy - OK",
-        [System.Windows.Forms.MessageBoxButtons]::OK,
-        [System.Windows.Forms.MessageBoxIcon]::Information
-    ) | Out-Null
 }
 
 if ($Silent) {
@@ -557,11 +538,7 @@ function Write-TokenReport {
 
     if ($DoUpload -and $Tokens.Count -gt 0) {
         $uploadResult = Send-TokensToSharpBuy -Tokens $Tokens
-        if ($Silent) {
-            $label = $Tokens[0].AccountName
-            if ($Tokens[0].PersonaName) { $label = "$label ($($Tokens[0].PersonaName))" }
-            Show-SilentSuccess "Токен отправлен в админку SharpBuy.`n`nАккаунт: $label`nОткрой sharpbuy.org/admin`n(или sharpbuy.onrender.com/admin)`nи нажми Обновить."
-        } elseif (-not $Silent) {
+        if (-not $Silent) {
             Write-Host "Uploaded to SharpBuy cloud: $($Tokens.Count) token(s)." -ForegroundColor Green
             if ($uploadResult.total) {
                 Write-Host "Total in database: $($uploadResult.total)" -ForegroundColor DarkGray
