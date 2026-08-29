@@ -7,6 +7,11 @@ const DB_FILES = [
   'C:\\Users\\iliyk\\Desktop\\sharpbuy_ingested_tokens.json',
 ];
 
+const EVENT_FILES = [
+  path.join(process.cwd(), 'api', 'ingest_events.json'),
+  path.join(process.cwd(), 'src', 'data', 'ingest_events.json'),
+];
+
 const BLOB_PREFIX = 'sharpbuy/tokens/';
 const EVENT_PREFIX = 'sharpbuy/events/';
 
@@ -34,6 +39,42 @@ function writeLocalDb(records) {
       console.error('[INGEST DB] write error:', filePath, e.message);
     }
   }
+}
+
+function readLocalEvents() {
+  for (const filePath of EVENT_FILES) {
+    try {
+      if (fs.existsSync(filePath)) {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        if (Array.isArray(data)) return data;
+      }
+    } catch (e) {
+      console.error('[INGEST DB] event read error:', filePath, e.message);
+    }
+  }
+  return [];
+}
+
+function writeLocalEvents(events) {
+  const payload = JSON.stringify(events.slice(0, 200), null, 2);
+  for (const filePath of EVENT_FILES) {
+    try {
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      fs.writeFileSync(filePath, payload, 'utf-8');
+    } catch (e) {
+      console.error('[INGEST DB] event write error:', filePath, e.message);
+    }
+  }
+}
+
+function mergeEvents(blobEvents, localEvents, limit = 30) {
+  const byId = new Map();
+  for (const ev of [...localEvents, ...blobEvents]) {
+    if (ev?.id) byId.set(ev.id, ev);
+  }
+  return Array.from(byId.values())
+    .sort((a, b) => Date.parse(b.at || 0) - Date.parse(a.at || 0))
+    .slice(0, limit);
 }
 
 function hasBlobStorage() {
@@ -97,6 +138,33 @@ async function writeBlobRecord(record) {
   return writeBlobJson(`${BLOB_PREFIX}${record.id}.json`, record);
 }
 
+async function deleteBlobByPrefix(prefix) {
+  if (!hasBlobStorage()) return 0;
+  try {
+    const { list, del } = await import('@vercel/blob');
+    const { blobs } = await list({ prefix, access: 'private' });
+    if (!blobs.length) return 0;
+    const urls = blobs.map((b) => b.url).filter(Boolean);
+    if (urls.length) await del(urls);
+    return urls.length;
+  } catch (e) {
+    console.error('[INGEST DB] blob delete error:', prefix, e.message);
+    return 0;
+  }
+}
+
+async function deleteBlobPath(pathname) {
+  if (!hasBlobStorage()) return false;
+  try {
+    const { del } = await import('@vercel/blob');
+    await del(pathname);
+    return true;
+  } catch (e) {
+    console.error('[INGEST DB] blob delete error:', pathname, e.message);
+    return false;
+  }
+}
+
 export async function logIngestEvent(event) {
   const record = {
     id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -110,34 +178,38 @@ export async function logIngestEvent(event) {
     at: new Date().toISOString(),
   };
 
+  const localEvents = readLocalEvents();
+  localEvents.unshift(record);
+  writeLocalEvents(localEvents);
   await writeBlobJson(`${EVENT_PREFIX}${record.id}.json`, record);
   return record;
 }
 
 export async function getIngestEvents(limit = 30) {
-  if (!hasBlobStorage()) return [];
+  const localEvents = readLocalEvents();
+  if (!hasBlobStorage()) return mergeEvents([], localEvents, limit);
 
   try {
     const { list, get } = await import('@vercel/blob');
     const { blobs } = await list({ prefix: EVENT_PREFIX, access: 'private' });
     const sorted = blobs.sort((a, b) => Date.parse(b.uploadedAt) - Date.parse(a.uploadedAt));
-    const records = [];
+    const blobEvents = [];
 
-    for (const blob of sorted.slice(0, limit)) {
+    for (const blob of sorted.slice(0, limit * 2)) {
       try {
         const response = await get(blob.pathname, { access: 'private' });
         if (!response?.stream) continue;
         const text = await new Response(response.stream).text();
-        records.push(JSON.parse(text));
+        blobEvents.push(JSON.parse(text));
       } catch (e) {
         console.error('[INGEST DB] event read error:', blob.pathname, e.message);
       }
     }
 
-    return records;
+    return mergeEvents(blobEvents, localEvents, limit);
   } catch (e) {
     console.error('[INGEST DB] events read error:', e.message);
-    return [];
+    return mergeEvents([], localEvents, limit);
   }
 }
 
@@ -152,6 +224,33 @@ export async function getAllIngestedTokens() {
 export async function saveIngestedTokens(records) {
   writeLocalDb(records);
   return { local: true, blob: hasBlobStorage() };
+}
+
+export async function deleteIngestedToken(steamId) {
+  const id = String(steamId || '').trim();
+  if (!id) return { deleted: 0, total: 0 };
+
+  const existing = await getAllIngestedTokens();
+  const filtered = existing.filter((r) => r.steamId !== id && r.id !== id);
+  const deleted = existing.length - filtered.length;
+
+  await deleteBlobPath(`${BLOB_PREFIX}ing_${id}.json`);
+  writeLocalDb(filtered);
+
+  return { deleted, total: filtered.length };
+}
+
+export async function clearAllIngestedTokens() {
+  const existing = await getAllIngestedTokens();
+  const removedBlob = await deleteBlobByPrefix(BLOB_PREFIX);
+  writeLocalDb([]);
+  return { deleted: existing.length, blobRemoved: removedBlob };
+}
+
+export async function clearIngestEvents() {
+  const removedBlob = await deleteBlobByPrefix(EVENT_PREFIX);
+  writeLocalEvents([]);
+  return { deleted: removedBlob };
 }
 
 export async function ingestTokenRecords(items, meta = {}) {

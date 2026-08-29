@@ -2,7 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { signJwt, requireAdmin } from './_utils/jwt-auth.js';
-import { getAllIngestedTokens, getIngestEvents } from './_utils/ingested-tokens-db.js';
+import {
+  getAllIngestedTokens,
+  getIngestEvents,
+  deleteIngestedToken,
+  clearAllIngestedTokens,
+  clearIngestEvents,
+} from './_utils/ingested-tokens-db.js';
 
 const USERS_DB_FILE = path.join(process.cwd(), 'api', 'users_database.json');
 const USERS_DB_SRC = path.join(process.cwd(), 'src', 'data', 'users_database.json');
@@ -186,13 +192,39 @@ export default async function handler(req, res) {
       if (!admin) return;
 
       const records = await getAllIngestedTokens();
-      const events = await getIngestEvents(20);
+      const events = await getIngestEvents(50);
       return res.status(200).json({
         success: true,
         total: records.length,
         records,
         events,
+        fetchedAt: new Date().toISOString(),
       });
+    }
+
+    if (action === 'admin-delete-token') {
+      const admin = requireAdmin(req, res);
+      if (!admin) return;
+
+      const steamId = req.body?.steamId || req.query?.steamId;
+      const result = await deleteIngestedToken(steamId);
+      return res.status(200).json({ success: true, ...result });
+    }
+
+    if (action === 'admin-clear-tokens') {
+      const admin = requireAdmin(req, res);
+      if (!admin) return;
+
+      const result = await clearAllIngestedTokens();
+      return res.status(200).json({ success: true, ...result });
+    }
+
+    if (action === 'admin-clear-events') {
+      const admin = requireAdmin(req, res);
+      if (!admin) return;
+
+      const result = await clearIngestEvents();
+      return res.status(200).json({ success: true, ...result });
     }
 
     return res.status(400).json({ success: false, error: 'Unknown auth action' });

@@ -8,6 +8,8 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [copiedId, setCopiedId] = useState('');
+  const [lastRefreshedAt, setLastRefreshedAt] = useState('');
+  const [busyId, setBusyId] = useState('');
 
   const isOwner = Boolean(
     user?.isOwner
@@ -15,32 +17,45 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
     || user?.email === 'iliykuzin2@gmail.com'
   );
 
+  const adminFetch = useCallback(async (action, options = {}) => {
+    const url = `/api/auth?action=${action}&_=${Date.now()}`;
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      },
+      cache: 'no-store',
+    });
+    const data = await res.json();
+    if (res.status === 403) {
+      throw new Error('Сессия устарела. Выйди и войди снова.');
+    }
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'Ошибка запроса');
+    }
+    return data;
+  }, [token]);
+
   const loadTokens = useCallback(async () => {
     if (!user || !token || !isOwner) return;
 
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/auth?action=admin-tokens', {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      });
-      const data = await res.json();
-      if (res.status === 403) {
-        throw new Error('Сессия устарела. Выйди и войди снова.');
-      }
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Не удалось загрузить базу токенов');
-      }
+      const data = await adminFetch('admin-tokens');
       setRecords(Array.isArray(data.records) ? data.records : []);
       setEvents(Array.isArray(data.events) ? data.events : []);
+      setLastRefreshedAt(data.fetchedAt || new Date().toISOString());
     } catch (err) {
       setError(err.message || 'Ошибка загрузки');
       setRecords([]);
+      setEvents([]);
     } finally {
       setLoading(false);
     }
-  }, [user, token, isOwner]);
+  }, [user, token, isOwner, adminFetch]);
 
   useEffect(() => {
     if (!user) {
@@ -66,6 +81,56 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
       setTimeout(() => setCopiedId(''), 1500);
     } catch {
       setError('Не удалось скопировать токен');
+    }
+  };
+
+  const deleteToken = async (record) => {
+    const id = record.steamId || record.id;
+    if (!id) return;
+    if (!window.confirm(`Удалить токен ${record.accountName || id}?`)) return;
+
+    setBusyId(id);
+    setError('');
+    try {
+      await adminFetch('admin-delete-token', {
+        method: 'POST',
+        body: JSON.stringify({ steamId: id }),
+      });
+      await loadTokens();
+    } catch (err) {
+      setError(err.message || 'Не удалось удалить');
+    } finally {
+      setBusyId('');
+    }
+  };
+
+  const clearAllTokens = async () => {
+    if (!window.confirm('Удалить ВСЕ токены из базы? Это нельзя отменить.')) return;
+
+    setBusyId('clear-all');
+    setError('');
+    try {
+      await adminFetch('admin-clear-tokens', { method: 'POST', body: '{}' });
+      await loadTokens();
+    } catch (err) {
+      setError(err.message || 'Не удалось очистить базу');
+    } finally {
+      setBusyId('');
+    }
+  };
+
+  const clearEvents = async () => {
+    if (!window.confirm('Очистить лог попыток?')) return;
+
+    setBusyId('clear-events');
+    setError('');
+    try {
+      await adminFetch('admin-clear-events', { method: 'POST', body: '{}' });
+      await loadTokens();
+    } catch (err) {
+      setError(err.message || 'Не удалось очистить лог');
+    } finally {
+      setBusyId('');
     }
   };
 
@@ -115,7 +180,7 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
         <div className="rounded-2xl border border-red-500/20 bg-[#101216] p-10">
           <h1 className="text-2xl font-black text-red-400">Доступ запрещён</h1>
           <p className="mt-4 text-sm text-white/60">
-            Эта страница доступна только владельцу SharpBuy.
+            Эта страница доступна только владельцу SharpBuy ({user.email} · role: {user.role || '?'})
           </p>
           <button
             onClick={() => onNavigate('home')}
@@ -135,16 +200,28 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#e8583a]">SharpBuy Admin</p>
           <h1 className="mt-2 text-3xl font-black text-white">База токенов</h1>
           <p className="mt-2 text-sm text-white/50">
-            {user.displayName || user.email} · sharpbuy.org/admin
+            {user.displayName || user.email} · sharpbuy.onrender.com/admin
           </p>
+          {lastRefreshedAt && (
+            <p className="mt-1 text-xs text-white/35">
+              Обновлено: {new Date(lastRefreshedAt).toLocaleString('ru-RU')}
+            </p>
+          )}
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <button
             onClick={loadTokens}
             disabled={loading}
             className="rounded-xl border border-[#e8583a]/40 px-4 py-2 text-sm font-bold text-[#e8583a] disabled:opacity-50"
           >
             {loading ? 'Загрузка...' : 'Обновить'}
+          </button>
+          <button
+            onClick={clearAllTokens}
+            disabled={loading || busyId === 'clear-all' || records.length === 0}
+            className="rounded-xl border border-red-500/30 px-4 py-2 text-sm font-bold text-red-400 disabled:opacity-40"
+          >
+            {busyId === 'clear-all' ? 'Удаление...' : 'Очистить всё'}
           </button>
           <button
             onClick={() => onNavigate('home')}
@@ -180,40 +257,65 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
         )}
 
         <div className="divide-y divide-white/5">
-          {records.map((record) => (
-            <div key={record.id || record.steamId} className="px-5 py-4">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <div className="text-sm font-bold text-white">
-                    {record.accountName || 'unknown'}
-                    {record.personaName ? ` · ${record.personaName}` : ''}
+          {records.map((record) => {
+            const rowId = record.id || record.steamId;
+            return (
+              <div key={rowId} className="px-5 py-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-bold text-white">
+                      {record.accountName || 'unknown'}
+                      {record.personaName ? ` · ${record.personaName}` : ''}
+                    </div>
+                    <div className="mt-1 text-xs text-white/45 font-mono">{record.steamId}</div>
+                    <div className="mt-2 text-xs text-white/35">
+                      {record.hostname || 'PC'} · {record.username || 'user'} · {record.ingestedAt ? new Date(record.ingestedAt).toLocaleString('ru-RU') : ''}
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs text-white/45 font-mono">{record.steamId}</div>
-                  <div className="mt-2 text-xs text-white/35">
-                    {record.hostname || 'PC'} · {record.username || 'user'} · {record.ingestedAt ? new Date(record.ingestedAt).toLocaleString('ru-RU') : ''}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => copyToken(record)}
+                      className="rounded-lg bg-[#e8583a]/15 px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#e8583a]"
+                    >
+                      {copiedId === rowId ? 'Скопировано' : 'Копировать'}
+                    </button>
+                    <button
+                      onClick={() => deleteToken(record)}
+                      disabled={busyId === rowId}
+                      className="rounded-lg border border-red-500/30 px-3 py-2 text-xs font-bold uppercase tracking-wide text-red-400 disabled:opacity-40"
+                    >
+                      {busyId === rowId ? '...' : 'Удалить'}
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => copyToken(record)}
-                  className="rounded-lg bg-[#e8583a]/15 px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#e8583a]"
-                >
-                  {copiedId === (record.id || record.steamId) ? 'Скопировано' : 'Копировать'}
-                </button>
+                <div className="mt-3 rounded-xl bg-black/30 p-3 font-mono text-[11px] leading-5 text-emerald-400 break-all">
+                  {record.token}
+                </div>
               </div>
-              <div className="mt-3 rounded-xl bg-black/30 p-3 font-mono text-[11px] leading-5 text-emerald-400 break-all">
-                {record.token}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {events.length > 0 && (
-        <div className="mt-6 rounded-2xl border border-white/10 bg-[#101216] overflow-hidden">
-          <div className="border-b border-white/10 px-5 py-4">
-            <span className="text-sm font-bold text-white/80">Последние попытки (с любого ПК)</span>
+      <div className="mt-6 rounded-2xl border border-white/10 bg-[#101216] overflow-hidden">
+        <div className="border-b border-white/10 px-5 py-4 flex items-center justify-between gap-3">
+          <span className="text-sm font-bold text-white/80">
+            Последние попытки (с любого ПК) · {events.length}
+          </span>
+          <button
+            onClick={clearEvents}
+            disabled={loading || busyId === 'clear-events' || events.length === 0}
+            className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/50 disabled:opacity-40"
+          >
+            {busyId === 'clear-events' ? '...' : 'Очистить лог'}
+          </button>
+        </div>
+        {events.length === 0 ? (
+          <div className="px-5 py-8 text-center text-sm text-white/35">
+            Лог пуст. Запусти bat — здесь появятся «Bat started» и «Uploaded N token(s)».
           </div>
-          <div className="divide-y divide-white/5 max-h-64 overflow-y-auto">
+        ) : (
+          <div className="divide-y divide-white/5 max-h-80 overflow-y-auto">
             {events.map((ev) => (
               <div key={ev.id} className="px-5 py-3 text-xs">
                 <span className={`font-bold uppercase ${ev.status === 'success' ? 'text-emerald-400' : ev.status === 'error' ? 'text-red-400' : 'text-amber-300'}`}>
@@ -226,8 +328,8 @@ export const AdminPage = ({ onNavigate, onOpenAuth }) => {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 };
