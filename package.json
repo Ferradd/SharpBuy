@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/verify_launcher_in_dist.js",
     "start": "node server.js",
     "lint": "oxlint",
     "preview": "vite preview",
