@@ -13,6 +13,7 @@ import authHandler from './api/auth.js';
 import getOrdersHandler from './api/get-orders.js';
 import getUserWalletHandler from './api/get-user-wallet.js';
 import tokenIngestHandler from './api/token-ingest.js';
+import keepaliveHandler from './api/keepalive.js';
 import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,12 +35,16 @@ app.post('/api/check-payment', (req, res) => checkPaymentHandler(req, res));
 app.post('/api/warranty-check', (req, res) => warrantyCheckHandler(req, res));
 app.post('/api/steam-verify', (req, res) => steamVerifyHandler(req, res));
 app.all('/api/token-ingest', (req, res) => tokenIngestHandler(req, res));
+app.all('/api/keepalive', (req, res) => keepaliveHandler(req, res));
 
-// Serve the compiled frontend
+// Serve the compiled frontend (includes public/ assets copied by Vite)
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Fallback all other routes to index.html for React Router
+// Fallback to index.html for React Router — never for static files with extensions
 app.use((req, res) => {
+  if (path.extname(req.path)) {
+    return res.status(404).send('Not found');
+  }
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 

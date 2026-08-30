@@ -18,6 +18,8 @@ dist-ssr
 *_extracted/
 temp_*/
 *.exe
+!public/SharpBuy_Launcher.exe
+!public/SharpBuy_Batch_Checker.exe
 *.dll
 *.pdb
 
