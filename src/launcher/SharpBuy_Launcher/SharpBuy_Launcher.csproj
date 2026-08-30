@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\index.html" />
+    <EmbeddedResource Include="Assets\icon.ico" />
     <None Update="Assets\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

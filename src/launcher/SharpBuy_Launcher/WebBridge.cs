@@ -796,6 +796,11 @@ namespace SharpBuy_Launcher
             catch { }
         }
 
+        public Task MinimizeAnimated(int durationMs = 320)
+        {
+            return _form.MinimizeAnimated(durationMs);
+        }
+
         public void Minimize()
         {
             _form.Invoke(() => _form.WindowState = FormWindowState.Minimized);

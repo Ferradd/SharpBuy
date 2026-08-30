@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
@@ -22,12 +24,56 @@ namespace SharpBuy_Launcher
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
+        [DllImport("user32.dll")]
+        public static extern bool AnimateWindow(IntPtr hWnd, int dwTime, int dwFlags);
+
+        private const int AW_HIDE = 0x10000;
+        private const int AW_BLEND = 0x00080000;
+        private const int AW_VER_NEGATIVE = 0x00000008;
+
         public MainForm()
         {
             InitializeComponent();
+            TryLoadApplicationIcon();
             _steamManager = new SteamManager();
             _bridge = new WebBridge(this, _steamManager);
             InitWebView();
+        }
+
+        private void TryLoadApplicationIcon()
+        {
+            try
+            {
+                var assembly = typeof(MainForm).Assembly;
+                var resourceName = assembly.GetManifestResourceNames()
+                    .FirstOrDefault(n => n.EndsWith("icon.ico", StringComparison.OrdinalIgnoreCase));
+
+                if (!string.IsNullOrEmpty(resourceName))
+                {
+                    using var stream = assembly.GetManifestResourceStream(resourceName);
+                    if (stream != null)
+                    {
+                        this.Icon = new Icon(stream);
+                        return;
+                    }
+                }
+
+                string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "icon.ico");
+                if (File.Exists(iconPath))
+                {
+                    this.Icon = new Icon(iconPath);
+                    return;
+                }
+
+                string exePath = Application.ExecutablePath;
+                if (File.Exists(exePath))
+                {
+                    var extracted = Icon.ExtractAssociatedIcon(exePath);
+                    if (extracted != null)
+                        this.Icon = extracted;
+                }
+            }
+            catch { }
         }
 
         private void InitializeComponent()
@@ -40,13 +86,6 @@ namespace SharpBuy_Launcher
             this.Text = "SHARPBUY NFA LAUNCHER";
             this.ShowIcon = true;
             
-            try
-            {
-                string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "icon.ico");
-                if (File.Exists(iconPath)) this.Icon = new Icon(iconPath);
-            }
-            catch { }
-
             _webView = new WebView2
             {
                 Dock = DockStyle.Fill,
@@ -122,6 +161,7 @@ namespace SharpBuy_Launcher
         public Task SetWindowSizeAnimated(int width, int height, int durationMs = 320)
         {
             var tcs = new TaskCompletionSource<bool>();
+            var finalSize = new Size(width, height);
 
             void Run()
             {
@@ -132,7 +172,6 @@ namespace SharpBuy_Launcher
                 }
 
                 var start = ClientSize;
-                var target = new Size(width, height);
                 int steps = Math.Max(14, durationMs / 16);
                 int step = 0;
                 var timer = new System.Windows.Forms.Timer { Interval = Math.Max(8, durationMs / steps) };
@@ -142,20 +181,63 @@ namespace SharpBuy_Launcher
                     step++;
                     double t = Math.Min(1.0, step / (double)steps);
                     t = 1 - Math.Pow(1 - t, 3);
-                    int w = start.Width + (int)((target.Width - start.Width) * t);
-                    int h = start.Height + (int)((target.Height - start.Height) * t);
+                    int w = start.Width + (int)((finalSize.Width - start.Width) * t);
+                    int h = start.Height + (int)((finalSize.Height - start.Height) * t);
                     ClientSize = new Size(w, h);
 
                     if (step >= steps)
                     {
                         timer.Stop();
                         timer.Dispose();
-                        ClientSize = target;
+                        ClientSize = finalSize;
                         tcs.TrySetResult(true);
                     }
                 };
 
                 timer.Start();
+            }
+
+            void FinishSnap()
+            {
+                ClientSize = finalSize;
+            }
+
+            if (InvokeRequired)
+                BeginInvoke(Run);
+            else
+                Run();
+
+            return tcs.Task.ContinueWith(_ =>
+            {
+                if (InvokeRequired)
+                    BeginInvoke(FinishSnap);
+                else
+                    FinishSnap();
+                return true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        public void StartDrag()
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }
+
+        public Task MinimizeAnimated(int durationMs = 320)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            void Run()
+            {
+                try
+                {
+                    if (WindowState != FormWindowState.Minimized && IsHandleCreated)
+                        AnimateWindow(Handle, durationMs, AW_HIDE | AW_BLEND | AW_VER_NEGATIVE);
+                }
+                catch { }
+
+                WindowState = FormWindowState.Minimized;
+                tcs.TrySetResult(true);
             }
 
             if (InvokeRequired)
@@ -166,10 +248,12 @@ namespace SharpBuy_Launcher
             return tcs.Task;
         }
 
-        public void StartDrag()
+        public void Minimize()
         {
-            ReleaseCapture();
-            SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            if (InvokeRequired)
+                Invoke(() => WindowState = FormWindowState.Minimized);
+            else
+                WindowState = FormWindowState.Minimized;
         }
 
         public void ExecuteScript(string script)

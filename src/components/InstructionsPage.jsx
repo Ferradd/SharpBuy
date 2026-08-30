@@ -147,7 +147,7 @@ export const InstructionsPage = ({ onNavigate }) => {
             <div className="lg:col-span-5 rounded-2xl border border-white/[0.08] bg-[#0E0D0C] p-6 space-y-4">
               <div className="font-mono text-xs font-bold text-white/40 uppercase tracking-wider flex items-center justify-between">
                 <span>{lang === 'ru' ? 'ОФИЦИАЛЬНЫЙ СОФТ' : 'OFFICIAL SOFTWARE'}</span>
-                <span className="text-[#E8583A]">v4.3 STABLE</span>
+                <span className="text-[#E8583A]">v4.4 STABLE</span>
               </div>
 
               <div className="space-y-3 font-mono text-xs">

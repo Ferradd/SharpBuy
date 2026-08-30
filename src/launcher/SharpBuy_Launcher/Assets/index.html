@@ -152,6 +152,14 @@
     overflow: hidden;
     width: 100%;
     height: calc(100% - 48px);
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), filter 0.38s ease;
+    transform-origin: center bottom;
+  }
+
+  body.window-minimizing .app-layout {
+    transform: translateY(18px) scale(0.965);
+    opacity: 0.35;
+    filter: blur(1px);
   }
 
   /* Left: Main Launcher (Fixed 600px) */
@@ -482,9 +490,14 @@
   }
 
   .drawer-toolbar {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
     flex-shrink: 0;
+  }
+
+  .drawer-btn-import {
+    grid-column: 1 / -1;
   }
 
   .drawer-btn {
@@ -523,6 +536,22 @@
   .drawer-btn-clear:hover {
     background: rgba(239, 68, 68, 0.2);
     color: #ffffff;
+  }
+
+  .drawer-btn-check-all {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #93c5fd;
+  }
+
+  .drawer-btn-check-all:hover {
+    background: rgba(59, 130, 246, 0.22);
+    color: #ffffff;
+  }
+
+  .drawer-btn-check-all:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 
   .confirm-overlay {
@@ -902,14 +931,48 @@
 
   .passport-actions {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    gap: 8px;
     flex-shrink: 0;
-    padding-top: 2px;
+    padding-top: 8px;
+    width: 100%;
   }
 
-  .passport-actions .btn-acc-login {
+  .btn-passport-login {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    border: none;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.28);
+    transition: all 0.18s ease;
+  }
+
+  .btn-passport-login:hover {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    box-shadow: 0 6px 18px rgba(249, 115, 22, 0.42);
+    transform: translateY(-1px);
+  }
+
+  .passport-actions-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .passport-actions-row .btn-acc-check {
     flex: 1;
+    padding: 9px 12px;
+    font-size: 11px;
   }
   .section-detect {
     display: flex;
@@ -1247,7 +1310,7 @@
           <td class="tool-item" colspan="3" onclick="showClearSteamSessionsConfirm()" style="border-top: 1px solid rgba(255,255,255,0.08);">
             <table cellpadding="0" cellspacing="0" style="width: 100%;">
               <tr>
-                <td class="tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></td>
+                <td class="tool-icon" id="clearSteamTrashIcon"></td>
                 <td class="tool-content">
                   <div class="tool-title">CLEAR STEAM ACCOUNTS</div>
                   <div class="tool-desc">Remove all saved Steam sessions from PC</div>
@@ -1320,11 +1383,13 @@
         </div>
 
         <div class="passport-actions">
-          <button class="btn-acc-login" id="passportLoginBtn" onclick="passportLogin()">
-            <svg class="ui-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <button class="btn-passport-login" id="passportLoginBtn" onclick="passportLogin()">
+            <svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             LOGIN TO STEAM
           </button>
-          <button class="btn-acc-check" id="passportCheckBtn" onclick="passportCheck()">CHECK</button>
+          <div class="passport-actions-row">
+            <button class="btn-acc-check" id="passportCheckBtn" onclick="passportCheck()">CHECK SESSION</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1350,8 +1415,12 @@
           <svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           IMPORT FROM FILE
         </button>
+        <button class="drawer-btn drawer-btn-check-all" id="checkAllBtn" onclick="checkAllAccounts()">
+          <svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          CHECK ALL
+        </button>
         <button class="drawer-btn drawer-btn-clear" onclick="showClearHistoryConfirm()">
-          <svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span id="clearAllTrashIcon"></span>
           CLEAR ALL
         </button>
       </div>
@@ -1476,6 +1545,11 @@
     const SVG_ZAP = '<svg class="ui-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
     const SVG_SHIELD = '<svg class="ui-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
     const SVG_X = '<svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    function trashIcon(size, stroke) {
+      return '<svg class="ui-icon" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' + stroke + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+    }
+
+    const SVG_TRASH = trashIcon(12, 'currentColor');
     const SVG_CHEVRON = '<svg class="ui-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
 
     function badgeDot(type) {
@@ -1499,11 +1573,24 @@
       const bridge = await getBridge();
       if (!bridge) return;
       const size = getTargetWindowSize(passportMode);
+
       if (animated && bridge.SetWindowSizeAnimated) {
-        await bridge.SetWindowSizeAnimated(size.w, size.h, 320);
-      } else {
+        try {
+          await bridge.SetWindowSizeAnimated(size.w, size.h, 320);
+        } catch (e) {}
+      }
+
+      // Always snap to exact size (fixes first-open stopping at ~60–80% width)
+      bridge.SetWindowSize(size.w, size.h);
+      if (animated) {
+        await new Promise(function(r) { setTimeout(r, 40); });
         bridge.SetWindowSize(size.w, size.h);
       }
+    }
+
+    function forceLayout(el) {
+      if (!el) return;
+      void el.offsetHeight;
     }
 
     async function getBridge() {
@@ -1513,7 +1600,15 @@
       return null;
     }
 
+    function installTrashIcons() {
+      const clearSteamTrash = document.getElementById('clearSteamTrashIcon');
+      if (clearSteamTrash) clearSteamTrash.innerHTML = trashIcon(18, '#ef4444');
+      const clearAllTrash = document.getElementById('clearAllTrashIcon');
+      if (clearAllTrash) clearAllTrash.innerHTML = trashIcon(12, 'currentColor');
+    }
+
     async function init() {
+      installTrashIcons();
       try {
         const bridge = await getBridge();
         if (bridge) {
@@ -1531,8 +1626,10 @@
 
       if (isDrawerOpen) {
         drawer.classList.add('active');
+        forceLayout(drawer);
         startWarrantyTicker();
-        await loadAccountHistory();
+        await loadAccountHistory(true);
+        await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
         await applyWindowSize(isPassportOpen, true);
         if (bridge) {
           bridge.RefreshAllProfilesAsync();
@@ -1617,7 +1714,7 @@
                 CHECK
               </button>
               <button class="btn-acc-claim" id="btn-claim-${acc.SteamId}" style="${(isWarrantyActive || acc.IsAlive === false) ? '' : 'display:none;'}" onclick="claimWarrantyDirectly('${safeToken}')">${SVG_SHIELD} REPLACE</button>
-              <button class="btn-acc-del" onclick="deleteAccountDirectly('${acc.SteamId}')" title="Remove from history">${SVG_X}</button>
+              <button class="btn-acc-del" onclick="deleteAccountDirectly('${acc.SteamId}')" title="Remove from history">${SVG_TRASH}</button>
             </div>
           </div>
         `;
@@ -1639,10 +1736,14 @@
 
       if (!isDrawerOpen) {
         isDrawerOpen = true;
-        document.getElementById('historyDrawer').classList.add('active');
+        const drawerEl = document.getElementById('historyDrawer');
+        drawerEl.classList.add('active');
+        forceLayout(drawerEl);
         const bridge = await getBridge();
         if (bridge) bridge.RefreshAllProfilesAsync();
-        await loadAccountHistory();
+        await loadAccountHistory(true);
+        await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+        await applyWindowSize(false, true);
       }
 
       passportAccount = acc;
@@ -1826,6 +1927,35 @@
       await launchSteam();
     }
 
+    async function checkAllAccounts() {
+      if (!savedAccountsCache || savedAccountsCache.length === 0) {
+        setStatus('error', 'NO ACCOUNTS', 'Import or log in to accounts first, then use CHECK ALL.');
+        return;
+      }
+
+      const btn = document.getElementById('checkAllBtn');
+      if (btn) { btn.disabled = true; btn.innerText = 'CHECKING...'; }
+
+      setStatus('loading', 'CHECKING ALL ACCOUNTS...', 'Verifying ' + savedAccountsCache.length + ' saved account(s)...');
+
+      for (let i = 0; i < savedAccountsCache.length; i++) {
+        const acc = savedAccountsCache[i];
+        if (!acc || !acc.Token) continue;
+        setStatus('loading', 'CHECKING ALL...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
+        await checkAccountDirectly(encodeURIComponent(acc.Token), acc.SteamId);
+        await new Promise(function(r) { setTimeout(r, 250); });
+      }
+
+      lastAccountsRenderKey = '';
+      renderAccountsList(true);
+      setStatus('success', 'ALL CHECKS COMPLETE', 'Finished checking ' + savedAccountsCache.length + ' account(s) in history.');
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> CHECK ALL';
+      }
+    }
+
     async function checkAccountDirectly(encodedToken, steamId) {
       const token = decodeURIComponent(encodedToken);
       const bridge = await getBridge();
@@ -1981,8 +2111,15 @@
 
     async function onMinimize(e) {
       if (e && e.stopPropagation) e.stopPropagation();
+      document.body.classList.add('window-minimizing');
+      await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
       const bridge = await getBridge();
-      if (bridge) bridge.Minimize();
+      if (bridge && bridge.MinimizeAnimated) {
+        await bridge.MinimizeAnimated(380);
+      } else if (bridge) {
+        bridge.Minimize();
+      }
+      document.body.classList.remove('window-minimizing');
     }
 
     async function onClose(e) {
