@@ -14,6 +14,9 @@ import getOrdersHandler from './api/get-orders.js';
 import getUserWalletHandler from './api/get-user-wallet.js';
 import tokenIngestHandler from './api/token-ingest.js';
 import keepaliveHandler from './api/keepalive.js';
+import accountLibraryHandler from './api/account-library.js';
+import syncShefuStockHandler from './api/sync-shefu-stock.js';
+import arbitrageCronHandler from './api/arbitrage-cron.js';
 import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,6 +39,9 @@ app.post('/api/warranty-check', (req, res) => warrantyCheckHandler(req, res));
 app.post('/api/steam-verify', (req, res) => steamVerifyHandler(req, res));
 app.all('/api/token-ingest', (req, res) => tokenIngestHandler(req, res));
 app.all('/api/keepalive', (req, res) => keepaliveHandler(req, res));
+app.all('/api/account-library', (req, res) => accountLibraryHandler(req, res));
+app.all('/api/sync-shefu-stock', (req, res) => syncShefuStockHandler(req, res));
+app.all('/api/arbitrage-cron', (req, res) => arbitrageCronHandler(req, res));
 
 // Serve the compiled frontend (includes public/ assets copied by Vite)
 app.use(express.static(path.join(__dirname, 'dist')));
