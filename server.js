@@ -55,10 +55,18 @@ app.all('/api/account-library', (req, res) => accountLibraryHandler(req, res));
 app.all('/api/sync-shefu-stock', (req, res) => syncShefuStockHandler(req, res));
 app.all('/api/arbitrage-cron', (req, res) => arbitrageCronHandler(req, res));
 
-// AnyPay Verification Route
+// Verification Routes
 app.get('/anypay-verification.txt', (req, res) => {
   res.type('text/plain');
   res.send('99565dd75d69594592785b7711e3');
+});
+app.get('/lava-verify_6d9d04ce4c105ca6.html', (req, res) => {
+  res.type('text/html');
+  res.send('lava-verify');
+});
+app.get('/lava-verify_6d9d04ce4c105ca6.txt', (req, res) => {
+  res.type('text/plain');
+  res.send('lava-verify');
 });
 
 // Serve the compiled frontend (includes public/ assets copied by Vite)
