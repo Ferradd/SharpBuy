@@ -156,7 +156,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
           const realToken = data.delivery.tokens[0];
 
           // ── Токен уже готов — сразу показываем SUCCESS ──
-          if (realToken && realToken !== 'PROCURING' && realToken !== 'ERR_SUPPLIER_FAIL') {
+          if (realToken && realToken !== 'PROCURING' && !realToken.startsWith('ERR_SUPPLIER_FAIL')) {
             const orderRecord = {
               orderId,
               email,
@@ -176,7 +176,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             setOrder(orderRecord);
             setTimeout(() => setStep('SUCCESS'), 600);
 
-          } else if (realToken === 'ERR_SUPPLIER_FAIL') {
+          } else if (realToken.startsWith('ERR_SUPPLIER_FAIL')) {
             // ── ОШИБКА ЗАКУПКИ — показываем пользователю ──
             setDelivery(data.delivery);
             setOrder({ orderId, email, productName: product.cleanTitle || product.title, amountRub: priceRub });
@@ -978,69 +978,109 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
         {/* ── STEP 3: REAL NFA ACCOUNT DELIVERY & LAUNCHER DOWNLOAD ── */}
         {step === 'SUCCESS' && delivery && (
           <div className="space-y-4 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#34D399]/15 border border-[#34D399]/40 shadow-[0_0_25px_rgba(52,211,153,0.35)]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="3" className="h-7 w-7">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-
-            <div>
-              <h2 className="font-sans text-xl font-black uppercase text-white">
-                {isEn ? 'PAYMENT CONFIRMED!' : 'ОПЛАТА ПОДТВЕРЖДЕНА!'}
-              </h2>
-              <p className="font-mono text-xs text-[#34D399] mt-0.5">
-                {isEn
-                  ? `${tokensList.length > 1 ? `${tokensList.length}x ${product?.englishTitle || product?.cleanTitle || 'Account'}` : `${product?.englishTitle || product?.cleanTitle || 'Account'}`} successfully dispatched · Copy sent to ${order?.email}`
-                  : `${tokensList.length > 1 ? `Выдано ${tokensList.length}x ${product?.cleanTitle || 'Аккаунт'}` : `${product?.cleanTitle || 'Ваш аккаунт'} успешно выдан`} · Копия отправлена на ${order?.email}`}
-              </p>
-            </div>
-
-            {/* NFA Tokens List OR Procuring State */}
-            <div className="space-y-2 text-left">
-              {delivery.status === 'PROCURING' ? (
-                <div className="rounded-xl border border-white/[0.12] bg-[#E8583A]/10 p-5 font-mono space-y-3 shadow-xl text-center">
-                  <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#E8583A]/20 animate-spin">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#E8583A" strokeWidth="2" className="h-6 w-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
-                    </svg>
-                  </div>
+            {tokensList.length > 0 && tokensList[0].startsWith('ERR_SUPPLIER_FAIL') ? (
+              // ── ERROR STATE ──
+              <>
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#E8583A]/15 border border-[#E8583A]/40 shadow-[0_0_25px_rgba(232,88,58,0.35)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#E8583A" strokeWidth="3" className="h-7 w-7">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="font-sans text-xl font-black uppercase text-[#E8583A]">
+                    {isEn ? 'PURCHASE ERROR' : 'ОШИБКА ЗАКУПКИ'}
+                  </h2>
+                  <p className="font-mono text-xs text-white/70 mt-1">
+                    {isEn ? 'Your payment was received, but the automatic purchase from the supplier failed.' : 'Ваша оплата получена, но автоматическая закупка у поставщика завершилась с ошибкой.'}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-white/[0.12] bg-[#E8583A]/10 p-5 font-mono space-y-3 shadow-xl text-left">
                   <div className="text-[#E8583A] font-bold text-sm">
-                    {isEn ? 'ACCOUNT PREPARATION' : 'ПОДГОТОВКА АККАУНТА'}
+                    {isEn ? 'ERROR DETAILS:' : 'ДЕТАЛИ ОШИБКИ:'}
                   </div>
-                  <div className="text-white/70 text-xs">
+                  <div className="text-white text-xs select-all bg-black/50 p-2 rounded border border-[#E8583A]/30 font-bold break-words">
+                    {tokensList[0]}
+                  </div>
+                  <div className="text-white/70 text-xs mt-3">
                     {isEn 
-                      ? 'Payment received! We are currently preparing and verifying your account for security. This usually takes 2-10 minutes. The token will be automatically emailed to you once ready.' 
-                      : 'Оплата получена! Ваш аккаунт сейчас подготавливается и проверяется на валидность. Обычно это занимает от 2 до 10 минут. Ключ будет автоматически выслан на ваш Email, как только мы его подготовим.'}
+                      ? 'Please contact support with your Order ID and this error message. We will manually issue your account or refund your payment.' 
+                      : 'Пожалуйста, обратитесь в поддержку, предоставив номер заказа и этот текст ошибки. Мы выдадим аккаунт вручную или вернем средства.'}
                   </div>
                   <div className="text-white/50 text-[10px] mt-2">
-                    {isEn ? 'You can safely close this window.' : 'Вы можете безопасно закрыть это окно.'}
+                    Order ID: {order?.orderId}
                   </div>
                 </div>
-              ) : (
-                tokensList.map((tok, idx) => (
-                  <div key={idx} className="rounded-xl border border-white/[0.12] bg-black/70 p-3.5 font-mono space-y-2 shadow-xl">
-                    <div className="flex items-center justify-between text-[10px] text-white/40 uppercase tracking-widest border-b border-white/[0.08] pb-1">
-                      <span>{isEn ? `LOGIN TOKEN #${idx + 1} (NFA STEAM):` : `ТОКЕН ВХОДА #${idx + 1} (NFA STEAM):`}</span>
-                      <span className="text-[#34D399] font-bold">{isEn ? 'ACTIVE' : 'АКТИВЕН'}</span>
-                    </div>
+              </>
+            ) : (
+              // ── SUCCESS STATE ──
+              <>
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#34D399]/15 border border-[#34D399]/40 shadow-[0_0_25px_rgba(52,211,153,0.35)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="3" className="h-7 w-7">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
 
-                    <div className="relative rounded-lg bg-black/80 p-2.5 border border-white/[0.08] overflow-hidden">
-                      <div className="truncate text-xs font-bold text-[#E8583A] select-all">
-                        {tok}
+                <div>
+                  <h2 className="font-sans text-xl font-black uppercase text-white">
+                    {isEn ? 'PAYMENT CONFIRMED!' : 'ОПЛАТА ПОДТВЕРЖДЕНА!'}
+                  </h2>
+                  <p className="font-mono text-xs text-[#34D399] mt-0.5">
+                    {isEn
+                      ? `${tokensList.length > 1 ? `${tokensList.length}x ${product?.englishTitle || product?.cleanTitle || 'Account'}` : `${product?.englishTitle || product?.cleanTitle || 'Account'}`} successfully dispatched · Copy sent to ${order?.email}`
+                      : `${tokensList.length > 1 ? `Выдано ${tokensList.length}x ${product?.cleanTitle || 'Аккаунт'}` : `${product?.cleanTitle || 'Ваш аккаунт'} успешно выдан`} · Копия отправлена на ${order?.email}`}
+                  </p>
+                </div>
+
+                {/* NFA Tokens List OR Procuring State */}
+                <div className="space-y-2 text-left">
+                  {delivery.status === 'PROCURING' ? (
+                    <div className="rounded-xl border border-white/[0.12] bg-[#E8583A]/10 p-5 font-mono space-y-3 shadow-xl text-center">
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#E8583A]/20 animate-spin">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#E8583A" strokeWidth="2" className="h-6 w-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                        </svg>
+                      </div>
+                      <div className="text-[#E8583A] font-bold text-sm">
+                        {isEn ? 'ACCOUNT PREPARATION' : 'ПОДГОТОВКА АККАУНТА'}
+                      </div>
+                      <div className="text-white/70 text-xs">
+                        {isEn 
+                          ? 'Payment received! We are currently preparing and verifying your account for security. This usually takes 2-10 minutes. The token will be automatically emailed to you once ready.' 
+                          : 'Оплата получена! Ваш аккаунт сейчас подготавливается и проверяется на валидность. Обычно это занимает от 2 до 10 минут. Ключ будет автоматически выслан на ваш Email, как только мы его подготовим.'}
+                      </div>
+                      <div className="text-white/50 text-[10px] mt-2">
+                        {isEn ? 'You can safely close this window.' : 'Вы можете безопасно закрыть это окно.'}
                       </div>
                     </div>
+                  ) : (
+                    tokensList.map((tok, idx) => (
+                      <div key={idx} className="rounded-xl border border-white/[0.12] bg-black/70 p-3.5 font-mono space-y-2 shadow-xl">
+                        <div className="flex items-center justify-between text-[10px] text-white/40 uppercase tracking-widest border-b border-white/[0.08] pb-1">
+                          <span>{isEn ? `LOGIN TOKEN #${idx + 1} (NFA STEAM):` : `ТОКЕН ВХОДА #${idx + 1} (NFA STEAM):`}</span>
+                          <span className="text-[#34D399] font-bold">{isEn ? 'ACTIVE' : 'АКТИВЕН'}</span>
+                        </div>
 
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(tok, `token_${idx}`)}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8583A] py-2 font-mono text-xs font-black text-white hover:bg-[#FF6B4A] transition-all cursor-pointer"
-                    >
-                      <span>{copiedField === `token_${idx}` ? (isEn ? 'COPIED ✓' : 'СКОПИРОВАНО ✓') : (isEn ? `COPY TOKEN #${idx + 1}` : `СКОПИРОВАТЬ ТОКЕН #${idx + 1}`)}</span>
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
+                        <div className="relative rounded-lg bg-black/80 p-2.5 border border-white/[0.08] overflow-hidden">
+                          <div className="truncate text-xs font-bold text-[#E8583A] select-all">
+                            {tok}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(tok, `token_${idx}`)}
+                          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E8583A] py-2 font-mono text-xs font-black text-white hover:bg-[#FF6B4A] transition-all cursor-pointer"
+                        >
+                          <span>{copiedField === `token_${idx}` ? (isEn ? 'COPIED ✓' : 'СКОПИРОВАНО ✓') : (isEn ? `COPY TOKEN #${idx + 1}` : `СКОПИРОВАТЬ ТОКЕН #${idx + 1}`)}</span>
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </>
+            )}
+          </div>
 
             {/* Download All TXT Button for multiple accounts */}
             {tokensList.length > 1 && (
