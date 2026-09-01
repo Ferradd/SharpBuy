@@ -2418,11 +2418,11 @@
       <!-- Sorting Filter Pills -->
       <div class="drawer-sort-bar" style="display:flex; gap:5px; padding: 4px 14px 6px 14px; overflow-x:auto; scrollbar-width:none; align-items:center;">
         <button class="sort-pill active" id="sort-worth" onclick="setAccountSort('worth')">🔥 По цене ($)</button>
+        <button class="sort-pill" id="sort-only-skins" onclick="setAccountSort('only-skins')">💎 Только со скинами</button>
         <button class="sort-pill" id="sort-items" onclick="setAccountSort('items')">🎒 По скинам</button>
         <button class="sort-pill" id="sort-knives" onclick="setAccountSort('knives')">🔪 Ножи</button>
         <button class="sort-pill" id="sort-medals" onclick="setAccountSort('medals')">🎖️ Медали</button>
         <button class="sort-pill" id="sort-recent" onclick="setAccountSort('recent')">🕒 Новые</button>
-        <button class="sort-pill" id="scanInventoriesBtn" onclick="scanMissingInventories()" style="background:rgba(59,130,246,0.18);border-color:rgba(59,130,246,0.4);color:#93c5fd;margin-left:auto;">⚡ СКАН</button>
       </div>
 
       <div class="accounts-list-section" id="accountsListSection">
@@ -2760,12 +2760,18 @@
 
       const totalWorthEl = document.getElementById('cs2TotalWorthLabel');
       const totalItemsEl = document.getElementById('cs2TotalItemsLabel');
+      const emptyCount = savedAccountsCache.length - totalAccountsWithSkins;
       if (totalWorthEl) totalWorthEl.innerText = '$' + totalCs2Worth.toFixed(2);
-      if (totalItemsEl) totalItemsEl.innerText = totalCs2Items + ' скинов на ' + totalAccountsWithSkins + ' из ' + savedAccountsCache.length + ' аккаунтов';
+      if (totalItemsEl) totalItemsEl.innerText = totalCs2Items + ' скинов на ' + totalAccountsWithSkins + ' акк. (' + emptyCount + ' пустых без скинов)';
 
       // Sort accounts according to active sort pill
-      const sortedAccounts = savedAccountsCache.slice().sort(function(a, b) {
-        if (accountSortMode === 'worth') {
+      let sortedAccounts = savedAccountsCache.slice();
+      if (accountSortMode === 'only-skins') {
+        sortedAccounts = sortedAccounts.filter(function(a) { return (a.Cs2ItemsCount || 0) > 0; });
+      }
+
+      sortedAccounts.sort(function(a, b) {
+        if (accountSortMode === 'worth' || accountSortMode === 'only-skins') {
           return (b.Cs2InventoryWorthUsd || 0) - (a.Cs2InventoryWorthUsd || 0);
         } else if (accountSortMode === 'items') {
           return (b.Cs2ItemsCount || 0) - (a.Cs2ItemsCount || 0);
