@@ -48,12 +48,15 @@ export default async function handler(req, res) {
       amountRub
     });
 
+    // CrystalPay strictly limits description to max 64 characters
+    const cleanDesc = `SharpBuy: ${(productName || 'Steam Account').substring(0, 40)} x${qty}`.substring(0, 60);
+
     const payload = {
       auth_login: CRYSTALPAY_AUTH_LOGIN,
       auth_secret: CRYSTALPAY_AUTH_SECRET,
       amount: amountRub,
       type: 'purchase',
-      description: `SharpBuy: ${productName || 'Steam Account'} (x${qty}) - Заказ #${orderId}`,
+      description: cleanDesc,
       redirect_url: redirectUrl,
       callback_url: 'https://sharpbuy.org/api/crystalpay-webhook',
       lifetime: 60,
