@@ -57,16 +57,8 @@ export function claimLocalStockToken(productId = '', productName = '', orderId =
         return item.token;
       }
     }
-
-    // Allocate fresh active SharpBuy Steam node token
-    const pseudoSteamId = '7656119' + (Math.floor(Math.random() * 899999999) + 100000000).toString();
-    const pseudoSecret = Array.from({length: 48}, () => Math.floor(Math.random() * 16).toString(16)).join('');
-    const token = `${pseudoSteamId}----${pseudoSecret}`;
-    console.log(`[LOCAL STOCK] ⚡ Allocated active SharpBuy Steam token for order ${orderId}`);
-    return token;
   } catch (e) {
     console.error('[LOCAL STOCK] Claim error:', e);
   }
-  const fallbackId = '7656119' + (Math.floor(Math.random() * 899999999) + 100000000).toString();
-  return `${fallbackId}----${Date.now().toString(36)}${Math.random().toString(36).substring(2)}`;
+  return null;
 }
