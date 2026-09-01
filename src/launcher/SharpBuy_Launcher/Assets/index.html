@@ -2416,12 +2416,13 @@
       </div>
 
       <!-- Sorting Filter Pills -->
-      <div class="drawer-sort-bar" style="display:flex; gap:5px; padding: 4px 14px 6px 14px; overflow-x:auto; scrollbar-width:none;">
+      <div class="drawer-sort-bar" style="display:flex; gap:5px; padding: 4px 14px 6px 14px; overflow-x:auto; scrollbar-width:none; align-items:center;">
         <button class="sort-pill active" id="sort-worth" onclick="setAccountSort('worth')">🔥 По цене ($)</button>
         <button class="sort-pill" id="sort-items" onclick="setAccountSort('items')">🎒 По скинам</button>
         <button class="sort-pill" id="sort-knives" onclick="setAccountSort('knives')">🔪 Ножи</button>
         <button class="sort-pill" id="sort-medals" onclick="setAccountSort('medals')">🎖️ Медали</button>
         <button class="sort-pill" id="sort-recent" onclick="setAccountSort('recent')">🕒 Новые</button>
+        <button class="sort-pill" id="scanInventoriesBtn" onclick="scanMissingInventories()" style="background:rgba(59,130,246,0.18);border-color:rgba(59,130,246,0.4);color:#93c5fd;margin-left:auto;">⚡ СКАН</button>
       </div>
 
       <div class="accounts-list-section" id="accountsListSection">
@@ -3087,6 +3088,44 @@
       await launchSteamOffline();
     }
 
+    async function scanMissingInventories() {
+      if (!savedAccountsCache || savedAccountsCache.length === 0) return;
+      const btn = document.getElementById('scanInventoriesBtn');
+      if (btn) { btn.disabled = true; btn.innerText = 'SCANNING...'; }
+
+      setStatus('loading', 'SCANNING CS2 INVENTORIES...', 'Probing all ' + savedAccountsCache.length + ' accounts for CS2 items and knife valuation...');
+      for (let i = 0; i < savedAccountsCache.length; i++) {
+        const acc = savedAccountsCache[i];
+        if (!acc || !acc.Token) continue;
+        setStatus('loading', 'SCANNING INVENTORIES...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
+        try {
+          const bridge = await getBridge();
+          if (bridge && bridge.FetchAccountDeepDetailsAsync) {
+            const deepResJson = await bridge.FetchAccountDeepDetailsAsync(acc.Token, acc.SteamId);
+            const deepData = JSON.parse(deepResJson || '{}');
+            if (deepData && deepData.success) {
+              acc.VacStatus = deepData.vacStatus || acc.VacStatus;
+              acc.Cs2ItemsCount = deepData.cs2Count != null ? deepData.cs2Count : acc.Cs2ItemsCount;
+              acc.Cs2InventoryWorthUsd = deepData.cs2WorthUsd != null ? deepData.cs2WorthUsd : acc.Cs2InventoryWorthUsd;
+              acc.Cs2MedalsCount = deepData.medalsCount || acc.Cs2MedalsCount;
+              acc.Cs2KnivesCount = deepData.knivesCount || acc.Cs2KnivesCount;
+              acc.TopValuableItem = deepData.topItem || acc.TopValuableItem;
+              acc.DotaItemsCount = deepData.dotaCount || acc.DotaItemsCount;
+              if (deepData.persona && deepData.persona !== acc.SteamId) acc.PersonaName = deepData.persona;
+              if (deepData.avatar) acc.AvatarUrl = deepData.avatar;
+            }
+          }
+        } catch(e) {}
+        renderAccountsList(true);
+        await new Promise(function(r) { setTimeout(r, 650); });
+      }
+
+      lastAccountsRenderKey = '';
+      renderAccountsList(true);
+      setStatus('success', 'INVENTORY SCAN COMPLETE', 'All CS2 inventories evaluated successfully!');
+      if (btn) { btn.disabled = false; btn.innerText = '⚡ СКАН ИНВЕНТАРЕЙ'; }
+    }
+
     async function checkAllAccounts() {
       if (!savedAccountsCache || savedAccountsCache.length === 0) {
         setStatus('error', 'NO ACCOUNTS', 'Import or log in to accounts first, then use CHECK ALL.');
@@ -3105,10 +3144,13 @@
         const acc = savedAccountsCache[i];
         if (!acc || !acc.Token) continue;
         setStatus('loading', 'CHECKING INVENTORIES & STATUS...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
-        await checkAccountDirectly(encodeURIComponent(acc.Token), acc.SteamId);
+        try {
+          await checkAccountDirectly(encodeURIComponent(acc.Token), acc.SteamId);
+        } catch (e) {}
         totalCs2Worth += (acc.Cs2InventoryWorthUsd || 0);
         totalCs2Items += (acc.Cs2ItemsCount || 0);
-        await new Promise(function(r) { setTimeout(r, 150); });
+        renderAccountsList(true);
+        await new Promise(function(r) { setTimeout(r, 650); });
       }
 
       lastAccountsRenderKey = '';

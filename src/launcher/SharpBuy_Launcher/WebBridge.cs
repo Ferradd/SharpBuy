@@ -885,18 +885,35 @@ namespace SharpBuy_Launcher
 
                 try
                 {
-                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
-                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
-                    var res = await _httpClient.SendAsync(req);
-                    
-                    if (!res.IsSuccessStatusCode)
+                    HttpResponseMessage? res = null;
+                    for (int attempt = 0; attempt < 3; attempt++)
                     {
+                        if (attempt > 0)
+                        {
+                            await Task.Delay(1400 * attempt);
+                        }
+
+                        var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
+                        req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+                        res = await _httpClient.SendAsync(req);
+                        
+                        if (res.IsSuccessStatusCode)
+                            break;
+
+                        if (res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                            continue;
+
                         var req2 = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/profiles/{steamId}/inventory/json/730/2");
                         req2.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                        res = await _httpClient.SendAsync(req2);
+                        var res2 = await _httpClient.SendAsync(req2);
+                        if (res2.IsSuccessStatusCode)
+                        {
+                            res = res2;
+                            break;
+                        }
                     }
 
-                    if (res.IsSuccessStatusCode)
+                    if (res != null && res.IsSuccessStatusCode)
                     {
                         var body = await res.Content.ReadAsStringAsync();
                         using var doc = JsonDocument.Parse(body);
