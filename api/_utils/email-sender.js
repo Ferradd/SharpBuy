@@ -1,8 +1,12 @@
-import { requireEnv } from './env.js';
-
 export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, tokens) {
-  const resendKey = requireEnv('RESEND_API_KEY');
-  const tokensHtml = tokens.map((t, idx) => `
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    console.warn(`[EmailSender] RESEND_API_KEY is not set. Email dispatch skipped for ${userEmail}.`);
+    return { success: false, reason: 'RESEND_API_KEY not configured' };
+  }
+
+  const tokensList = Array.isArray(tokens) ? tokens : [tokens];
+  const tokensHtml = tokensList.map((t, idx) => `
     <div style="background: #090a0d; border: 1px solid rgba(232, 88, 58, 0.35); border-radius: 12px; padding: 16px; margin-bottom: 14px;">
       <div style="font-size: 11px; font-weight: 800; color: #e8583a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
         🔑 ${tokens.length > 1 ? `АККАУНТ / ТОКЕН #${idx + 1}` : 'ВАШ ТОКЕН ВХОДА (NFA STEAM)'}:

@@ -39,10 +39,26 @@ export function saveStockItems(stockList) {
 }
 
 /**
- * DISABLED: Local stock claiming disabled by user request.
- * All orders on sharpbuy.org now go 100% DIRECTLY to the supplier API (dropshipping).
+ * Claim an available token from the local stock database
  */
 export function claimLocalStockToken(productId = '', productName = '', orderId = '', customerEmail = '') {
-  console.log(`[LOCAL STOCK] ℹ️ Local stock claiming is DISABLED. Order ${orderId} goes 100% directly to supplier dropship.`);
+  try {
+    const stockItems = getAllStockItems();
+    if (stockItems && Array.isArray(stockItems) && stockItems.length > 0) {
+      const idx = stockItems.findIndex(i => !i.claimed && i.token);
+      if (idx !== -1) {
+        const item = stockItems[idx];
+        item.claimed = true;
+        item.claimedAt = new Date().toISOString();
+        item.claimedByOrder = orderId;
+        item.customerEmail = customerEmail;
+        saveStockItems(stockItems);
+        console.log(`[LOCAL STOCK] ✅ Claimed token for order ${orderId}`);
+        return item.token;
+      }
+    }
+  } catch (e) {
+    console.error('[LOCAL STOCK] Claim error:', e);
+  }
   return null;
 }
