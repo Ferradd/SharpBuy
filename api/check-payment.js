@@ -562,79 +562,17 @@ export default async function handler(req, res) {
       }
 
       const neededQty = Math.max(1, parseInt(quantity, 10) || 1);
-      const userEmail = req.body.email || 'iliykuzin2@gmail.com';
+      const userEmail = req.body.email || 'iliykuzin3@gmail.com';
       const supplierSlug = mapToSupplierSlug(req.body.productId, req.body.productName);
 
       // ========================================================================
-      // ⚡ PRIORITY 1: FULFILL FROM LOCAL STOCK WAREHOUSE ($0 COST, 100% MARGIN)
-      // ========================================================================
-      const localToken = claimLocalStockToken(req.body.productId, req.body.productName, orderId, userEmail);
-      if (localToken) {
-        console.log(`[PaymentConfirmed] ⚡ Fulfilling order ${orderId} from LOCAL STOCK! (100% Profit)`);
-        const localDelivery = {
-          quantity: neededQty,
-          tokens: [localToken],
-          tokenData: localToken,
-          status: 'DELIVERED',
-          launcherUrl: '/SharpBuy_Launcher.exe',
-          launcherName: 'SharpBuy_Launcher.exe',
-          instructions: '1. Скачайте лаунчер SharpBuy_Launcher.exe\n2. Запустите лаунчер и вставьте ваш токен аккаунта\n3. Нажмите Вход — Steam откроется с активным Prime!',
-          deliveredAt: new Date().toISOString()
-        };
-
-        fulfilledOrdersCache.set(orderId, {
-          txHash: txHash || '0xCONFIRMED_BSC_TX',
-          delivery: localDelivery,
-          status: 'DELIVERED'
-        });
-
-        saveOrderToDb({
-          orderId,
-          email: userEmail,
-          productId: req.body.productId || 'premier',
-          productName: req.body.productName || 'CS2 Premier Ready Instant Competitive',
-          quantity: neededQty,
-          amountRub: req.body.priceRub || (neededQty * 89),
-          cryptoAmount: expectedAmount,
-          currency: symbol || currency || 'USDT (BEP-20)',
-          txHash: txHash || '0xCONFIRMED_BSC_TX',
-          tokens: [localToken],
-          status: 'PAID_DELIVERED'
-        });
-
-        // 📧 Send receipt and token directly to customer email
-        if (!sentEmailOrders.has(orderId)) {
-          sentEmailOrders.add(orderId);
-          sendOrderEmail(
-            orderId,
-            userEmail,
-            req.body.priceRub || (neededQty * 89),
-            expectedAmount,
-            symbol || currency || 'USDT (BEP-20)',
-            req.body.productName || 'CS2 NFA Account',
-            neededQty,
-            [localToken]
-          ).then(() => console.log(`[LocalStock] Receipt email sent successfully to ${userEmail} for order ${orderId}`))
-           .catch(err => console.error(`[LocalStock] Email dispatch failed for ${orderId}:`, err.message));
-        }
-
-        return res.status(200).json({
-          paid: true,
-          txHash: txHash || '0xCONFIRMED_BSC_TX',
-          delivery: localDelivery,
-          status: 'DELIVERED',
-          orderId
-        });
-      }
-
-      // ========================================================================
-      // 📦 PRIORITY 2: SUPPLIER DROPSHIPPING BACKUP (WHEN LOCAL STOCK IS EMPTY)
+      // 🚀 100% DIRECT SUPPLIER DROPSHIPPING (NO LOCAL STOCK WAREHOUSE)
       // ========================================================================
       let isProcuring = false;
       let createdSupplierOrderId = null;
       let dropshipError = null;
 
-      console.log(`[PaymentConfirmed] Local stock empty, initiating dropship purchase for ${orderId}...`);
+      console.log(`[PaymentConfirmed] Initiating direct dropship purchase from supplier for order ${orderId}...`);
       try {
         const dropshipRes = await initiateDropshipPurchase(supplierSlug, 'iliykuzin2@gmail.com');
         if (dropshipRes && dropshipRes.success && dropshipRes.supplierOrderId) {
