@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LZT Quant Terminal — Quiet Precision (Sand Scale)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=23.0">
+  <script src="app.js?v=23.0" defer></script>
+</head>
+<body>
+  
+  <!-- Global Top Header (64px, Surface Elevated #FFFFFF) -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Brand & Quiet Precision Badge -->
+      <div class="brand-box">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">LZT Quant</span>
+          <span class="brand-tag">QUIET PRECISION · SAND v2</span>
+        </div>
+      </div>
+
+      <!-- Centered Segment Navigation -->
+      <nav class="nav-segment-deck">
+        <button id="modeSingleBtn" class="nav-btn active" data-view="single">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Single Search</span>
+        </button>
+        <button id="modeBundleBtn" class="nav-btn" data-view="bundle">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>Co-op Bundles</span>
+          <span class="nav-tag-pro">PRO</span>
+        </button>
+        <button id="modeScannerBtn" class="nav-btn" data-view="scanner">
+          <span class="scanner-status-pulse"></span>
+          <span>Scanner & Sniper</span>
+        </button>
+      </nav>
+
+      <!-- Right Controls -->
+      <div class="header-actions">
+        
+        <!-- Theme Mode Switcher Capsule (Sun / Moon) -->
+        <div class="theme-switch-capsule" id="themeSwitchCapsule" title="Тема оформления (Светлая / Тёмная)">
+          <button id="themeLightBtn" class="theme-opt active" title="Светлая тема" aria-label="Светлая тема">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+          <button id="themeDarkBtn" class="theme-opt" title="Тёмная тема" aria-label="Тёмная тема">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Currency Capsule -->
+        <div class="currency-capsule">
+          <button id="currencyEurBtn" class="curr-opt active">€ EUR</button>
+          <button id="currencyRubBtn" class="curr-opt">₽ RUB</button>
+        </div>
+
+        <!-- Comparison Counter Button -->
+        <button class="btn-header-compare" id="headerCompareBtn" title="Открыть сравнение лотов">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+          </svg>
+          <span>Сравнение</span>
+          <span class="compare-counter-badge" id="compareCountBadge">0</span>
+        </button>
+
+        <!-- API Token Capsule -->
+        <div class="token-popover-wrap" id="apiTokenWrapper">
+          <button class="btn-token-toggle" id="toggleTokenBtn" title="Статус API подключения">
+            <span class="status-dot-emerald" id="apiStatusBadge"></span>
+            <span>LZT API</span>
+          </button>
+          <div class="token-dropdown">
+            <div class="token-dropdown-header">
+              <span>Ключ доступа LZT API</span>
+              <a href="https://lzt.market/account/api" target="_blank">Получить ключ ↗</a>
+            </div>
+            <div class="api-status-info-row">
+              <span class="status-dot-emerald"></span>
+              <span id="apiConnectionStatusLabel">Подключено (SQLite Cache: 128k+)</span>
+            </div>
+            <input type="password" id="apiTokenInput" placeholder="Bearer токен..." class="token-field" />
+            <button id="saveTokenBtn" class="btn-save-token">Сохранить</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 12-Column Page Master Grid (Max-Width 1600px) -->
+  <div class="page-master-grid">
+    
+    <!-- ROW 1: Bento KPI Deck (Span 12) -->
+    <div class="kpi-bento-row">
+      
+      <!-- Bento 1: Average Price (Span 5) -->
+      <div class="bento-kpi-card kpi-primary">
+        <div class="bento-header">
+          <span class="bento-label">AVERAGE MARKET PRICE</span>
+          <span class="bento-badge emerald" id="kpiPriceChange">+2.4% ↗</span>
+        </div>
+        <div class="bento-body">
+          <div class="bento-big-num" id="avgPriceVal">€ 1,245.00</div>
+          <div class="bento-spark-box">
+            <svg class="sparkline-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.18"></stop>
+                  <stop offset="100%" stop-color="#4F46E5" stop-opacity="0.0"></stop>
+                </linearGradient>
+              </defs>
+              <path d="M0,32 Q40,12 90,22 T200,8 L200,40 L0,40 Z" fill="url(#sparkGrad)"></path>
+              <path d="M0,32 Q40,12 90,22 T200,8" fill="none" stroke="#4F46E5" stroke-width="2.2"></path>
+            </svg>
+            <div class="sparkline-axis-labels">
+              <span>Min: €420</span>
+              <span>Max: €1,890</span>
+            </div>
+          </div>
+        </div>
+        <div class="bento-footer-text">На основе выборки активных фильтров</div>
+      </div>
+
+      <!-- Bento 2: Peak Deal Score & Histogram (Span 4) -->
+      <div class="bento-kpi-card kpi-secondary">
+        <div class="bento-header">
+          <span class="bento-label">PEAK DEAL SCORE</span>
+          <span class="bento-badge indigo" id="topScoreBadge">EXCELLENT</span>
+        </div>
+        <div class="bento-body">
+          <div class="bento-big-num" id="topScoreVal">98<span class="num-unit">/100</span></div>
+          
+          <!-- Score Quantile Distribution -->
+          <div class="quantile-bar-wrap">
+            <div class="quantile-bar-track">
+              <div class="quantile-bar-fill" id="quantileBarFill" style="width: 98%;"></div>
+            </div>
+            <div class="quantile-labels">
+              <span>0 (Fair)</span>
+              <span>85 (Strong)</span>
+              <span>100 (Top)</span>
+            </div>
+          </div>
+        </div>
+        <div class="bento-footer-text">Квантильный ранг среди 128k аккаунтов</div>
+      </div>
+
+      <!-- Bento 3: Synced Database (Span 3) -->
+      <div class="bento-kpi-card kpi-tertiary">
+        <div class="bento-header">
+          <span class="bento-label">SYNCHRONIZED DATABASE</span>
+          <span class="bento-badge emerald" id="kpiSpeedLabel">
+            <span class="live-blink-dot"></span>
+            <span id="kpiSpeedText">19.2/s</span>
+          </span>
+        </div>
+        <div class="bento-body">
+          <div class="bento-big-num" id="totalListingsCount">128,450 <span class="num-unit-inline">лотов</span></div>
+        </div>
+        <div class="bento-footer-text">Локальный SQLite кэш в реальном времени</div>
+      </div>
+
+    </div>
+
+    <!-- MAIN VIEWS WRAPPER -->
+    
+    <!-- ====================================================================
+         VIEW 1: SINGLE SEARCH (BENTO 3/12 + 9/12)
+         ==================================================================== -->
+    <div class="view-content-wrapper" id="singleListingsView">
+      
+      <!-- Sticky Sidebar Filters (Span 3, Level 2 Surface #FAF9F7) -->
+      <aside class="filters-sidebar">
+        
+        <div class="sidebar-header">
+          <div class="sidebar-title-box">
+            <span class="sidebar-title">Фильтры поиска</span>
+            <span class="sidebar-subtitle-count" id="sidebarTotalFilteredCount">128,450 в базе</span>
+          </div>
+          <button class="btn-sidebar-reset" id="resetSidebarFiltersBtn" title="Сбросить все параметры">
+            <span>Сброс</span>
+            <span class="reset-count-badge" id="resetCountBadge" style="display:none;">0</span>
+          </button>
+        </div>
+
+        <!-- Quick Presets Carousel -->
+        <div class="presets-row">
+          <button class="preset-pill active" data-preset-val="cs2_prime">⚡ CS2 Prime 85+</button>
+          <button class="preset-pill" data-preset-val="aging_long">⌛ Отлёжка 90d+</button>
+          <button class="preset-pill" data-preset-val="budget_gems">💎 Бюджетные топы</button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="sidebar-search-box">
+          <svg class="search-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="quickSearchInput" placeholder="Поиск по играм, названию..." class="sidebar-search-input" />
+          <span class="kbd-hint">⌘K</span>
+        </div>
+
+        <!-- Active Filter Pills Ribbon -->
+        <div class="sidebar-active-chips" id="sidebarActiveChips">
+          <span class="filter-pill active" data-preset="diamond">● SCORE 85+ <button class="pill-remove">✕</button></span>
+          <span class="filter-pill active" data-preset="cs2">● CS2 PRIME <button class="pill-remove">✕</button></span>
+          <span class="filter-pill active" data-preset="aging6m">● DORMANT > 30D <button class="pill-remove">✕</button></span>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Aging Slider (Emerald) -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">ОТЛЁЖКА (ДНЕЙ)</span>
+            <span class="control-val emerald" id="agingValDisplay">30d+</span>
+          </div>
+          <input type="range" id="minDaybreakSlider" min="0" max="365" value="30" class="quiet-slider slider-emerald" />
+        </div>
+
+        <!-- Activity Slider (Indigo) -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">АКТИВНОСТЬ ЗА 2 НЕДЕЛИ</span>
+            <span class="control-val indigo" id="activityValDisplay">&lt;10h</span>
+          </div>
+          <input type="range" id="maxHoursSlider" min="0" max="100" value="10" class="quiet-slider slider-indigo" />
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Price Range -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">ДИАПАЗОН ЦЕНЫ (€ / ₽)</span>
+            <span class="control-val" id="priceRangeDisplay">0 — 5000</span>
+          </div>
+          <div class="price-input-pair">
+            <input type="number" id="minPriceInput" value="0" placeholder="0" class="price-field" />
+            <span class="price-sep">—</span>
+            <input type="number" id="maxPriceInput" value="5000" placeholder="5000" class="price-field" />
+          </div>
+        </div>
+
+        <!-- Steam Level Range (От / До) -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">📈 УРОВЕНЬ STEAM (LVL)</span>
+            <span class="control-val indigo" id="levelRangeDisplay">Любой</span>
+          </div>
+          <div class="price-input-pair">
+            <input type="number" id="minLevelInput" min="0" placeholder="От 0" class="price-field" />
+            <span class="price-sep">—</span>
+            <input type="number" id="maxLevelInput" min="0" placeholder="До 500" class="price-field" />
+          </div>
+        </div>
+
+        <!-- Steam Points Range (От / До) -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">💎 ОЧКИ STEAM (POINTS)</span>
+            <span class="control-val amber" id="pointsRangeDisplay">Любые</span>
+          </div>
+          <div class="price-input-pair">
+            <input type="number" id="minPointsInput" min="0" placeholder="От 0" class="price-field" />
+            <span class="price-sep">—</span>
+            <input type="number" id="maxPointsInput" min="0" placeholder="До 200k" class="price-field" />
+          </div>
+        </div>
+
+        <!-- Potential Steam Level Range (От / До) -->
+        <div class="sidebar-control-group">
+          <div class="control-label-row">
+            <span class="control-label">🔮 ПОТЕНЦИАЛЬНЫЙ LVL (С ОЧКАМИ)</span>
+            <span class="control-val violet" id="potLevelRangeDisplay">Любой</span>
+          </div>
+          <div class="price-input-pair">
+            <input type="number" id="minPotLevelInput" min="0" placeholder="От 0" class="price-field" />
+            <span class="price-sep">—</span>
+            <input type="number" id="maxPotLevelInput" min="0" placeholder="До 500" class="price-field" />
+          </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Switches with Facet Counts -->
+        <div class="sidebar-switches-deck">
+          <label class="ios-switch-row active" id="switchRowCs2">
+            <div class="switch-text-col">
+              <span class="switch-label">CS2 Prime Only</span>
+              <span class="switch-facet-count">(8,420 лотов)</span>
+            </div>
+            <input type="checkbox" id="cs2PrimeChk" checked />
+            <span class="ios-toggle"></span>
+          </label>
+
+          <label class="ios-switch-row active" id="switchRowVac">
+            <div class="switch-text-col">
+              <span class="switch-label">VAC Clean (Без банов)</span>
+              <span class="switch-facet-count">(112,800 лотов)</span>
+            </div>
+            <input type="checkbox" id="noVacChk" checked />
+            <span class="ios-toggle"></span>
+          </label>
+
+          <label class="ios-switch-row" id="switchRowHidePhishing">
+            <div class="switch-text-col">
+              <span class="switch-label">🛡️ Скрыть фишинг</span>
+              <span class="switch-facet-count">(Защита от реса)</span>
+            </div>
+            <input type="checkbox" id="hidePhishingChk" />
+            <span class="ios-toggle"></span>
+          </label>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Origin Dropdown -->
+        <div class="sidebar-control-group">
+          <span class="control-label">ПРОИСХОЖДЕНИЕ АККАУНТА</span>
+          <div class="custom-select-wrap">
+            <select id="itemOriginSelect" class="quiet-select">
+              <option value="any" selected>Все происхождения</option>
+              <option value="personal">👤 Личный (Personal / Safe)</option>
+              <option value="resale">🔄 Перепродажа (Resale)</option>
+              <option value="autoreg">🤖 Авторег (Autoreg)</option>
+              <option value="stealer">🦹 Стиллер (Stealer)</option>
+              <option value="fishing">🎣 Фишинг (Phishing / High Risk)</option>
+              <option value="brute">🔓 Брут (Brute)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Custom Dropdowns -->
+        <div class="sidebar-control-group">
+          <span class="control-label">ТИП ПОЧТЫ</span>
+          <div class="custom-select-wrap">
+            <select id="emailTypeSelect" class="quiet-select">
+              <option value="any" selected>Все типы почты</option>
+              <option value="native">✉ Родная почта (Native Mail)</option>
+              <option value="autoreg">⚡ Авторег (Firstmail/Rambler)</option>
+              <option value="temp">⏳ Временная маркета</option>
+              <option value="no">🚫 Без родной почты</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sidebar-control-group">
+          <span class="control-label">ГАРАНТИЯ</span>
+          <div class="custom-select-wrap">
+            <select id="guaranteeSelect" class="quiet-select">
+              <option value="any">Любая гарантия</option>
+              <option value="12">⏱ Минимум 12 часов</option>
+              <option value="24" selected>🛡️ Минимум 24 часа</option>
+              <option value="safest">⭐ Личная гарантия (Safest)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Game Library Tags -->
+        <div class="sidebar-control-group">
+          <span class="control-label">БИБЛИОТЕКА ИГР</span>
+          <div class="add-game-box">
+            <input type="text" id="addGameInput" list="popularGamesDatalist" placeholder="Добавить тайтл..." class="add-game-field" />
+            <datalist id="popularGamesDatalist">
+              <option value="Counter-Strike 2">
+              <option value="Rust">
+              <option value="Grand Theft Auto V">
+              <option value="Dota 2">
+              <option value="PUBG: BATTLEGROUNDS">
+              <option value="DayZ">
+              <option value="Red Dead Redemption 2">
+              <option value="Cyberpunk 2077">
+              <option value="Forza Horizon 5">
+            </datalist>
+            <button id="addGameBtn" class="btn-game-plus" title="Добавить игру">+</button>
+          </div>
+          <div class="selected-game-chips" id="selectedGamesContainer"></div>
+        </div>
+
+        <div class="sidebar-action-btns-group">
+          <button class="btn-sidebar-juice" id="sidebarBestJuiceBtn" title="ИИ мгновенно сопоставит все параметры всей базы и найдет Самый Сок">
+            <span>🏆 Найти САМЫЙ СОК (AI)</span>
+          </button>
+          <button class="btn-sidebar-apply" id="applySidebarFiltersBtn">Применить параметры</button>
+        </div>
+
+      </aside>
+
+      <!-- Right Lots Area (Span 9) -->
+      <section class="lots-main-area">
+        
+        <!-- Lots Header Bar with Source Switcher & Extended Sort -->
+        <div class="lots-header-bar">
+          <div class="lots-header-left">
+            <div class="lots-counter-title" id="lotsCounterTitle">
+              Найдено лотов: <strong>20</strong>
+            </div>
+
+            <!-- Grand AI Quant "Самый Сок" Button -->
+            <button class="btn-best-juice-action" id="findBestJuiceBtn" title="ИИ сопоставит все параметры всех найденных аккаунтов (цену, отлежку, очки, уровень, игры, риск) и найдет ТОП-1 Самый Сок">
+              <span class="btn-juice-sparkle">✨</span>
+              <span class="btn-juice-text">Сравнить всё & Самый Сок</span>
+              <span class="btn-juice-badge">AI ТОП</span>
+            </button>
+
+            <!-- Search Mode Source Switcher (Live LZT API vs SQLite Local DB) -->
+            <div class="source-toggle-group" id="searchSourceToggle">
+              <button class="source-toggle-btn active" id="sourceLiveBtn" data-source="live" title="Прямой поиск на LZT Market через API токен (самые свежие лоты)">
+                <span class="source-live-indicator"></span>
+                <span class="source-icon">⚡</span>
+                <span class="source-label">LZT Live API</span>
+              </button>
+              <button class="source-toggle-btn" id="sourceDbBtn" data-source="db" title="Мгновенный поиск по локальной базе данных SQLite (128k+ лотов)">
+                <span class="source-icon">💾</span>
+                <span class="source-label">SQLite База (128k+)</span>
+              </button>
+            </div>
+
+            <!-- Targeted Harvest Button (Scrape all pages into SQLite) -->
+            <button class="btn-harvest-action" id="harvestQueryBtn" title="Спарсить все 50-200 страниц по текущим фильтрам в локальную базу SQLite для 100% точной глобальной сортировки по всем 8,000+ лотам">
+              <span class="harvest-icon">📥</span>
+              <span class="harvest-label">Спарсить выборку в базу</span>
+              <span class="harvest-badge" id="harvestStatusBadge">Все страницы</span>
+            </button>
+          </div>
+
+          <div class="sort-selector-box">
+            <span class="sort-label">Сортировка:</span>
+            <select id="sortSelect" class="quiet-sort-select">
+              <option value="score" selected>🎯 Deal Score (по скорингу)</option>
+              <option value="potential_level_value_desc">⭐ Потенц. уровень / рубль (⭐/₽)</option>
+              <option value="potential_level_desc">⭐ Потенц. уровень (Steam Level + Points)</option>
+              <option value="level_value_desc">📈 Steam Level к цене (Lvl/₽)</option>
+              <option value="level_desc">📈 Steam Level: максимум</option>
+              <option value="level_asc">📉 Steam Level: минимум</option>
+              <option value="points_value_desc">💎 Очки Steam к цене (Pts/₽)</option>
+              <option value="points_desc">💎 Очки Steam: максимум</option>
+              <option value="points_asc">💎 Очки Steam: минимум</option>
+              <option value="value_ratio_desc">🚀 Множитель ROI (Value / Price)</option>
+              <option value="estimated_value_desc">💰 Ценность игр (€ / ₽)</option>
+              <option value="daybreak_desc">⏳ Отлёжка: максимум (дни)</option>
+              <option value="daybreak_asc">⏳ Отлёжка: минимум</option>
+              <option value="price_asc">🏷️ Цена: сначала дешевые</option>
+              <option value="price_desc">🏷️ Цена: сначала дорогие</option>
+              <option value="recent">🕒 Новые лоты (Recent)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bento Lots Grid (Pure White Level 3 Cards on Sand Level 1) -->
+        <div class="lots-cards-bento-grid" id="listingsGrid">
+          <!-- Dynamically Populated with Hero & Standard Cards -->
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="pagination-bar" id="paginationBar">
+          <button class="btn-page-nav disabled" id="prevPageBtn">← Назад</button>
+          <div class="page-pills-row" id="pagePillsRow">
+            <button class="page-num-pill active">1</button>
+            <button class="page-num-pill">2</button>
+            <button class="page-num-pill">3</button>
+            <span class="page-dots">...</span>
+            <button class="page-num-pill">12</button>
+          </div>
+          <button class="btn-page-nav" id="nextPageBtn">Вперед →</button>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ====================================================================
+         VIEW 2: CO-OP BUNDLE MATCHER PRO
+         ==================================================================== -->
+    <div class="view-content-wrapper" id="bundleListingsView" style="display:none;">
+      <section class="bundle-full-area">
+        
+        <!-- Bundle Hero Banner & Source Selector -->
+        <div class="bundle-banner-card">
+          <div class="bundle-banner-info">
+            <div class="bundle-pro-badge">● CO-OP BUNDLE ENGINE PRO</div>
+            <h2 class="bundle-banner-title">Подбор парных аккаунтов с общими играми</h2>
+            <p class="bundle-banner-desc">Мгновенно комбинирует и сопоставляет аккаунты из базы для игры вдвоём, втроём или вчетвером без переплат.</p>
+          </div>
+
+          <div class="bundle-banner-actions">
+            <!-- Source Toggle (Live API vs SQLite) -->
+            <div class="source-toggle-group" id="bundleSourceToggle">
+              <button class="source-toggle-btn active" id="bundleSourceDbBtn" data-bundle-source="db" title="Мгновенный поиск связок по локальной SQLite базе">
+                <span class="source-icon">💾</span>
+                <span class="source-label">SQLite База (128k+)</span>
+              </button>
+              <button class="source-toggle-btn" id="bundleSourceLiveBtn" data-bundle-source="live" title="Поиск свежих активных связок напрямую через LZT Market API">
+                <span class="source-live-indicator"></span>
+                <span class="source-icon">⚡</span>
+                <span class="source-label">LZT Live API</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bundle Controls & Filters Bar -->
+        <div class="bundle-controls-panel">
+          
+          <!-- Row 1: Party Size + Category Tabs -->
+          <div class="bundle-primary-filters">
+            <!-- Party Size Switcher -->
+            <div class="bundle-party-deck">
+              <span class="bundle-filter-label">СОСТАВ:</span>
+              <div class="party-size-capsule">
+                <button class="party-btn active" data-party="2">👥 2 игрока (Duo)</button>
+                <button class="party-btn" data-party="3">👥 3 игрока (Trio)</button>
+                <button class="party-btn" data-party="4">👥 4 игрока (Squad)</button>
+              </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="bundle-category-pills" id="bundleCategoryPills">
+              <button class="bundle-category-btn active" data-cat="all">☀️ Все топ кооп</button>
+              <button class="bundle-category-btn" data-cat="couples">🛋️ Для двоих / Duo</button>
+              <button class="bundle-category-btn" data-cat="party">🎉 Party Games</button>
+              <button class="bundle-category-btn" data-cat="survival">🧟 Survival & Sandbox</button>
+              <button class="bundle-category-btn" data-cat="horror">👻 Horror & Phasmophobia</button>
+              <button class="bundle-category-btn" data-cat="action">🔫 Action & Shooters</button>
+            </div>
+          </div>
+
+          <!-- Row 2: Budget, Daybreak, Sort & Quick Must-Have Games -->
+          <div class="bundle-secondary-filters">
+            
+            <div class="bundle-select-group">
+              <span class="bundle-filter-label">БЮДЖЕТ (ОБЩИЙ):</span>
+              <select id="bundleMaxPriceSelect" class="quiet-sort-select">
+                <option value="any" selected>Любой бюджет</option>
+                <option value="500">До 500 ₽ (€5)</option>
+                <option value="1000">До 1 000 ₽ (€10)</option>
+                <option value="2000">До 2 000 ₽ (€20)</option>
+                <option value="3000">До 3 000 ₽ (€30)</option>
+                <option value="5000">До 5 000 ₽ (€50)</option>
+              </select>
+            </div>
+
+            <div class="bundle-select-group">
+              <span class="bundle-filter-label">ОТЛЁЖКА:</span>
+              <select id="bundleDaybreakSelect" class="quiet-sort-select">
+                <option value="0" selected>Любая отлёжка</option>
+                <option value="7">От 7 дней</option>
+                <option value="30">От 30 дней (Safe)</option>
+                <option value="90">От 90 дней (Dormant)</option>
+              </select>
+            </div>
+
+            <div class="bundle-select-group">
+              <span class="bundle-filter-label">СОРТИРОВКА:</span>
+              <select id="bundleSortSelect" class="quiet-sort-select">
+                <option value="shared_games" selected>🎯 Макс. совпадение игр</option>
+                <option value="bundle_score">🏆 Bundle Score (Сбалансированно)</option>
+                <option value="cheapest">🏷️ Сначала дешевые</option>
+                <option value="value_for_money">💎 Максимум игр / рубль</option>
+              </select>
+            </div>
+
+            <button class="btn-bundle-refresh" id="bundleRefreshBtn">
+              <span>🔄 Подобрать связки</span>
+            </button>
+
+          </div>
+
+          <!-- Row 3: Quick Must-Have Chips -->
+          <div class="bundle-must-have-row">
+            <span class="bundle-filter-label">ОБЯЗАТЕЛЬНАЯ ИГРА:</span>
+            <div class="bundle-game-chips" id="bundleMustHaveChips">
+              <button class="must-game-chip" data-game="Rust">Rust</button>
+              <button class="must-game-chip" data-game="Lethal Company">Lethal Company</button>
+              <button class="must-game-chip" data-game="It Takes Two">It Takes Two</button>
+              <button class="must-game-chip" data-game="A Way Out">A Way Out</button>
+              <button class="must-game-chip" data-game="Counter-Strike 2">CS2 Prime</button>
+              <button class="must-game-chip" data-game="DayZ">DayZ</button>
+              <button class="must-game-chip" data-game="Helldivers 2">Helldivers 2</button>
+              <button class="must-game-chip" data-game="Phasmophobia">Phasmophobia</button>
+              <button class="must-game-chip" data-game="7 Days to Die">7 Days to Die</button>
+              <button class="must-game-chip" data-game="Content Warning">Content Warning</button>
+              <button class="must-game-chip" data-game="The Forest">The Forest</button>
+              <button class="must-game-chip" data-game="Sons Of The Forest">Sons Of The Forest</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bundle Stats & Summary Bar -->
+        <div class="bundle-summary-bar">
+          <div class="bundle-summary-left">
+            <span class="bundle-summary-count" id="bundleResultCount">Найдено связок: <strong>...</strong></span>
+            <span class="bundle-summary-dot">·</span>
+            <span class="bundle-summary-evaluated" id="bundleEvaluatedCount">Кандидатов оценено: <strong>...</strong></span>
+          </div>
+          <div class="bundle-summary-right" id="bundleActiveFilterPills">
+            <!-- Dynamic tags -->
+          </div>
+        </div>
+
+        <!-- Bundle Cards Grid -->
+        <div class="bundle-cards-grid" id="bundleGrid">
+          <!-- Dynamically populated -->
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ====================================================================
+         VIEW 3: SCANNER & SNIPER TERMINAL
+         ==================================================================== -->
+    <div class="view-content-wrapper" id="scannerTerminalView" style="display:none;">
+      <section class="scanner-full-area">
+        
+        <div class="scanner-banner-card">
+          <div class="scanner-banner-info">
+            <div class="scanner-live-badge">● REALTIME MARKET STREAM</div>
+            <div class="scanner-title">Фоновый парсер и мгновенный отлов лотов в SQLite</div>
+            <div class="scanner-desc">Сканирует маркет на высокой скорости и фильтрует аккаунты по Deal Score и отлёжке.</div>
+          </div>
+          <div class="scanner-banner-actions">
+            <button class="btn-scanner-start" id="btnStartHarvester">▶ Запустить Харвестер</button>
+            <button class="btn-scanner-sniper" id="btnStartSniper">⚡ Sniper Mode</button>
+            <button class="btn-scanner-stop" id="btnStopIndexer">⏹ Стоп</button>
+          </div>
+        </div>
+
+        <div class="scanner-kpi-deck">
+          <div class="bento-kpi-card">
+            <span class="bento-label">СКОРОСТЬ ИНДЕКСАЦИИ</span>
+            <div class="bento-big-num" id="scanSpeedVal">0.0 items/s</div>
+          </div>
+          <div class="bento-kpi-card">
+            <span class="bento-label">ИНДЕКСИРОВАНО ЗА СЕССИЮ</span>
+            <div class="bento-big-num" id="scanSessionVal">0</div>
+          </div>
+          <div class="bento-kpi-card">
+            <span class="bento-label">ВСЕГО В БАЗЕ SQLITE</span>
+            <div class="bento-big-num emerald" id="scanTotalDbVal">128,450</div>
+          </div>
+        </div>
+
+        <div class="scanner-terminal-console">
+          <div class="console-top-bar">
+            <span>ЖУРНАЛ СОБЫТИЙ СИСТЕМЫ</span>
+            <span class="console-pulse-tag">LIVE STREAM</span>
+          </div>
+          <div class="console-text-box" id="scannerLogConsole">
+            <div class="log-row info">[SYSTEM] Quiet Precision Harvester Ready.</div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Floating Quick Comparison Bottom Bar -->
+  <div class="compare-floating-bar" id="compareFloatingBar" style="display: none;">
+    <div class="compare-floating-content">
+      <div class="compare-floating-info">
+        <span class="compare-floating-icon">⚖</span>
+        <span class="compare-floating-text" id="compareFloatingText">В сравнении: <strong>0</strong> аккаунтов</span>
+      </div>
+      <div class="compare-floating-chips" id="compareFloatingChips"></div>
+      <div class="compare-floating-actions">
+        <button class="btn-compare-action-clear" onclick="clearComparedItems()" title="Очистить сравнение">Очистить</button>
+        <button class="btn-compare-action-open" onclick="openComparisonModal()">
+          <span>Сравнить и выбрать ТОП</span>
+          <span class="btn-compare-glow">🏆</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Compare Lots & AI Quant Ranking Matrix -->
+  <div class="modal-backdrop" id="compareModalOverlay">
+    <div class="modal-window modal-compare-wide">
+      <div class="modal-top-row">
+        <div class="modal-title-with-count">
+          <span class="modal-heading">⚖ ТОП-Сравнение и Рекомендательный скоринг</span>
+          <span class="modal-count-tag" id="modalCompareCountTag">0 / 6</span>
+        </div>
+        <div class="modal-top-actions">
+          <button class="btn-modal-clear" onclick="clearComparedItems()">Очистить всё</button>
+          <button class="btn-modal-close" id="compareModalCloseBtn">✕</button>
+        </div>
+      </div>
+      <div class="modal-body-deck" id="compareModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Lot Details Specification -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-window modal-medium">
+      <div class="modal-top-row">
+        <span class="modal-heading">Спецификация и аналитика лота</span>
+        <button class="btn-modal-close" id="modalCloseBtn">✕</button>
+      </div>
+      <div class="modal-body-deck" id="modalBody"></div>
+    </div>
+  </div>
+
+</body>
+</html>

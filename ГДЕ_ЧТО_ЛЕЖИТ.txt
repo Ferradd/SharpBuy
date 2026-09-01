@@ -1,0 +1,36 @@
+SHARPBUY — ВСЁ В ОДНОМ МЕСТЕ
+============================
+
+SharpBuy\               <- корень проекта (сайт + инструменты)
+|
+|-- desktop-tools\      <- БАТНИКИ (запускай отсюда)
+|   |-- Start_SharpBuy.bat          — локальный сайт (dev)
+|   |-- EXTRACT_STEAM_TOKEN.bat     — достать токены + синк на сервер
+|   |-- REMOVE_STEAM_SYNC.bat       — выключить фоновый синк
+|   `-- Start_LZ_Market_Scanner.bat — LZT сканер
+|
+|-- data\               <- ВАЖНЫЕ ДАННЫЕ (не удалять!)
+|   |-- steam.txt                   — токены аккаунтов
+|   |-- steam_sessions.txt
+|   |-- sharpbuy_ingested_tokens.json
+|   |-- sharpbuy_orders_log.json
+|   `-- user_backup.json
+|
+|-- logs\               <- логи extract/remove
+|-- public\             <- EXE + DMG для скачивания с сайта
+|   |-- SharpBuy_Launcher.exe
+|   |-- SharpBuy_Launcher.dmg   (Mac, Tauri ~5 MB)
+|   `-- SharpBuy_Batch_Checker.exe
+|-- wallet\             <- кошелёк / merchant
+|-- docs\               <- история чатов / заметки
+|-- account\            <- скрины заказов, credentials
+|-- lzt-analyzer\       <- LZT Market анализатор
+|-- steam-token-tools\  <- копии extract-инструментов
+|-- assets\             <- иконки
+|
+|-- src\ api\ public\   <- исходники САЙТА (sharpbuy.org)
+|-- scripts\            <- скрипты сборки
+`-- server.js           <- сервер Render
+
+Сайт онлайн: https://sharpbuy.org
+Админка:     https://sharpbuy.onrender.com/admin

@@ -20,6 +20,10 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: MERCHANT_MNEMONIC
+        sync: false
+      - key: NOWPAYMENTS_API_KEY
+        sync: false
       - key: MERCHANT_RECEIVER_ADDRESS
         sync: false
       - key: MERCHANT_MNEMONIC

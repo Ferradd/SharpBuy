@@ -1,5 +1,71 @@
 [
   {
+    "orderId": "INSTANT-TEST-1788281090677",
+    "email": "iliykuzin3@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Prime",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "1.0",
+    "currency": "WALLET_BALANCE",
+    "txHash": "0xWALLET_BALANCE_1a05ddbf275",
+    "tokens": [
+      "76561199886800351----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTg4NjgwMDM1MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTY4Mzc5MDksICJuYmYiOiAxNzY5ODc2NjMxLCAiaWF0IjogMTc3ODUxNjYzMSwgImp0aSI6ICIwMDA4XzI4MjQxMDM0Xzc4OTZCIiwgIm9hdCI6IDE3Nzg1MTY2MzEsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI5NS41My43OS4xMjYiLCAiaXBfY29uZmlybWVyIjogIjE4NS4xODEuNjEuMTMwIiB9.8xGvDQjb2UmaioT5XU5Ybd9irg414vWcGzC-QoijMRy331n0WjA2neFQe7Mn8v3FXy0evAIDFsFrUoBPSPYWCA"
+    ],
+    "createdAt": "2026-09-01T16:44:50.682Z",
+    "paidAt": "2026-09-01T16:44:50.682Z",
+    "firstActivatedAt": "2026-09-01T16:44:50.682Z",
+    "warrantyExpiresAt": "2026-09-01T19:44:50.682Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery"
+  },
+  {
+    "orderId": "AUTO-TEST-1788279038263",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Prime",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "1.0",
+    "currency": "WALLET_BALANCE",
+    "txHash": "0xWALLET_BALANCE_1a05dbca137",
+    "tokens": [
+      "PROCURING"
+    ],
+    "createdAt": "2026-09-01T16:10:41.989Z",
+    "paidAt": "2026-09-01T16:10:41.989Z",
+    "firstActivatedAt": "2026-09-01T16:10:41.989Z",
+    "warrantyExpiresAt": "2026-09-01T19:10:41.989Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery"
+  },
+  {
+    "orderId": "TEST-ORDER-1788278780303",
+    "email": "iliykuzin2@gmail.com",
+    "productId": "1776000000001",
+    "productName": "CS2 Prime",
+    "quantity": 1,
+    "amountRub": 89,
+    "cryptoAmount": "1.0",
+    "currency": "WALLET_BALANCE",
+    "txHash": "0xWALLET_BALANCE_1a05db8b190",
+    "tokens": [
+      "ERR_SUPPLIER_FAIL: Shefu API parsing failed: Status 404"
+    ],
+    "createdAt": "2026-09-01T16:06:20.900Z",
+    "paidAt": "2026-09-01T16:06:20.900Z",
+    "firstActivatedAt": "2026-09-01T16:06:20.900Z",
+    "warrantyExpiresAt": "2026-09-01T19:06:20.900Z",
+    "warrantyHours": 3,
+    "status": "PAID_DELIVERED",
+    "customerIp": "127.0.0.1",
+    "notes": "Automated Instant Delivery"
+  },
+  {
     "orderId": "PROOF-TON-2186",
     "email": "customer_ton@gmail.com",
     "productId": "knife",

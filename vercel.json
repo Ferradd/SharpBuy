@@ -26,6 +26,19 @@
           "value": "attachment; filename=\"SharpBuy_Launcher.exe\""
         }
       ]
+    },
+    {
+      "source": "/SharpBuy_Launcher.dmg",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"SharpBuy_Launcher.dmg\""
+        }
+      ]
     }
   ],
   "rewrites": [
