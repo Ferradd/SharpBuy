@@ -44,6 +44,14 @@ export function getOrderById(orderId) {
   return getAllOrders().find(o => o.orderId === orderId) || null;
 }
 
+/** Orders waiting on supplier — need background fulfillment if client tab closed */
+export function getProcuringOrders() {
+  return getAllOrders().filter((o) => {
+    const token = o.tokens?.[0];
+    return token === 'PROCURING' && o.supplierOrderId;
+  });
+}
+
 export function getOrderDeliveryFromDb(orderId) {
   const order = getOrderById(orderId);
   if (!order) return null;

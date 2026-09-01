@@ -1,7 +1,9 @@
 /**
  * Lightweight wake/ping endpoint for Render free tier.
- * External schedulers (GitHub Actions, UptimeRobot) hit this to prevent spin-down.
+ * Also runs background fulfillment for stuck PROCURING orders.
  */
+
+import { runFulfillmentScan } from './_utils/fulfillment-worker.js';
 
 const VISITOR_NAMES = [
   'Alex_M',
@@ -20,7 +22,7 @@ function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-export default function keepaliveHandler(req, res) {
+export default async function keepaliveHandler(req, res) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -37,6 +39,16 @@ export default function keepaliveHandler(req, res) {
 
   console.log(`[KeepAlive] Synthetic visit: ${visitor.displayName} (${visitor.region}) via ${visitor.source}`);
 
+  let fulfillment = null;
+  try {
+    fulfillment = await runFulfillmentScan();
+    if (fulfillment?.delivered > 0) {
+      console.log(`[KeepAlive] Auto-delivered ${fulfillment.delivered} order(s):`, fulfillment.orderIds);
+    }
+  } catch (e) {
+    console.error('[KeepAlive] Fulfillment scan error:', e.message);
+  }
+
   if (req.method === 'HEAD') {
     res.status(200).end();
     return;
@@ -47,6 +59,7 @@ export default function keepaliveHandler(req, res) {
     alive: true,
     service: 'sharpbuy',
     visitor,
+    fulfillment,
     uptimeSec: Math.floor(process.uptime()),
   });
 }

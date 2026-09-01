@@ -18,6 +18,7 @@ import accountLibraryHandler from './api/account-library.js';
 import syncShefuStockHandler from './api/sync-shefu-stock.js';
 import arbitrageCronHandler from './api/arbitrage-cron.js';
 import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
+import { startFulfillmentCron } from './api/_utils/fulfillment-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,4 +89,6 @@ app.listen(PORT, () => {
 
   // Start 5h 55m background arbitrage sniper
   startArbitrageCron();
+  // Deliver stuck PROCURING orders even if client closed checkout tab
+  startFulfillmentCron(45_000);
 });
