@@ -405,7 +405,22 @@ export default async function handler(req, res) {
       // 2. If this exact orderId was already processed in cache or DB, return delivery
       try {
         const allDbOrders = getAllOrders();
-        const existingOrder = allDbOrders.find(o => o.orderId === orderId);
+        let existingOrder = allDbOrders.find(o => o.orderId === orderId);
+
+        // VERCEL FIX: Reconstruct order state if DB was wiped but frontend sent supplierOrderId
+        if (!existingOrder && req.body.supplierOrderId) {
+          existingOrder = {
+            orderId,
+            supplierOrderId: req.body.supplierOrderId,
+            tokens: ['PROCURING'],
+            amountRub: req.body.priceRub,
+            cryptoAmount: req.body.expectedAmount,
+            currency: req.body.symbol || req.body.currency,
+            email: req.body.email,
+            productName: req.body.productName
+          };
+        }
+
         if (existingOrder) {
           if (existingOrder.tokens && existingOrder.tokens.length > 0 && existingOrder.tokens[0] !== 'PROCURING') {
             return res.status(200).json({
@@ -425,9 +440,7 @@ export default async function handler(req, res) {
           }
 
           // If order is PROCURING, check supplier in real time!
-          // Also check if supplierOrderId was passed directly from frontend (bypasses ephemeral DB issue on Vercel)
-          const directSupplierOrderId = req.body.supplierOrderId;
-          const effectiveSupplierOrderId = existingOrder.supplierOrderId || directSupplierOrderId;
+          const effectiveSupplierOrderId = existingOrder.supplierOrderId;
 
           if (effectiveSupplierOrderId) {
             const checkRes = await checkAndFulfillSupplierOrder(
