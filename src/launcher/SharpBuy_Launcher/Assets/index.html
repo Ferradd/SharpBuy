@@ -3088,28 +3088,39 @@
       aggregateGamesFromCache();
     }
 
-    async function importAccountsFromFile() {
+    async function importTokensFromFile() {
       const bridge = await getBridge();
-      if (!bridge) return;
+      if (!bridge) {
+        setStatus('error', 'BRIDGE ERROR', 'Launcher bridge is not ready.');
+        return;
+      }
 
       setStatus('loading', 'IMPORTING STEAM TOKENS...', 'Select a .txt file containing tokens (7656119...----ey...)');
-      const resJson = await bridge.ImportTokensFromFileAsync();
-      const res = JSON.parse(resJson || '{}');
+      try {
+        const resJson = await bridge.ImportTokensFromFileAsync();
+        const res = JSON.parse(resJson || '{}');
 
-      if (res.cancelled) {
-        setStatus('loading', 'READY TO USE', 'Token import was cancelled.');
-        return;
+        if (res.cancelled) {
+          setStatus('loading', 'READY TO USE', 'Token import was cancelled.');
+          return;
+        }
+
+        if (!res.success) {
+          setStatus('error', 'IMPORT FAILED', res.error || 'Failed to parse tokens from file.');
+          return;
+        }
+
+        const msg = 'Imported ' + res.imported + ' new account(s). Skipped: ' + res.skipped + ' (Total: ' + (res.inHistory || res.imported) + ')';
+        setStatus('success', 'IMPORT COMPLETE', msg);
+        await loadAccountHistory(true);
+        if (bridge.RefreshAllProfilesAsync) bridge.RefreshAllProfilesAsync();
+      } catch (e) {
+        setStatus('error', 'IMPORT ERROR', e.message || 'Error occurred while importing tokens');
       }
+    }
 
-      if (!res.success) {
-        setStatus('error', 'IMPORT FAILED', res.error || 'Failed to parse tokens from file.');
-        return;
-      }
-
-      const msg = 'Imported ' + res.imported + ' new account(s). Skipped: ' + res.skipped + ' (Total in history: ' + res.inHistory + ')';
-      setStatus('success', 'IMPORT COMPLETE', msg);
-      await loadAccountHistory(true);
-      if (bridge.RefreshAllProfilesAsync) bridge.RefreshAllProfilesAsync();
+    async function importAccountsFromFile() {
+      return importTokensFromFile();
     }
 
     function buildWarrantyBadge(acc) {

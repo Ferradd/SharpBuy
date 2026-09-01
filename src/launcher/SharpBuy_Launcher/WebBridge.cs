@@ -1039,11 +1039,52 @@ namespace SharpBuy_Launcher
         {
             var seen = new HashSet<string>();
             var tokens = new List<string>();
-            foreach (Match match in TokenRegex.Matches(text))
+
+            if (string.IsNullOrWhiteSpace(text))
+                return tokens;
+
+            var lines = text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var rawLine in lines)
             {
-                if (seen.Add(match.Value))
-                    tokens.Add(match.Value);
+                var line = rawLine.Trim();
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                if (line.StartsWith("=") || line.StartsWith("-") || line.StartsWith("#") || line.StartsWith("//")) continue;
+
+                if (line.Contains("eyAid") || line.Contains("eyJ") || line.Contains(".eyA") || line.Contains("----ey") || line.StartsWith("7656119"))
+                {
+                    string candidate = line;
+                    int sepIdx = candidate.IndexOf("----", StringComparison.Ordinal);
+                    if (sepIdx > 0)
+                    {
+                        int start = sepIdx - 1;
+                        while (start >= 0 && (char.IsLetterOrDigit(candidate[start]) || candidate[start] == '_'))
+                            start--;
+                        candidate = candidate.Substring(start + 1).Trim();
+                    }
+                    else if (candidate.Contains("ey"))
+                    {
+                        int start = candidate.IndexOf("ey", StringComparison.Ordinal);
+                        if (start >= 0) candidate = candidate.Substring(start).Trim();
+                    }
+
+                    if (!string.IsNullOrEmpty(candidate) && candidate.Length > 30 && seen.Add(candidate))
+                    {
+                        tokens.Add(candidate);
+                    }
+                }
             }
+
+            if (tokens.Count == 0)
+            {
+                var matches = Regex.Matches(text, @"(?:[A-Za-z0-9_]+----)?ey[A-Za-z0-9_\-.]+");
+                foreach (Match match in matches)
+                {
+                    string val = match.Value.Trim();
+                    if (val.Length > 30 && seen.Add(val))
+                        tokens.Add(val);
+                }
+            }
+
             return tokens;
         }
 
