@@ -11,7 +11,25 @@ import { updateOrderDeliveryInDb } from './orders-db.js';
 const DEFAULT_MNEMONIC_B64 = 'b3RoZXIgYWdlbnQgYWJzdXJkIHJlY2lwZSBtaWxsaW9uIGNsYWltIGNhdCBmaWxtIGNsb3NlIHNob3ZlIHZlc3NlbCBtYXJrZXQ=';
 const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC || Buffer.from(DEFAULT_MNEMONIC_B64, 'base64').toString('utf8');
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY || '2K2CBE4-26W4FDE-NHNT9Z3-5W5ST8B';
-const BSC_RPC = process.env.BSC_RPC_URL || 'https://rpc.ankr.com/bsc';
+const BSC_RPCS = [
+  process.env.BSC_RPC_URL,
+  'https://bsc-rpc.publicnode.com',
+  'https://bsc-dataseed1.defibit.io/',
+  'https://bsc-dataseed.binance.org/'
+].filter(Boolean);
+
+async function getWorkingBscProvider() {
+  for (const url of BSC_RPCS) {
+    try {
+      const provider = new ethers.JsonRpcProvider(url, 56, { staticNetwork: true });
+      await provider.getBlockNumber();
+      return provider;
+    } catch (e) {
+      console.warn(`[BSC_RPC] Provider ${url} failed:`, e.message);
+    }
+  }
+  return new ethers.JsonRpcProvider('https://bsc-rpc.publicnode.com', 56, { staticNetwork: true });
+}
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 
 const ERC20_ABI = [
@@ -106,12 +124,12 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
       orderData = await orderRes.json();
     } catch (e) {
       console.error('[AutoDropship] Failed to parse shefu response. Status:', orderRes.status);
-      return null;
+      return { success: false, error: `Shefu API parsing failed: Status ${orderRes.status}` };
     }
 
     if (!orderData.url || !orderData.order_id) {
       console.warn('[AutoDropship] Failed to create shefu order:', orderData);
-      return null;
+      return { success: false, error: `Shefu API rejected order: ${JSON.stringify(orderData)}` };
     }
 
     const supplierOrderId = orderData.order_id;
@@ -119,11 +137,11 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
 
     const urlObj = new URL(orderData.url);
     const iid = urlObj.searchParams.get('iid');
-    if (!iid) return null;
+    if (!iid) return { success: false, error: `No iid found in shefu url: ${orderData.url}` };
 
     if (!NOWPAYMENTS_API_KEY) {
       console.warn('[AutoDropship] NOWPAYMENTS_API_KEY not set');
-      return null;
+      return { success: false, error: 'NOWPAYMENTS_API_KEY not set' };
     }
     const payRes = await fetch('https://api.nowpayments.io/v1/invoice-payment', {
       method: 'POST',
@@ -142,15 +160,15 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const payData = await payRes.json();
     if (!payData.pay_address) {
       console.warn('[AutoDropship] No pay address from NOWPayments');
-      return null;
+      return { success: false, error: `NOWPayments API error: ${JSON.stringify(payData)}` };
     }
 
     if (!MERCHANT_MNEMONIC) {
       console.warn('[AutoDropship] MERCHANT_MNEMONIC not set');
-      return null;
+      return { success: false, error: 'MERCHANT_MNEMONIC not set' };
     }
 
-    const provider = new ethers.JsonRpcProvider(BSC_RPC);
+    const provider = await getWorkingBscProvider();
     const wallet = ethers.Wallet.fromPhrase(MERCHANT_MNEMONIC, provider);
     const usdtContract = new ethers.Contract(USDT_BSC_CONTRACT, ERC20_ABI, wallet);
 
@@ -166,7 +184,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     };
   } catch (err) {
     console.error('[AutoDropship] Purchase exception:', err);
-    return null;
+    return { success: false, error: `Exception: ${err.message || String(err)}` };
   }
 }
 
