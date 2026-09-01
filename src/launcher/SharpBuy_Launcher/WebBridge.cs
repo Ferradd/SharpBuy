@@ -32,6 +32,10 @@ namespace SharpBuy_Launcher
         public bool OwnerActive { get; set; } = false;
         public long LastOwnerActiveAt { get; set; } = 0;
         public int Cs2ItemsCount { get; set; } = 0;
+        public double Cs2InventoryWorthUsd { get; set; } = 0.0;
+        public int Cs2MedalsCount { get; set; } = 0;
+        public int Cs2KnivesCount { get; set; } = 0;
+        public string TopValuableItem { get; set; } = "";
         public int DotaItemsCount { get; set; } = 0;
     }
 
@@ -830,6 +834,41 @@ namespace SharpBuy_Launcher
             }
         }
 
+        private static readonly Dictionary<string, double> KnownCs2Prices = new(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Operation Bravo Case", 45.0 },
+            { "CS:GO Weapon Case", 85.0 },
+            { "CS:GO Weapon Case 2", 14.5 },
+            { "CS:GO Weapon Case 3", 8.2 },
+            { "eSports 2013 Case", 48.0 },
+            { "Huntsman Weapon Case", 10.5 },
+            { "Operation Breakout Weapon Case", 7.5 },
+            { "Operation Phoenix Weapon Case", 4.2 },
+            { "Operation Vanguard Weapon Case", 3.8 },
+            { "Operation Wildfire Case", 3.1 },
+            { "Operation Hydra Case", 22.0 },
+            { "Shattered Web Case", 4.8 },
+            { "Fracture Case", 0.75 },
+            { "Dreams & Nightmares Case", 1.1 },
+            { "Recoil Case", 0.65 },
+            { "Revolution Case", 0.55 },
+            { "Kilowatt Case", 1.8 },
+            { "Gallery Case", 1.2 },
+            { "AK-47 | Redline", 18.0 },
+            { "AWP | Asiimov", 95.0 },
+            { "M4A4 | Asiimov", 85.0 },
+            { "AK-47 | Vulcan", 140.0 },
+            { "Desert Eagle | Printstream", 65.0 },
+            { "M4A1-S | Printstream", 110.0 },
+            { "AK-47 | Case Hardened", 190.0 },
+            { "Covert", 28.0 },
+            { "Classified", 8.0 },
+            { "Restricted", 2.2 },
+            { "Mil-Spec Grade", 0.55 },
+            { "Industrial Grade", 0.18 },
+            { "Consumer Grade", 0.06 }
+        };
+
         public async Task<string> FetchAccountDeepDetailsAsync(string rawToken, string steamId)
         {
             try
@@ -837,18 +876,97 @@ namespace SharpBuy_Launcher
                 var (persona, avatar, vacBanned, vacStatus, isPrivate, isLimited) = await FetchSteamProfileDetailedAsync(steamId);
 
                 int cs2Count = 0;
+                double cs2WorthUsd = 0.0;
+                int medalsCount = 0;
+                int knivesCount = 0;
+                string topItem = "";
+                double topItemPrice = 0.0;
                 int dotaCount = 0;
 
                 try
                 {
-                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=1");
-                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
+                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
                     var res = await _httpClient.SendAsync(req);
                     if (res.IsSuccessStatusCode)
                     {
                         var body = await res.Content.ReadAsStringAsync();
-                        var match = Regex.Match(body, @"""total_inventory_count"":\s*(\d+)");
-                        if (match.Success) cs2Count = int.Parse(match.Groups[1].Value);
+                        using var doc = JsonDocument.Parse(body);
+                        var root = doc.RootElement;
+
+                        if (root.TryGetProperty("total_inventory_count", out var totalEl))
+                            cs2Count = totalEl.GetInt32();
+
+                        if (root.TryGetProperty("descriptions", out var descEl) && descEl.ValueKind == JsonValueKind.Array)
+                        {
+                            if (cs2Count == 0) cs2Count = descEl.GetArrayLength();
+
+                            foreach (var item in descEl.EnumerateArray())
+                            {
+                                string name = item.TryGetProperty("name", out var nEl) ? nEl.GetString() ?? "" : "";
+                                string marketName = item.TryGetProperty("market_name", out var mnEl) ? mnEl.GetString() ?? "" : name;
+                                string type = item.TryGetProperty("type", out var tEl) ? tEl.GetString() ?? "" : "";
+
+                                bool isMedal = type.Contains("Collectible", StringComparison.OrdinalIgnoreCase) ||
+                                               type.Contains("Medal", StringComparison.OrdinalIgnoreCase) ||
+                                               type.Contains("Coin", StringComparison.OrdinalIgnoreCase) ||
+                                               name.Contains("Service Medal", StringComparison.OrdinalIgnoreCase) ||
+                                               name.Contains("Veteran Coin", StringComparison.OrdinalIgnoreCase) ||
+                                               name.Contains("Badge", StringComparison.OrdinalIgnoreCase);
+
+                                if (isMedal)
+                                {
+                                    medalsCount++;
+                                    continue;
+                                }
+
+                                bool isKnifeOrGlove = name.Contains("★") ||
+                                                      type.Contains("Knife", StringComparison.OrdinalIgnoreCase) ||
+                                                      type.Contains("Gloves", StringComparison.OrdinalIgnoreCase);
+
+                                if (isKnifeOrGlove) knivesCount++;
+
+                                double price = 0.0;
+                                if (KnownCs2Prices.TryGetValue(marketName, out var kp) || KnownCs2Prices.TryGetValue(name, out kp))
+                                {
+                                    price = kp;
+                                }
+                                else if (isKnifeOrGlove)
+                                {
+                                    price = type.Contains("Gloves", StringComparison.OrdinalIgnoreCase) ? 95.0 : 120.0;
+                                }
+                                else if (type.Contains("Container", StringComparison.OrdinalIgnoreCase) || name.Contains("Case", StringComparison.OrdinalIgnoreCase) || name.Contains("Capsule", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    price = 0.85;
+                                }
+                                else
+                                {
+                                    if (item.TryGetProperty("tags", out var tagsEl) && tagsEl.ValueKind == JsonValueKind.Array)
+                                    {
+                                        foreach (var tag in tagsEl.EnumerateArray())
+                                        {
+                                            string tagName = tag.TryGetProperty("localized_tag_name", out var tnEl) ? tnEl.GetString() ?? "" : "";
+                                            foreach (var kvp in KnownCs2Prices)
+                                            {
+                                                if (tagName.Contains(kvp.Key, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    price = kvp.Value;
+                                                    break;
+                                                }
+                                            }
+                                            if (price > 0) break;
+                                        }
+                                    }
+                                }
+
+                                cs2WorthUsd += price;
+                                if (price > topItemPrice)
+                                {
+                                    topItemPrice = price;
+                                    topItem = marketName;
+                                }
+                            }
+                        }
                     }
                 }
                 catch { }
@@ -867,6 +985,8 @@ namespace SharpBuy_Launcher
                 }
                 catch { }
 
+                cs2WorthUsd = Math.Round(cs2WorthUsd, 2);
+
                 // Update accounts DB
                 var list = LoadAccountsList();
                 var target = list.Find(a => a.SteamId == steamId);
@@ -877,6 +997,10 @@ namespace SharpBuy_Launcher
                     target.VacBanned = vacBanned;
                     target.VacStatus = vacStatus;
                     target.Cs2ItemsCount = cs2Count;
+                    target.Cs2InventoryWorthUsd = cs2WorthUsd;
+                    target.Cs2MedalsCount = medalsCount;
+                    target.Cs2KnivesCount = knivesCount;
+                    target.TopValuableItem = topItem;
                     target.DotaItemsCount = dotaCount;
                     SaveAccountsList(list);
                 }
@@ -889,6 +1013,10 @@ namespace SharpBuy_Launcher
                     avatar,
                     vacStatus,
                     cs2Count,
+                    cs2WorthUsd,
+                    medalsCount,
+                    knivesCount,
+                    topItem,
                     dotaCount
                 });
             }

@@ -2700,8 +2700,14 @@
         }
 
         let itemsBadge = '';
-        if (acc.Cs2ItemsCount > 0) {
-          itemsBadge += '<span class="items-badge">🎒 CS2: ' + acc.Cs2ItemsCount + ' предм.</span>';
+        const cs2Items = acc.Cs2ItemsCount || 0;
+        const cs2Worth = acc.Cs2InventoryWorthUsd || 0;
+        if (cs2Items > 0 || cs2Worth > 0) {
+          const priceStr = cs2Worth > 0 ? (' · $' + cs2Worth.toFixed(2)) : '';
+          const knifeTag = (acc.Cs2KnivesCount > 0) ? ' 🔪' : '';
+          const medalTag = (acc.Cs2MedalsCount > 0) ? ' 🎖️' : '';
+          const fireTag = cs2Worth >= 40 ? ' 🔥' : '';
+          itemsBadge += '<span class="items-badge cs2-inv-badge" title="CS2 Inventory: ' + cs2Items + ' items' + (cs2Worth > 0 ? ', estimated $' + cs2Worth.toFixed(2) : '') + '">🎒 CS2: ' + cs2Items + ' предм.' + priceStr + knifeTag + medalTag + fireTag + '</span>';
         }
         if (acc.DotaItemsCount > 0) {
           itemsBadge += '<span class="items-badge">🛡️ Dota: ' + acc.DotaItemsCount + ' предм.</span>';
@@ -2983,17 +2989,23 @@
 
       setStatus('loading', 'CHECKING ALL ACCOUNTS...', 'Verifying ' + savedAccountsCache.length + ' saved account(s)...');
 
+      let totalCs2Worth = 0;
+      let totalCs2Items = 0;
+
       for (let i = 0; i < savedAccountsCache.length; i++) {
         const acc = savedAccountsCache[i];
         if (!acc || !acc.Token) continue;
-        setStatus('loading', 'CHECKING ALL...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
+        setStatus('loading', 'CHECKING INVENTORIES & STATUS...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
         await checkAccountDirectly(encodeURIComponent(acc.Token), acc.SteamId);
-        await new Promise(function(r) { setTimeout(r, 250); });
+        totalCs2Worth += (acc.Cs2InventoryWorthUsd || 0);
+        totalCs2Items += (acc.Cs2ItemsCount || 0);
+        await new Promise(function(r) { setTimeout(r, 150); });
       }
 
       lastAccountsRenderKey = '';
       renderAccountsList(true);
-      setStatus('success', 'ALL CHECKS COMPLETE', 'Finished checking ' + savedAccountsCache.length + ' account(s) in history.');
+      const worthMsg = totalCs2Worth > 0 ? (' | Общая стоимость CS2: $' + totalCs2Worth.toFixed(2)) : '';
+      setStatus('success', 'ALL CHECKS COMPLETE', 'Проверено ' + savedAccountsCache.length + ' аккаунтов' + worthMsg + ' (' + totalCs2Items + ' скинов CS2).');
 
       if (btn) {
         btn.disabled = false;
@@ -3009,11 +3021,11 @@
       const chkBtn = document.getElementById('btn-chk-' + steamId);
       if (chkBtn) chkBtn.innerText = '⌛...';
 
-      setStatus('loading', 'CHECKING ACCOUNT...', 'Checking token & VAC status for ' + steamId + '...');
+      setStatus('loading', 'CHECKING ACCOUNT...', 'Checking token, inventory & VAC status for ' + steamId + '...');
       const resJson = await bridge.CheckAccountLiveAsync(token, steamId);
       const data = JSON.parse(resJson || '{}');
 
-      // Deep details (VAC & inventory items)
+      // Deep details (VAC & inventory items & price valuation)
       try {
         if (bridge.FetchAccountDeepDetailsAsync) {
           const deepResJson = await bridge.FetchAccountDeepDetailsAsync(token, steamId);
@@ -3022,7 +3034,11 @@
             const accObj = savedAccountsCache.find(function(a) { return a.SteamId === steamId; });
             if (accObj) {
               accObj.VacStatus = deepData.vacStatus || accObj.VacStatus;
-              accObj.Cs2ItemsCount = deepData.cs2Count || accObj.Cs2ItemsCount;
+              accObj.Cs2ItemsCount = deepData.cs2Count != null ? deepData.cs2Count : accObj.Cs2ItemsCount;
+              accObj.Cs2InventoryWorthUsd = deepData.cs2WorthUsd != null ? deepData.cs2WorthUsd : accObj.Cs2InventoryWorthUsd;
+              accObj.Cs2MedalsCount = deepData.medalsCount || accObj.Cs2MedalsCount;
+              accObj.Cs2KnivesCount = deepData.knivesCount || accObj.Cs2KnivesCount;
+              accObj.TopValuableItem = deepData.topItem || accObj.TopValuableItem;
               accObj.DotaItemsCount = deepData.dotaCount || accObj.DotaItemsCount;
               if (deepData.persona && deepData.persona !== steamId) accObj.PersonaName = deepData.persona;
               if (deepData.avatar) accObj.AvatarUrl = deepData.avatar;
