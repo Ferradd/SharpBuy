@@ -953,7 +953,9 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
               </p>
             )}
             <p className="font-mono text-[10px] text-white/40">
-              {isEn ? 'Do not close this window — token and email arrive automatically.' : 'Не закрывайте окно — токен и email придут автоматически.'}
+              {isEn
+                ? 'Payment received. Waiting for supplier to release the account (usually 1–5 min, sometimes up to 15). Token + email arrive automatically.'
+                : 'Оплата получена. Ждём выдачу аккаунта от поставщика (обычно 1–5 мин, иногда до 15). Токен и email придут автоматически.'}
             </p>
           </div>
         )}

@@ -197,25 +197,62 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
 }
 
 /**
- * 3. Checks supplier order for delivered key and redeems + sends email synchronously on each polling tick
+ * Poll shefu for order status (downloads + crypto-status).
  */
-export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty) {
-  if (!supplierOrderId) return null;
+export async function getSupplierOrderStatus(supplierOrderId) {
+  if (!supplierOrderId) return { status: 'missing_id', fulfilled: false };
 
   try {
-    const dlRes = await fetch('https://shefu223.shop/api/nfa-downloads', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({ nfa_order: supplierOrderId })
-    });
+    const [dlRes, statusRes] = await Promise.all([
+      fetch('https://shefu223.shop/api/nfa-downloads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/5.0',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({ nfa_order: supplierOrderId })
+      }),
+      fetch(`https://shefu223.shop/api/nfa-crypto-status?order=${encodeURIComponent(supplierOrderId)}`, {
+        headers: { Accept: 'application/json', 'User-Agent': 'Mozilla/5.0' }
+      })
+    ]);
 
-    if (!dlRes.ok) return null;
+    const dlData = dlRes.ok ? await dlRes.json().catch(() => ({})) : {};
+    const cryptoData = statusRes.ok ? await statusRes.json().catch(() => ({})) : {};
 
-    const dlData = await dlRes.json();
+    if (dlData.status === 'fulfilled' && dlData.keysByProduct?.[0]?.keys?.length) {
+      return { status: 'fulfilled', fulfilled: true, dlData, cryptoData };
+    }
+
+    return {
+      status: dlData.status || cryptoData.status || 'unknown',
+      message: dlData.message || cryptoData.message || cryptoData.payment_status || null,
+      fulfilled: false,
+      dlData,
+      cryptoData
+    };
+  } catch (err) {
+    return { status: 'error', message: err.message, fulfilled: false };
+  }
+}
+
+export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty) {
+  if (!supplierOrderId) return { delivered: false, error: 'missing_supplier_order_id' };
+
+  try {
+    const supplierStatus = await getSupplierOrderStatus(supplierOrderId);
+
+    if (!supplierStatus.fulfilled) {
+      console.log(`[AutoDropship] Supplier ${supplierOrderId} not ready: ${supplierStatus.status} — ${supplierStatus.message || ''}`);
+      return {
+        delivered: false,
+        supplierStatus: supplierStatus.status,
+        supplierMessage: supplierStatus.message
+      };
+    }
+
+    const dlData = supplierStatus.dlData;
     if (dlData.status === 'fulfilled' && dlData.keysByProduct && dlData.keysByProduct.length > 0) {
       const group = dlData.keysByProduct[0];
       if (group.keys && group.keys.length > 0) {
@@ -250,7 +287,8 @@ export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, use
     }
   } catch (err) {
     console.error(`[AutoDropship] Check supplier error:`, err.message);
+    return { delivered: false, error: err.message };
   }
 
-  return { delivered: false };
+  return { delivered: false, supplierStatus: 'no_keys' };
 }

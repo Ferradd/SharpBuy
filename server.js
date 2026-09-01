@@ -90,5 +90,5 @@ app.listen(PORT, () => {
   // Start 5h 55m background arbitrage sniper
   startArbitrageCron();
   // Deliver stuck PROCURING orders even if client closed checkout tab
-  startFulfillmentCron(45_000);
+  startFulfillmentCron(15_000);
 });
