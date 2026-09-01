@@ -317,7 +317,9 @@ export default async function handler(req, res) {
                 if (initBal > 0) {
                   isThresholdMet = (currentBalance >= (initBal + expAmt - 0.02));
                 } else {
-                  isThresholdMet = (currentBalance >= expAmt);
+                  // Without baseline we cannot detect a new deposit — prevents false positives
+                  isThresholdMet = false;
+                  console.warn(`[PaymentCheck] Order ${orderId}: missing initialBalance — cannot verify USDT deposit`);
                 }
               } else {
                 isThresholdMet = (currentBalance >= (expAmt - 0.05));

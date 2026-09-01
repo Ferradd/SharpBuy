@@ -44,6 +44,9 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
   const [procureStage, setProcureStage] = useState(1);
   const [procureProgress, setProcureProgress] = useState(15);
+  const [procureMessage, setProcureMessage] = useState('');
+  const procureTimersRef = useRef([]);
+  const procureStartedAtRef = useRef(null);
 
   const CRYPTO_CURRENCIES = getCryptoCurrencies(isEn);
 
@@ -83,6 +86,45 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
   }, [step, timeLeft]);
 
+  const clearProcureTimers = () => {
+    procureTimersRef.current.forEach((t) => clearTimeout(t));
+    procureTimersRef.current = [];
+  };
+
+  const beginProcuringUI = (message = '') => {
+    clearProcureTimers();
+    procureStartedAtRef.current = Date.now();
+    setProcureMessage(message);
+    setProcureStage(1);
+    setProcureProgress(20);
+    procureTimersRef.current.push(
+      setTimeout(() => { setProcureStage(2); setProcureProgress(45); }, 2500),
+      setTimeout(() => { setProcureStage(3); setProcureProgress(70); }, 7000),
+      setTimeout(() => { setProcureStage(4); setProcureProgress(88); }, 14000)
+    );
+  };
+
+  useEffect(() => {
+    if (step !== 'PROCURING') {
+      clearProcureTimers();
+      return;
+    }
+
+    const creep = setInterval(() => {
+      setProcureProgress((p) => (p < 96 ? p + 1 : p));
+      const elapsed = Date.now() - (procureStartedAtRef.current || Date.now());
+      if (elapsed > 120000) {
+        setProcureMessage(
+          isEn
+            ? 'Supplier is taking longer than usual. Your order is saved — token and email will arrive automatically. Order: ' + (order?.orderId || '')
+            : 'Поставщик отвечает дольше обычного. Заказ сохранён — токен и email придут автоматически. Заказ: ' + (order?.orderId || '')
+        );
+      }
+    }, 8000);
+
+    return () => clearInterval(creep);
+  }, [step, order?.orderId, isEn]);
+
   if (!isOpen || !product) return null;
 
   const totalSum = (product.price * quantity).toLocaleString('ru-RU');
@@ -119,9 +161,8 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
       // owner_wallet / owner через balance — никаких ограничений, платит с кошелька сайта
 
       setIsChecking(true);
+      beginProcuringUI();
       setStep('PROCURING');
-      setProcureStage(1);
-      setProcureProgress(25);
 
       const t1 = setTimeout(() => { setProcureStage(2); setProcureProgress(55); }, 2000);
       const t2 = setTimeout(() => { setProcureStage(3); setProcureProgress(80); }, 5500);
@@ -201,6 +242,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
             setOrder({ orderId, email, productName: product.cleanTitle || product.title, amountRub: priceRub });
             saveOrderToHistory(walletOrderForPolling, data.delivery, 'PROCURING');
+            beginProcuringUI(isEn ? 'Payment confirmed — purchasing account from supplier...' : 'Оплата подтверждена — закупаем аккаунт у поставщика...');
             setStep('PROCURING');
 
             if (pollerRef.current) clearInterval(pollerRef.current);
@@ -298,22 +340,29 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
     try {
       setIsChecking(true);
-      const res = await fetch(getApiUrl('/api/create-order'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: product.id,
-          email,
-          currency: selectedCrypto,
-          quantity,
-          unitPrice: product.price
-        })
-      });
+      let data = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const res = await fetch(getApiUrl('/api/create-order'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              productId: product.id,
+              email,
+              currency: selectedCrypto,
+              quantity,
+              unitPrice: product.price
+            })
+          });
+          if (res.ok) {
+            data = await res.json();
+            break;
+          }
+        } catch (e) {}
+        if (attempt < 2) await new Promise((r) => setTimeout(r, 800));
+      }
 
-      let data;
-      if (res.ok) {
-        data = await res.json();
-      } else {
+      if (!data?.order) {
         data = await generateClientFallbackOrder(product, email, selectedCrypto, quantity);
       }
 
@@ -394,6 +443,28 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
   };
 
+  const fetchMerchantUsdtBalance = async () => {
+    const merchant = '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1';
+    try {
+      const res = await fetch('https://bsc-dataseed1.binance.org', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_call',
+          params: [{
+            to: '0x55d398326f99059fF775485246999027B3197955',
+            data: '0x70a08231' + merchant.replace('0x', '').padStart(64, '0')
+          }, 'latest']
+        })
+      });
+      const json = await res.json();
+      if (json?.result) return Number(BigInt(json.result)) / 1e18;
+    } catch (e) {}
+    return 0;
+  };
+
   const generateClientFallbackOrder = async (prod, userEmail, currId, qty) => {
     const addresses = {
       USDT_BEP20: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
@@ -420,10 +491,14 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
     const addr = addresses[currId] || addresses.USDT_BEP20;
     const qrDataUrl = await QRCode.toDataURL(addr, { margin: 2, scale: 6 });
+    const initialBalance = ['USDT_BEP20', 'BNB_BSC', 'USDT_POLYGON', 'USDT_ARBITRUM', 'USDT_BASE'].includes(currId)
+      ? await fetchMerchantUsdtBalance()
+      : 0;
 
     return {
       order: {
         orderId: 'SHARP-' + Date.now().toString(36).toUpperCase(),
+        productId: prod?.id || '1776000000001',
         productName: isEn ? (prod.englishTitle || prod.cleanTitle || prod.title) : (prod.cleanTitle || prod.title),
         email: userEmail,
         currency: currId,
@@ -433,7 +508,9 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
         cryptoAmount,
         priceRub,
         symbol: curr.symbol,
-        qrDataUrl
+        qrDataUrl,
+        initialBalance,
+        createdAtTime: Math.floor(Date.now() / 1000)
       }
     };
   };
@@ -473,8 +550,20 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
           if (data.paid && data.delivery) {
             const token = data.delivery.tokens?.[0];
             if (token === 'PROCURING') {
+              setOrder((prev) => ({
+                ...currentOrder,
+                ...prev,
+                supplierOrderId: data.supplierOrderId || prev?.supplierOrderId
+              }));
+              beginProcuringUI(isEn ? 'Payment confirmed — preparing your account...' : 'Оплата подтверждена — готовим ваш аккаунт...');
               setStep('PROCURING');
               saveOrderToHistory(currentOrder, data.delivery, 'PROCURING');
+              return;
+            }
+            if (token?.startsWith?.('ERR_SUPPLIER_FAIL')) {
+              if (pollerRef.current) clearInterval(pollerRef.current);
+              setDelivery(data.delivery);
+              setStep('SUCCESS');
               return;
             }
             if (token && token !== 'PROCURING') {
@@ -490,6 +579,9 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
   const handleManualCheck = async () => {
     setIsChecking(true);
     try {
+      let supplierOrderId = null;
+      try { supplierOrderId = localStorage.getItem('sb_sid_' + order?.orderId); } catch (e) {}
+
       const res = await fetch(getApiUrl('/api/check-payment'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -504,13 +596,24 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
           email: order?.email || email,
           productId: product?.id || 'premier',
           productName: order?.productName || product?.title,
+          priceRub: order?.priceRub || product?.price,
           initialBalance: order?.initialBalance,
-          createdAtTime: order?.createdAtTime || Math.floor(Date.now() / 1000)
+          createdAtTime: order?.createdAtTime || Math.floor(Date.now() / 1000),
+          supplierOrderId
         })
       });
 
       const data = await res.json();
       if (data.paid && data.delivery) {
+        const token = data.delivery.tokens?.[0];
+        if (token === 'PROCURING') {
+          if (data.supplierOrderId) {
+            try { localStorage.setItem('sb_sid_' + order.orderId, data.supplierOrderId); } catch (e) {}
+          }
+          beginProcuringUI(isEn ? 'Payment confirmed — waiting for supplier...' : 'Оплата подтверждена — ждём поставщика...');
+          setStep('PROCURING');
+          return;
+        }
         handlePaymentSuccess(data.delivery, order);
       } else {
         alert(data.message || (isEn ? 'Transaction not yet found on blockchain. Confirmation typically takes 1–2 minutes.' : 'Транзакция ещё не найдена в сети. Подтверждение в блокчейне обычно занимает 1–2 минуты.'));
@@ -838,6 +941,20 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
                 </span>
               </div>
             </div>
+
+            {order?.orderId && (
+              <p className="font-mono text-[10px] text-white/35">
+                {isEn ? 'ORDER ID:' : 'ЗАКАЗ:'} {order.orderId}
+              </p>
+            )}
+            {procureMessage && (
+              <p className="font-mono text-xs text-amber-300/90 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2">
+                {procureMessage}
+              </p>
+            )}
+            <p className="font-mono text-[10px] text-white/40">
+              {isEn ? 'Do not close this window — token and email arrive automatically.' : 'Не закрывайте окно — токен и email придут автоматически.'}
+            </p>
           </div>
         )}
 
