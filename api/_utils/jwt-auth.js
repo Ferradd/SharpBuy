@@ -1,6 +1,9 @@
 import crypto from 'crypto';
+import { requireEnv } from './env.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'sharpbuy_secure_auth_secret_jwt_key_2026_x89a';
+function getJwtSecret() {
+  return requireEnv('JWT_SECRET');
+}
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'iliykuzin2@gmail.com').trim().toLowerCase();
 
 function base64UrlEncode(input) {
@@ -25,7 +28,7 @@ export function signJwt(payload, expiresInSec = 60 * 60 * 24 * 7) {
     exp: Math.floor(Date.now() / 1000) + expiresInSec,
   }));
   const signature = crypto
-    .createHmac('sha256', JWT_SECRET)
+    .createHmac('sha256', getJwtSecret())
     .update(`${header}.${body}`)
     .digest('base64')
     .replace(/=/g, '')
@@ -41,7 +44,7 @@ export function verifyJwt(token) {
 
   const [header, body, signature] = parts;
   const expected = crypto
-    .createHmac('sha256', JWT_SECRET)
+    .createHmac('sha256', getJwtSecret())
     .update(`${header}.${body}`)
     .digest('base64')
     .replace(/=/g, '')

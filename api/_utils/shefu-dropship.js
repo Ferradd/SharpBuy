@@ -8,7 +8,8 @@ import { updateOrderDeliveryInDb } from './orders-db.js';
 // SHARPBUY AUTONOMOUS DROPSHIP & REDEEM ENGINE (SHEFU223.SHOP)
 // ============================================================================
 
-const MERCHANT_MNEMONIC = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC;
+const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY;
 const BSC_RPC = 'https://bsc-dataseed1.binance.org';
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 
@@ -107,10 +108,14 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const iid = urlObj.searchParams.get('iid');
     if (!iid) return null;
 
+    if (!NOWPAYMENTS_API_KEY) {
+      console.warn('[AutoDropship] NOWPAYMENTS_API_KEY not set');
+      return null;
+    }
     const payRes = await fetch('https://api.nowpayments.io/v1/invoice-payment', {
       method: 'POST',
       headers: {
-        'x-api-key': '2K2CBE4-26W4FDE-NHNT9Z3-5W5ST8B',
+        'x-api-key': NOWPAYMENTS_API_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -122,6 +127,11 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const payData = await payRes.json();
     if (!payData.pay_address) {
       console.warn('[AutoDropship] No pay address from NOWPayments');
+      return null;
+    }
+
+    if (!MERCHANT_MNEMONIC) {
+      console.warn('[AutoDropship] MERCHANT_MNEMONIC not set');
       return null;
     }
 

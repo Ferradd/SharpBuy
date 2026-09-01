@@ -7,7 +7,7 @@ import path from 'path';
 
 const DB_FILE = path.join(process.cwd(), 'src', 'data', 'orders_database.json');
 const DB_FALLBACK = path.join(process.cwd(), 'api', 'orders_database.json');
-const DESKTOP_ORDERS_LOG = 'C:\\Users\\iliyk\\Desktop\\sharpbuy_orders_log.json';
+const DESKTOP_ORDERS_LOG = path.join(process.cwd(), 'data', 'sharpbuy_orders_log.json');
 
 /**
  * Reads all stored orders from database

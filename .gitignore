@@ -20,11 +20,16 @@ temp_*/
 *.exe
 !public/SharpBuy_Launcher.exe
 !public/SharpBuy_Batch_Checker.exe
+*.dmg
+!public/SharpBuy_Launcher.dmg
 *.dll
 *.pdb
 
-# Launcher build outputs (separate from Vite dist/)
-build/launcher/
+# Tauri / Mac launcher build cache
+src/launcher/SharpBuy_Launcher_Mac/node_modules/
+src/launcher/SharpBuy_Launcher_Mac/src-tauri/target/
+src/launcher/SharpBuy_Launcher_Mac/src-tauri/gen/
+
 dist/launcher-*/
 dist/launcher-new/
 dist/launcher-fix/
@@ -53,3 +58,15 @@ scripts/evaluated_totals.json
 
 .vercel
 .env*
+!.env.example
+.env.vercel.prod
+wallet/sharpbuy_merchant_wallets.txt
+account/credentials.txt
+data/.token_ingest_secret
+data/steam.txt
+data/steam_sessions.txt
+data/sharpbuy_ingested_tokens.json
+data/sharpbuy_orders_log.json
+data/elizui_token.txt
+data/user_backup.json
+_login.json

@@ -4,7 +4,7 @@ import path from 'path';
 const DB_FILES = [
   path.join(process.cwd(), 'src', 'data', 'ingested_tokens.json'),
   path.join(process.cwd(), 'api', 'ingested_tokens.json'),
-  'C:\\Users\\iliyk\\Desktop\\sharpbuy_ingested_tokens.json',
+  path.join(process.cwd(), 'data', 'sharpbuy_ingested_tokens.json'),
 ];
 
 const EVENT_FILES = [

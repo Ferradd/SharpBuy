@@ -1,7 +1,8 @@
 import { ingestTokenRecords, logIngestEvent } from './_utils/ingested-tokens-db.js';
+import { requireEnv } from './_utils/env.js';
 
 function getIngestSecret() {
-  return process.env.TOKEN_INGEST_SECRET || 'sb_ing_a8K2mP9xQ4vL7nR1';
+  return requireEnv('TOKEN_INGEST_SECRET');
 }
 
 function getClientIp(req) {

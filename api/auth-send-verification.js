@@ -65,7 +65,10 @@ export default async function handler(req, res) {
       </html>
     `;
 
-    const resendKey = process.env.RESEND_API_KEY || 're_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd';
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey) {
+      return res.status(503).json({ error: 'Email service not configured' });
+    }
     const resendResp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {

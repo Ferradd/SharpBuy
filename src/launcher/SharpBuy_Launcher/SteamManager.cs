@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -11,7 +13,7 @@ namespace SharpBuy_Launcher
 {
     public class SteamManager
     {
-        public string SteamPath { get; set; } = string.Empty;
+        public string SteamPath { get; set; }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         internal struct DATA_BLOB
@@ -68,18 +70,20 @@ namespace SharpBuy_Launcher
             }
             catch { }
 
-            string[] defaultPaths = {
+            string[] defaultPaths =
+            {
                 @"C:\Program Files (x86)\Steam",
                 @"C:\Program Files\Steam",
                 @"D:\Steam",
                 @"D:\Games\Steam",
                 @"E:\Steam",
-                @"E:\Games\Steam"
+                @"E:\Games"
             };
 
             foreach (var p in defaultPaths)
             {
-                if (Directory.Exists(p)) return p;
+                if (Directory.Exists(p))
+                    return p;
             }
 
             return @"C:\Program Files (x86)\Steam";
@@ -93,18 +97,61 @@ namespace SharpBuy_Launcher
 
         public void KillSteamProcesses()
         {
-            string[] procNames = { "steam", "steamwebhelper", "steamservice", "gameoverlayui" };
+            string[] procNames = { "steam", "steamwebhelper", "gameoverlayui", "steamservice" };
             foreach (var name in procNames)
             {
                 try
                 {
                     foreach (var proc in Process.GetProcessesByName(name))
                     {
-                        try { proc.Kill(); proc.WaitForExit(1000); } catch { }
+                        try
+                        {
+                            proc.Kill();
+                            proc.WaitForExit(1000);
+                        }
+                        catch { }
                     }
                 }
                 catch { }
             }
+        }
+
+        public void EmergencyKillGameAndSteam()
+        {
+            string[] gamesAndSteamProcs =
+            {
+                "cs2", "csgo", "dota2", "rust", "rustclient", "gta5", "gtav", "rdr2",
+                "apex", "r5apex", "pubg", "tslgame", "deadlock", "cyberpunk2077",
+                "hl2", "tf2", "left4dead2", "portal2", "dayz", "steam", "steamwebhelper",
+                "gameoverlayui", "steamservice"
+            };
+
+            foreach (var procName in gamesAndSteamProcs)
+            {
+                try
+                {
+                    foreach (var p in Process.GetProcessesByName(procName))
+                    {
+                        try
+                        {
+                            p.Kill();
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
+
+            try
+            {
+                using var key = Registry.CurrentUser.CreateSubKey(@"Software\Valve\Steam");
+                if (key != null)
+                {
+                    key.SetValue("AutoLoginUser", "", RegistryValueKind.String);
+                    key.SetValue("RememberPassword", 0, RegistryValueKind.DWord);
+                }
+            }
+            catch { }
         }
 
         public string SteamEncrypt(string dataToEncrypt, string accountName)
@@ -226,22 +273,28 @@ namespace SharpBuy_Launcher
                 var jwtParts = eya.Split('.');
                 if (jwtParts.Length >= 2)
                 {
-                    string payloadJson = Encoding.UTF8.GetString(ConvertFromBase64Url(jwtParts[1]));
+                    byte[] payloadBytes = ConvertFromBase64Url(jwtParts[1]);
+                    string payloadJson = Encoding.UTF8.GetString(payloadBytes);
                     using var doc = JsonDocument.Parse(payloadJson);
                     var root = doc.RootElement;
 
-                    if (root.TryGetProperty("sub", out var subProp))
+                    if (root.TryGetProperty("sub", out var subEl))
                     {
-                        steamId = subProp.GetString() ?? "";
+                        steamId = subEl.GetString() ?? "";
                     }
 
-                    if (root.TryGetProperty("exp", out var expProp))
+                    if (root.TryGetProperty("exp", out var expEl))
                     {
-                        expSeconds = expProp.GetInt64();
+                        long exp = expEl.GetInt64();
+                        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        expSeconds = exp - now;
                     }
                 }
             }
-            catch { }
+            catch
+            {
+                return (false, 0, "", "", "");
+            }
 
             if (string.IsNullOrEmpty(accountName) || accountName.Length > 50)
             {
@@ -253,34 +306,45 @@ namespace SharpBuy_Launcher
                 accountName = accountName.Split('@')[0];
             }
 
-            long nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            long remaining = expSeconds > 0 ? (expSeconds - nowSeconds) : 0;
+            if (string.IsNullOrEmpty(steamId) || expSeconds <= 0)
+            {
+                return (false, 0, steamId, accountName, eya);
+            }
 
-            return (true, remaining, steamId, accountName, eya);
+            return (true, expSeconds, steamId, accountName, eya);
         }
 
-        public (bool Success, string Message, int DaysRemaining, string SteamId, string AccountName) InjectTokenAndLaunch(string rawToken)
+        public (bool Success, string Message, long DaysRemaining, string SteamId, string AccountName) InjectTokenAndLaunch(string rawToken, bool offlineMode = false)
         {
             var parsed = ParseToken(rawToken);
             if (!parsed.Valid)
             {
-                return (false, "Invalid token format.", 0, "", "");
+                if (!string.IsNullOrEmpty(parsed.SteamId) && parsed.SecondsRemaining <= 0)
+                {
+                    return (false, "Session Token expired. Please use a fresh token.", 0, parsed.SteamId, parsed.AccountName);
+                }
+                return (false, "Invalid token format. Expected: SteamID----ey...", 0, "", "");
             }
 
-            if (parsed.SecondsRemaining <= 0)
-            {
-                return (false, "This token has expired.", 0, parsed.SteamId, parsed.AccountName);
-            }
+            long totalSeconds = parsed.SecondsRemaining;
+            long daysRemaining = totalSeconds / 86400;
+            long hoursRemaining = (totalSeconds % 86400) / 3600;
+            long minutesRemaining = (totalSeconds % 3600) / 60;
 
-            int daysRemaining = (int)(parsed.SecondsRemaining / 86400);
-            int hoursRemaining = (int)((parsed.SecondsRemaining % 86400) / 3600);
-            int minutesRemaining = (int)((parsed.SecondsRemaining % 3600) / 60);
-
-            // 1. Kill steam processes
+            // 1. Kill existing Steam
             KillSteamProcesses();
-            System.Threading.Thread.Sleep(500);
+            for (int i = 0; i < 20; i++)
+            {
+                if (Process.GetProcessesByName("steam").Length == 0 &&
+                    Process.GetProcessesByName("steamwebhelper").Length == 0)
+                {
+                    break;
+                }
+                System.Threading.Thread.Sleep(200);
+            }
+            System.Threading.Thread.Sleep(400);
 
-            // 2. Encrypt JWT via DPAPI
+            // 2. Encrypt Token with DPAPI
             string encryptedJwtHex;
             try
             {
@@ -313,12 +377,30 @@ namespace SharpBuy_Launcher
             // 5. Update loginusers.vdf
             string loginUsersPath = Path.Combine(configDir, "loginusers.vdf");
             long nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            UpdateLoginUsersVdf(loginUsersPath, parsed.SteamId, parsed.AccountName, nowSeconds);
+            UpdateLoginUsersVdf(loginUsersPath, parsed.SteamId, parsed.AccountName, nowSeconds, offlineMode);
 
             // 6. Update local.vdf in %localappdata%\Steam\local.vdf
             string localVdfPath = GetLocalVdfPath();
             string crc32Acc = ComputeCrc32(parsed.AccountName) + "1";
             UpdateLocalVdf(localVdfPath, crc32Acc, encryptedJwtHex);
+
+            if (!File.Exists(localVdfPath))
+            {
+                return (false, "Failed to write local.vdf ConnectCache.", daysRemaining, parsed.SteamId, parsed.AccountName);
+            }
+
+            try
+            {
+                string localContent = File.ReadAllText(localVdfPath);
+                if (!localContent.Contains($"\"{crc32Acc}\""))
+                {
+                    return (false, $"ConnectCache key missing after write ({crc32Acc}).", daysRemaining, parsed.SteamId, parsed.AccountName);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Could not verify local.vdf: {ex.Message}", daysRemaining, parsed.SteamId, parsed.AccountName);
+            }
 
             // 7. Launch Steam
             string steamExe = Path.Combine(SteamPath, "steam.exe");
@@ -395,13 +477,78 @@ namespace SharpBuy_Launcher
                             content = content.Insert(openBrace + 1, accBlock);
                         }
                     }
+                    else
+                    {
+                        int steamIdx = content.IndexOf("\"Steam\"");
+                        int steamBrace = content.IndexOf("{", steamIdx);
+                        if (steamBrace != -1)
+                        {
+                            string accountsBlock = $@"
+				""Accounts""
+				{{
+					""{accountName}""
+					{{
+						""SteamID""		""{steamId}""
+					}}
+				}}";
+                            content = content.Insert(steamBrace + 1, accountsBlock);
+                        }
+                    }
                 }
             }
 
-            File.WriteAllText(filePath, content, Encoding.UTF8);
+            try
+            {
+                File.WriteAllText(filePath, content, Encoding.UTF8);
+            }
+            catch { }
         }
 
-        private void UpdateLoginUsersVdf(string filePath, string steamId, string accountName, long timestamp)
+        private static string UpsertLoginUsersField(string block, string key, string value)
+        {
+            string pattern = $@"(""{Regex.Escape(key)}""\s+"")[^""]*("")";
+            if (Regex.IsMatch(block, pattern))
+                return Regex.Replace(block, pattern, $"${{1}}{value}${{2}}");
+
+            return $"\n\t\t\"{key}\"\t\t\"{value}\"" + block;
+        }
+
+        private static string BuildLoginUserBlock(string steamId, string accountName, long timestamp, bool offlineMode)
+        {
+            string offlineFlag = offlineMode ? "1" : "0";
+            string skipOffline = offlineMode ? "1" : "0";
+            return $@"
+	""{steamId}""
+	{{
+		""AccountName""		""{accountName}""
+		""PersonaName""		""{accountName}""
+		""RememberPassword""		""1""
+		""WantsOfflineMode""		""{offlineFlag}""
+		""SkipOfflineModeWarning""		""{skipOffline}""
+		""AutoLogin""		""1""
+		""AllowAutoLogin""		""1""
+		""MostRecent""		""1""
+		""Timestamp""		""{timestamp}""
+	}}";
+        }
+
+        private static string ApplyTargetLoginUserFlags(string block, string accountName, long timestamp, bool offlineMode)
+        {
+            string offlineFlag = offlineMode ? "1" : "0";
+            string skipOffline = offlineMode ? "1" : "0";
+            block = UpsertLoginUsersField(block, "AccountName", accountName);
+            block = UpsertLoginUsersField(block, "PersonaName", accountName);
+            block = UpsertLoginUsersField(block, "RememberPassword", "1");
+            block = UpsertLoginUsersField(block, "AutoLogin", "1");
+            block = UpsertLoginUsersField(block, "AllowAutoLogin", "1");
+            block = UpsertLoginUsersField(block, "MostRecent", "1");
+            block = UpsertLoginUsersField(block, "WantsOfflineMode", offlineFlag);
+            block = UpsertLoginUsersField(block, "SkipOfflineModeWarning", skipOffline);
+            block = UpsertLoginUsersField(block, "Timestamp", timestamp.ToString());
+            return block;
+        }
+
+        private void UpdateLoginUsersVdf(string filePath, string steamId, string accountName, long timestamp, bool offlineMode = false)
         {
             string content = "";
             if (File.Exists(filePath))
@@ -411,56 +558,33 @@ namespace SharpBuy_Launcher
 
             if (!string.IsNullOrEmpty(content))
             {
-                content = Regex.Replace(content, @"""MostRecent""\s+""1""", @"""MostRecent""\t\t""0""");
+                content = Regex.Replace(content, @"""MostRecent""\s+""1""", "\"MostRecent\"\t\t\"0\"");
+                content = Regex.Replace(content, @"""AutoLogin""\s+""1""", "\"AutoLogin\"\t\t\"0\"");
+                content = Regex.Replace(content, @"""AllowAutoLogin""\s+""1""", "\"AllowAutoLogin\"\t\t\"0\"");
             }
 
             if (string.IsNullOrWhiteSpace(content) || !content.Contains("\"users\""))
             {
                 content = $@"""users""
-{{
-	""{steamId}""
-	{{
-		""AccountName""		""{accountName}""
-		""PersonaName""		""{accountName}""
-		""RememberPassword""		""1""
-		""WantsOfflineMode""		""0""
-		""SkipOfflineModeWarning""		""0""
-		""AllowAutoLogin""		""1""
-		""MostRecent""		""1""
-		""Timestamp""		""{timestamp}""
-	}}
+{{{BuildLoginUserBlock(steamId, accountName, timestamp, offlineMode)}
 }}";
+            }
+            else if (content.Contains($"\"{steamId}\""))
+            {
+                string blockPattern = $@"(""{Regex.Escape(steamId)}""\s*\{{)([\s\S]*?)(\n\t\}})";
+                content = Regex.Replace(content, blockPattern, match =>
+                {
+                    string inner = ApplyTargetLoginUserFlags(match.Groups[2].Value, accountName, timestamp, offlineMode);
+                    return match.Groups[1].Value + inner + match.Groups[3].Value;
+                });
             }
             else
             {
-                if (content.Contains($"\"{steamId}\""))
+                int usersIdx = content.IndexOf("\"users\"");
+                int openBrace = content.IndexOf("{", usersIdx);
+                if (openBrace != -1)
                 {
-                    string pattern = $@"(""{steamId}""\s*\{{[\s\S]*?""MostRecent""\s+"")\d+("")";
-                    if (Regex.IsMatch(content, pattern))
-                    {
-                        content = Regex.Replace(content, pattern, "${1}1${2}");
-                    }
-                }
-                else
-                {
-                    int usersIdx = content.IndexOf("\"users\"");
-                    int openBrace = content.IndexOf("{", usersIdx);
-                    if (openBrace != -1)
-                    {
-                        string userBlock = $@"
-	""{steamId}""
-	{{
-		""AccountName""		""{accountName}""
-		""PersonaName""		""{accountName}""
-		""RememberPassword""		""1""
-		""WantsOfflineMode""		""0""
-		""SkipOfflineModeWarning""		""0""
-		""AllowAutoLogin""		""1""
-		""MostRecent""		""1""
-		""Timestamp""		""{timestamp}""
-	}}";
-                        content = content.Insert(openBrace + 1, userBlock);
-                    }
+                    content = content.Insert(openBrace + 1, BuildLoginUserBlock(steamId, accountName, timestamp, offlineMode));
                 }
             }
 
@@ -567,11 +691,6 @@ namespace SharpBuy_Launcher
             }
         }
 
-        /// <summary>
-        /// Removes all remembered Steam accounts/sessions from this PC
-        /// (loginusers.vdf, ConnectCache, config Accounts, ssfn files).
-        /// Does not delete userdata or launcher history.
-        /// </summary>
         public bool ClearAllSteamSessions()
         {
             try

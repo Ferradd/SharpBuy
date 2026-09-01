@@ -55,10 +55,10 @@ export class CS2FaceitCollector {
 
     try {
       // 1. Search player on Faceit open API
+      const faceitToken = process.env.FACEIT_API_KEY;
+      const headers = faceitToken ? { Authorization: `Bearer ${faceitToken}` } : {};
       const res = await fetch(`https://open.faceit.com/data/v4/players?game=cs2&game_player_id=${steamid}`, {
-        headers: {
-          'Authorization': 'Bearer de59a4be-62b2-4d7c-87d9-4112e75e1194'
-        }
+        headers
       }).catch(() => null);
 
       if (res && res.status === 200) {

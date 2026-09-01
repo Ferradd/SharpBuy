@@ -11,6 +11,8 @@
     <RootNamespace>SharpBuy_Launcher</RootNamespace>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
@@ -22,6 +24,9 @@
     <EmbeddedResource Include="Assets\index.html" />
     <EmbeddedResource Include="Assets\icon.ico" />
     <None Update="Assets\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\tauri-bridge.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

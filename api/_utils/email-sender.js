@@ -1,5 +1,7 @@
+import { requireEnv } from './env.js';
+
 export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, tokens) {
-  const resendKey = process.env.RESEND_API_KEY || 're_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd';
+  const resendKey = requireEnv('RESEND_API_KEY');
   const tokensHtml = tokens.map((t, idx) => `
     <div style="background: #090a0d; border: 1px solid rgba(232, 88, 58, 0.35); border-radius: 12px; padding: 16px; margin-bottom: 14px;">
       <div style="font-size: 11px; font-weight: 800; color: #e8583a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">

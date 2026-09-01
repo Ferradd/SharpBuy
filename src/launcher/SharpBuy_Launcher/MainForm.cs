@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -30,6 +31,84 @@ namespace SharpBuy_Launcher
         private const int AW_HIDE = 0x10000;
         private const int AW_BLEND = 0x00080000;
         private const int AW_VER_NEGATIVE = 0x00000008;
+
+        private const int WidthNormal = 620;
+        private const int HeightNormal = 480;
+        private const int HeightPassport = 650;
+        private const int ShellPad = 10;
+        private const int PanelGap = 12;
+        private const int PanelW = 600;
+        private const int DrawerW = 380;
+        private const int CornerRadius = 14;
+        private const int CardHNormal = 460;
+        private const int CardHTall = 630;
+        private static readonly Color ShellBackground = Color.FromArgb(12, 15, 23);
+
+        private float DpiScale => DeviceDpi / 96f;
+
+        private int S(int value) => Math.Max(1, (int)Math.Round(value * DpiScale));
+
+        private static void AddRoundedRect(GraphicsPath path, Rectangle bounds, int radius)
+        {
+            if (bounds.Width <= 0 || bounds.Height <= 0) return;
+
+            int r = Math.Min(radius, Math.Min(bounds.Width, bounds.Height) / 2);
+            int d = r * 2;
+            path.AddArc(bounds.X, bounds.Y, d, d, 180, 90);
+            path.AddArc(bounds.Right - d, bounds.Y, d, d, 270, 90);
+            path.AddArc(bounds.Right - d, bounds.Bottom - d, d, d, 0, 90);
+            path.AddArc(bounds.X, bounds.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+        }
+
+        private void ApplyWindowRegion(int width, int height, int layoutMode = 0)
+        {
+            Region? previous = Region;
+            try
+            {
+                int shellPad = S(ShellPad);
+                int panelGap = S(PanelGap);
+                int panelW = S(PanelW);
+                int drawerW = S(DrawerW);
+                int cornerRadius = S(CornerRadius);
+                int widthNormal = S(WidthNormal);
+
+                bool isTallMode = layoutMode == 1;
+                bool drawerOpen = width > widthNormal + S(40);
+                
+                int maxInnerH = Math.Max(0, height - shellPad * 2);
+                int targetLeftH = isTallMode ? S(CardHTall) : S(CardHNormal);
+                int leftH = Math.Min(targetLeftH, maxInnerH);
+                int rightH = maxInnerH;
+
+                using var path = new GraphicsPath { FillMode = FillMode.Winding };
+
+                // 1. Left Card - EXACT bounds
+                if (leftH > cornerRadius)
+                {
+                    var leftRect = new Rectangle(shellPad, shellPad, panelW, leftH);
+                    AddRoundedRect(path, leftRect, cornerRadius);
+                }
+
+                // 2. Right Drawer Card (if open) - EXACT bounds
+                if (drawerOpen && rightH > cornerRadius)
+                {
+                    int rightX = shellPad + panelW + panelGap;
+                    int rightW = Math.Min(drawerW, width - rightX - shellPad);
+                    if (rightW > 0)
+                    {
+                        var rightRect = new Rectangle(rightX, shellPad, rightW, rightH);
+                        AddRoundedRect(path, rightRect, cornerRadius);
+                    }
+                }
+
+                Region = new Region(path);
+            }
+            finally
+            {
+                previous?.Dispose();
+            }
+        }
 
         public MainForm()
         {
@@ -79,20 +158,26 @@ namespace SharpBuy_Launcher
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.ClientSize = new Size(600, 440);
+            this.ClientSize = new Size(S(WidthNormal), S(HeightNormal));
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(17, 20, 26);
+            this.BackColor = ShellBackground;
             this.Text = "SHARPBUY NFA LAUNCHER";
             this.ShowIcon = true;
             
             _webView = new WebView2
             {
                 Dock = DockStyle.Fill,
-                DefaultBackgroundColor = Color.FromArgb(17, 20, 26)
+                DefaultBackgroundColor = Color.Transparent
             };
 
             this.Controls.Add(_webView);
+            this.Shown += (_, _) =>
+            {
+                ApplyWindowRegion(ClientSize.Width, ClientSize.Height, 0);
+                Activate();
+                BringToFront();
+            };
             this.ResumeLayout(false);
         }
 
@@ -108,6 +193,11 @@ namespace SharpBuy_Launcher
                 _webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
                 _webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
                 _webView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+                _webView.ZoomFactor = 1.0;
+                _webView.CoreWebView2.NavigationCompleted += (_, _) =>
+                {
+                    ApplyWindowRegion(ClientSize.Width, ClientSize.Height, 0);
+                };
 
                 // Add Host Object for JS Bridge
                 _webView.CoreWebView2.AddHostObjectToScript("bridge", _bridge);
@@ -146,60 +236,100 @@ namespace SharpBuy_Launcher
             }
         }
 
-        public void SetWindowSize(int width, int height)
+        private System.Windows.Forms.Timer? _currentAnimTimer;
+        private Action? _currentAnimFinalizer;
+
+        private void StopCurrentAnimation(bool finalizeTarget = true)
         {
-            if (this.InvokeRequired)
+            if (_currentAnimTimer != null)
             {
-                this.Invoke(() => this.ClientSize = new Size(width, height));
+                _currentAnimTimer.Stop();
+                _currentAnimTimer.Dispose();
+                _currentAnimTimer = null;
+            }
+            if (finalizeTarget && _currentAnimFinalizer != null)
+            {
+                var fin = _currentAnimFinalizer;
+                _currentAnimFinalizer = null;
+                fin();
             }
             else
             {
-                this.ClientSize = new Size(width, height);
+                _currentAnimFinalizer = null;
             }
         }
 
-        public Task SetWindowSizeAnimated(int width, int height, int durationMs = 320)
+        private void SetClientSizeInternal(int physWidth, int physHeight, int layoutMode)
+        {
+            ClientSize = new Size(physWidth, physHeight);
+            ApplyWindowRegion(physWidth, physHeight, layoutMode);
+        }
+
+        public void SetWindowSize(int logicalWidth, int logicalHeight, int layoutMode = 0)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(() =>
+                {
+                    StopCurrentAnimation(false);
+                    int physW = S(logicalWidth);
+                    int physH = S(logicalHeight);
+                    SetClientSizeInternal(physW, physH, layoutMode);
+                });
+            }
+            else
+            {
+                StopCurrentAnimation(false);
+                int physW = S(logicalWidth);
+                int physH = S(logicalHeight);
+                SetClientSizeInternal(physW, physH, layoutMode);
+            }
+        }
+
+        public Task SetWindowSizeAnimated(int logicalWidth, int logicalHeight, int durationMs = 280, int layoutMode = 0)
         {
             var tcs = new TaskCompletionSource<bool>();
-            var finalSize = new Size(width, height);
+            int targetPhysW = S(logicalWidth);
+            int targetPhysH = S(logicalHeight);
 
             void Run()
             {
-                if (ClientSize.Width == width && ClientSize.Height == height)
+                StopCurrentAnimation(true);
+
+                if (ClientSize.Width == targetPhysW && ClientSize.Height == targetPhysH)
                 {
+                    SetClientSizeInternal(targetPhysW, targetPhysH, layoutMode);
                     tcs.TrySetResult(true);
                     return;
                 }
 
                 var start = ClientSize;
-                int steps = Math.Max(14, durationMs / 16);
+                int steps = Math.Max(12, durationMs / 16);
                 int step = 0;
-                var timer = new System.Windows.Forms.Timer { Interval = Math.Max(8, durationMs / steps) };
 
-                timer.Tick += (_, _) =>
+                _currentAnimFinalizer = () =>
+                {
+                    SetClientSizeInternal(targetPhysW, targetPhysH, layoutMode);
+                    tcs.TrySetResult(true);
+                };
+
+                _currentAnimTimer = new System.Windows.Forms.Timer { Interval = 16 };
+                _currentAnimTimer.Tick += (_, _) =>
                 {
                     step++;
                     double t = Math.Min(1.0, step / (double)steps);
                     t = 1 - Math.Pow(1 - t, 3);
-                    int w = start.Width + (int)((finalSize.Width - start.Width) * t);
-                    int h = start.Height + (int)((finalSize.Height - start.Height) * t);
-                    ClientSize = new Size(w, h);
+                    int w = start.Width + (int)((targetPhysW - start.Width) * t);
+                    int h = start.Height + (int)((targetPhysH - start.Height) * t);
+                    SetClientSizeInternal(w, h, layoutMode);
 
                     if (step >= steps)
                     {
-                        timer.Stop();
-                        timer.Dispose();
-                        ClientSize = finalSize;
-                        tcs.TrySetResult(true);
+                        StopCurrentAnimation(true);
                     }
                 };
 
-                timer.Start();
-            }
-
-            void FinishSnap()
-            {
-                ClientSize = finalSize;
+                _currentAnimTimer.Start();
             }
 
             if (InvokeRequired)
@@ -207,18 +337,12 @@ namespace SharpBuy_Launcher
             else
                 Run();
 
-            return tcs.Task.ContinueWith(_ =>
-            {
-                if (InvokeRequired)
-                    BeginInvoke(FinishSnap);
-                else
-                    FinishSnap();
-                return true;
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            return tcs.Task;
         }
 
         public void StartDrag()
         {
+            StopCurrentAnimation(true);
             ReleaseCapture();
             SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }

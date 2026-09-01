@@ -179,6 +179,34 @@ export const InstructionsPage = ({ onNavigate }) => {
                     &rarr;
                   </span>
                 </a>
+
+                <a
+                  href="/SharpBuy_Launcher.dmg" download="SharpBuy_Launcher.dmg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4 text-white transition-all hover:bg-white/[0.06] hover:border-white/20 group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white group-hover:scale-105 transition-transform">
+                      <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="font-sans font-black text-sm uppercase text-white">
+                        {lang === 'ru' ? 'СКАЧАТЬ ДЛЯ MAC' : 'DOWNLOAD FOR MAC'}
+                      </div>
+                      <div className="font-mono text-[11px] text-white/50">
+                        {lang === 'ru' ? 'DMG · Apple Silicon · ~5 MB' : 'DMG · Apple Silicon · ~5 MB'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-mono text-xs font-bold text-white/60 group-hover:translate-x-1 transition-transform">
+                    &rarr;
+                  </span>
+                </a>
               </div>
             </div>
           </div>

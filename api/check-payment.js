@@ -121,7 +121,10 @@ export default async function handler(req, res) {
       isWhitelisted = true;
     } else if (orderIndex !== undefined && orderIndex !== null) {
       // Legacy child wallet check
-      const mnemonic = process.env.MERCHANT_MNEMONIC || 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+      const mnemonic = process.env.MERCHANT_MNEMONIC;
+      if (!mnemonic) {
+        throw new Error('MERCHANT_MNEMONIC is not configured');
+      }
       const childWallet = ethers.HDNodeWallet.fromPhrase(mnemonic, "", "m/44'/60'/0'/0/" + orderIndex);
       if (childWallet.address.toLowerCase() === cleanAddr) {
         isWhitelisted = true;

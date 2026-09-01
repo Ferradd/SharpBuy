@@ -45,7 +45,7 @@ export function createAuditorServer(embeddedAssets = {}) {
         const userHome = process.env.USERPROFILE || process.env.HOME || 'C:\\Users\\iliyk';
         const candidatePaths = [
           path.join(userHome, 'Desktop', 'steam.txt'),
-          'C:\\Users\\iliyk\\Desktop\\steam.txt',
+          path.join(process.cwd(), 'data', 'steam.txt'),
           path.join(process.cwd(), 'steam.txt')
         ];
         let foundContent = '';

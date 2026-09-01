@@ -27,6 +27,12 @@ namespace SharpBuy_Launcher
         public bool IsAlive { get; set; } = true;
         public string StatusMessage { get; set; } = "";
         public string VacBanned { get; set; } = "0";
+        public string WalletBalance { get; set; } = "";
+        public string VacStatus { get; set; } = "Clean";
+        public bool OwnerActive { get; set; } = false;
+        public long LastOwnerActiveAt { get; set; } = 0;
+        public int Cs2ItemsCount { get; set; } = 0;
+        public int DotaItemsCount { get; set; } = 0;
     }
 
     [ClassInterface(ClassInterfaceType.AutoDual)]
@@ -39,9 +45,21 @@ namespace SharpBuy_Launcher
         private readonly MainForm _form;
         private readonly SteamManager _steam;
         private readonly string _accountsDbPath;
+        private readonly string _gamesDbPath;
         private const string ProductionApiBase = "https://sharpbuy.org/api";
         private static readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
         private static readonly HttpClient _apiClient = new HttpClient { Timeout = TimeSpan.FromSeconds(50) };
+
+        private string _activeSteamId = "";
+        private string _activeAccountName = "";
+        private bool _stealthGuardEnabled = true;
+        private System.Threading.Timer? _watchdogTimer = null;
+        private readonly object _watchdogLock = new object();
+        private bool _isWatchdogChecking = false;
+        private string _initialOnlineState = "";
+        private string _initialGameTitle = "";
+        private DateTime _watchdogGraceUntil = DateTime.MinValue;
+        private long _connectionLogPos = 0;
 
         public WebBridge(MainForm form, SteamManager steam)
         {
@@ -50,11 +68,32 @@ namespace SharpBuy_Launcher
             string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SharpBuy_Launcher");
             Directory.CreateDirectory(dir);
             _accountsDbPath = Path.Combine(dir, "accounts.json");
+            _gamesDbPath = Path.Combine(dir, "games_cache.json");
         }
 
         public string GetSteamPath()
         {
             return _steam.SteamPath;
+        }
+
+        public void SetStealthGuardEnabled(bool enabled)
+        {
+            _stealthGuardEnabled = enabled;
+        }
+
+        public bool GetStealthGuardEnabled()
+        {
+            return _stealthGuardEnabled;
+        }
+
+        public void EmergencyKill()
+        {
+            _steam.EmergencyKillGameAndSteam();
+            StopWatchdog();
+            _form.Invoke(() =>
+            {
+                _form.ExecuteScript("setStatus('error', 'EMERGENCY SHUTDOWN', 'All game and Steam processes force-terminated.');");
+            });
         }
 
         public void ChangePath()
@@ -72,17 +111,24 @@ namespace SharpBuy_Launcher
             });
         }
 
-        public void SetWindowSize(int width, int height)
+        public void SetWindowSize(int width, int height, int layoutMode = 0)
         {
-            _form.SetWindowSize(width, height);
+            _form.SetWindowSize(width, height, layoutMode);
         }
 
-        public Task SetWindowSizeAnimated(int width, int height, int durationMs = 320)
+        public Task SetWindowSizeAnimated(int width, int height, int durationMs = 320, int layoutMode = 0)
         {
-            return _form.SetWindowSizeAnimated(width, height, durationMs);
+            return _form.SetWindowSizeAnimated(width, height, durationMs, layoutMode);
         }
+
+        private static string JsString(string value) => JsonSerializer.Serialize(value ?? "");
 
         public void LaunchSteam(string tokenInput)
+        {
+            LaunchSteamStealth(tokenInput, false);
+        }
+
+        public void LaunchSteamStealth(string tokenInput, bool offlineMode = false)
         {
             Task.Run(async () =>
             {
@@ -93,24 +139,182 @@ namespace SharpBuy_Launcher
                     return;
                 }
 
-                _form.Invoke(() => _form.ExecuteScript("setStatus('loading', 'LOGGING IN TO STEAM...', 'Encrypting session with DPAPI and launching Steam client.');"));
+                string modeText = offlineMode ? " [OFFLINE MODE]" : " [STEALTH GUARD]";
+                _form.Invoke(() => _form.ExecuteScript($"setStatus('loading', 'LOGGING IN TO STEAM{modeText}...', 'Encrypting session with DPAPI, applying stealth configs.');"));
 
-                var result = _steam.InjectTokenAndLaunch(tokenInput);
+                var result = _steam.InjectTokenAndLaunch(tokenInput, offlineMode);
                 if (result.Success)
                 {
                     await SaveAccountInternalAsync(result.SteamId, result.AccountName, tokenInput);
+                    if (!offlineMode && _stealthGuardEnabled)
+                    {
+                        StartWatchdog(result.SteamId, result.AccountName);
+                    }
+                    else
+                    {
+                        StopWatchdog();
+                    }
+
                     _form.Invoke(() =>
                     {
-                        _form.ExecuteScript($"onLoginSuccess('{result.SteamId}', '{result.AccountName}', '{result.Message}');");
+                        _form.ExecuteScript($"onLoginSuccess({JsString(result.SteamId)}, {JsString(result.AccountName)}, {JsString(result.Message)});");
                     });
                 }
                 else
                 {
                     _form.Invoke(() =>
                     {
-                        _form.ExecuteScript($"setStatus('error', 'LOGIN FAILED', '{result.Message}');");
+                        _form.ExecuteScript($"setStatus('error', 'LOGIN FAILED', {JsString(result.Message)});");
                     });
                 }
+            });
+        }
+
+        private void StartWatchdog(string steamId, string accountName)
+        {
+            lock (_watchdogLock)
+            {
+                _activeSteamId = steamId;
+                _activeAccountName = accountName;
+                _initialOnlineState = "";
+                _initialGameTitle = "";
+                _watchdogGraceUntil = DateTime.UtcNow.AddSeconds(90);
+                try
+                {
+                    string logPath = Path.Combine(_steam.SteamPath, "logs", "connection_log.txt");
+                    _connectionLogPos = File.Exists(logPath) ? new FileInfo(logPath).Length : 0;
+                }
+                catch
+                {
+                    _connectionLogPos = 0;
+                }
+                _watchdogTimer?.Dispose();
+                _watchdogTimer = new System.Threading.Timer(OnWatchdogTick, null, 15000, 4500);
+            }
+        }
+
+        private void StopWatchdog()
+        {
+            lock (_watchdogLock)
+            {
+                _watchdogTimer?.Dispose();
+                _watchdogTimer = null;
+                _activeSteamId = "";
+                _activeAccountName = "";
+            }
+        }
+
+        private async void OnWatchdogTick(object? state)
+        {
+            if (!_stealthGuardEnabled || string.IsNullOrEmpty(_activeSteamId)) return;
+            if (_isWatchdogChecking) return;
+
+            _isWatchdogChecking = true;
+            try
+            {
+                var steamProcs = Process.GetProcessesByName("steam");
+                if (steamProcs.Length == 0)
+                {
+                    StopWatchdog();
+                    return;
+                }
+
+                string xml = "";
+                try
+                {
+                    xml = await _httpClient.GetStringAsync($"https://steamcommunity.com/profiles/{_activeSteamId}?xml=1");
+                }
+                catch { }
+
+                if (!string.IsNullOrEmpty(xml) && DateTime.UtcNow >= _watchdogGraceUntil)
+                {
+                    var stateMatch = Regex.Match(xml, @"<onlineState>(.*?)</onlineState>");
+                    var inGameMatch = Regex.Match(xml, @"<stateMessage><!\[CDATA\[(.*?)\]\]></stateMessage>");
+                    string onlineState = stateMatch.Success ? stateMatch.Groups[1].Value.Trim().ToLower() : "";
+                    string stateMessage = inGameMatch.Success ? inGameMatch.Groups[1].Value.Trim() : "";
+
+                    if (string.IsNullOrEmpty(_initialOnlineState))
+                    {
+                        _initialOnlineState = onlineState;
+                        _initialGameTitle = stateMessage;
+                    }
+                    else
+                    {
+                        bool ownerConflict = false;
+                        if (_initialOnlineState == "offline" && (onlineState == "in-game" || onlineState == "online"))
+                        {
+                            ownerConflict = true;
+                        }
+                        else if (!string.IsNullOrEmpty(stateMessage) && stateMessage != _initialGameTitle && stateMessage.StartsWith("In-Game", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ownerConflict = true;
+                        }
+
+                        if (ownerConflict)
+                        {
+                            TriggerEmergencyOwnerDrop("Владелец зашел в сеть / запустил игру");
+                            return;
+                        }
+                    }
+                }
+
+                // Check Steam connection log (only new lines written after our login)
+                string logPath = Path.Combine(_steam.SteamPath, "logs", "connection_log.txt");
+                if (File.Exists(logPath))
+                {
+                    try
+                    {
+                        using var fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        if (fs.Length > _connectionLogPos)
+                        {
+                            fs.Seek(_connectionLogPos, SeekOrigin.Begin);
+                            using var sr = new StreamReader(fs, Encoding.UTF8);
+                            string recentLogs = await sr.ReadToEndAsync();
+                            _connectionLogPos = fs.Length;
+                            if (recentLogs.Contains("Logged off: Logged in elsewhere") ||
+                                recentLogs.Contains("Account replaced by new session") ||
+                                recentLogs.Contains("App launched on another machine"))
+                            {
+                                TriggerEmergencyOwnerDrop("Владелец перехватил сессию Steam");
+                                return;
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+            finally
+            {
+                _isWatchdogChecking = false;
+            }
+        }
+
+        private void TriggerEmergencyOwnerDrop(string reason)
+        {
+            string steamId = _activeSteamId;
+            string accountName = _activeAccountName;
+            StopWatchdog();
+
+            _steam.EmergencyKillGameAndSteam();
+
+            try
+            {
+                var list = LoadAccountsList();
+                var target = list.Find(a => a.SteamId == steamId);
+                if (target != null)
+                {
+                    target.OwnerActive = true;
+                    target.LastOwnerActiveAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    target.StatusMessage = $"⚠️ Владелец в сети ({DateTime.Now:HH:mm})";
+                    SaveAccountsList(list);
+                }
+            }
+            catch { }
+
+            _form.Invoke(() =>
+            {
+                _form.ExecuteScript($"onOwnerDetectedAlert({JsString(steamId)}, {JsString(accountName)}, {JsString(reason)});");
             });
         }
 
@@ -420,6 +624,31 @@ namespace SharpBuy_Launcher
             return "[]";
         }
 
+        public string GetCachedGames()
+        {
+            try
+            {
+                if (File.Exists(_gamesDbPath))
+                {
+                    return File.ReadAllText(_gamesDbPath);
+                }
+            }
+            catch { }
+            return "{}";
+        }
+
+        public void SaveCachedGames(string json)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(json))
+                {
+                    File.WriteAllText(_gamesDbPath, json);
+                }
+            }
+            catch { }
+        }
+
         public void SaveAccount(string steamId, string accountName, string token)
         {
             Task.Run(async () => await SaveAccountInternalAsync(steamId, accountName, token));
@@ -436,7 +665,7 @@ namespace SharpBuy_Launcher
 
                 list.RemoveAll(a => a.SteamId == steamId || a.AccountName == accountName);
 
-                var (persona, avatar, vacBanned, _) = await FetchSteamProfileDetailedAsync(steamId);
+                var (persona, avatar, vacBanned, vacStatus, _, _) = await FetchSteamProfileDetailedAsync(steamId);
                 var warranty = await FetchWarrantyFromServerAsync(token);
 
                 long warrantyExpiresAt = warranty.ExpiresAtUnix;
@@ -456,7 +685,8 @@ namespace SharpBuy_Launcher
                     IsAlive = true,
                     LastCheckedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                     StatusMessage = warranty.Eligible ? "Warranty active" : "Active",
-                    VacBanned = vacBanned
+                    VacBanned = vacBanned,
+                    VacStatus = vacStatus
                 });
 
                 SaveAccountsList(list);
@@ -543,12 +773,13 @@ namespace SharpBuy_Launcher
                 {
                     if (string.IsNullOrEmpty(acc.AvatarUrl) || acc.PersonaName == acc.SteamId || acc.AvatarUrl.Contains("fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb"))
                     {
-                        var (persona, avatar, vacBanned, isPrivate) = await FetchSteamProfileDetailedAsync(acc.SteamId);
+                        var (persona, avatar, vacBanned, vacStatus, isPrivate, _) = await FetchSteamProfileDetailedAsync(acc.SteamId);
                         if (!string.IsNullOrEmpty(persona) && persona != acc.SteamId)
                         {
                             acc.PersonaName = persona;
                             acc.AvatarUrl = avatar;
                             acc.VacBanned = vacBanned;
+                            acc.VacStatus = vacStatus;
                             changed = true;
                         }
                     }
@@ -563,11 +794,11 @@ namespace SharpBuy_Launcher
             catch { }
         }
 
-        private async Task<(string PersonaName, string AvatarUrl, string VacBanned, bool IsPrivate)> FetchSteamProfileDetailedAsync(string steamId)
+        private async Task<(string PersonaName, string AvatarUrl, string VacBanned, string VacStatus, bool IsPrivate, bool IsLimited)> FetchSteamProfileDetailedAsync(string steamId)
         {
             string defaultAvatar = "https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg";
             if (string.IsNullOrEmpty(steamId) || steamId.Length < 10)
-                return (steamId, defaultAvatar, "0", false);
+                return (steamId, defaultAvatar, "0", "CLEAN", false, false);
 
             try
             {
@@ -575,18 +806,95 @@ namespace SharpBuy_Launcher
                 var nameMatch = Regex.Match(xml, @"<steamID><!\[CDATA\[(.*?)\]\]></steamID>");
                 var avatarMatch = Regex.Match(xml, @"<avatarMedium><!\[CDATA\[(.*?)\]\]></avatarMedium>");
                 var vacMatch = Regex.Match(xml, @"<vacBanned>(\d+)</vacBanned>");
+                var tradeMatch = Regex.Match(xml, @"<tradeBanState>(.*?)</tradeBanState>");
+                var limitedMatch = Regex.Match(xml, @"<isLimitedAccount>(\d+)</isLimitedAccount>");
                 var privacyMatch = Regex.Match(xml, @"<privacyState>(.*?)</privacyState>");
 
                 string persona = nameMatch.Success ? nameMatch.Groups[1].Value : steamId;
                 string avatar = avatarMatch.Success ? avatarMatch.Groups[1].Value : defaultAvatar;
                 string vac = vacMatch.Success ? vacMatch.Groups[1].Value : "0";
+                string trade = tradeMatch.Success ? tradeMatch.Groups[1].Value : "None";
+                bool isLimited = limitedMatch.Success && limitedMatch.Groups[1].Value == "1";
                 bool isPriv = privacyMatch.Success && privacyMatch.Groups[1].Value != "public";
 
-                return (persona, avatar, vac, isPriv);
+                string vacStatus = "CLEAN";
+                if (vac == "1") vacStatus = "VAC BANNED";
+                else if (!string.IsNullOrEmpty(trade) && trade != "None") vacStatus = "TRADE BANNED";
+                else if (isLimited) vacStatus = "LIMITED $5";
+
+                return (persona, avatar, vac, vacStatus, isPriv, isLimited);
             }
             catch
             {
-                return (steamId, defaultAvatar, "0", false);
+                return (steamId, defaultAvatar, "0", "CLEAN", false, false);
+            }
+        }
+
+        public async Task<string> FetchAccountDeepDetailsAsync(string rawToken, string steamId)
+        {
+            try
+            {
+                var (persona, avatar, vacBanned, vacStatus, isPrivate, isLimited) = await FetchSteamProfileDetailedAsync(steamId);
+
+                int cs2Count = 0;
+                int dotaCount = 0;
+
+                try
+                {
+                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=1");
+                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+                    var res = await _httpClient.SendAsync(req);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        var body = await res.Content.ReadAsStringAsync();
+                        var match = Regex.Match(body, @"""total_inventory_count"":\s*(\d+)");
+                        if (match.Success) cs2Count = int.Parse(match.Groups[1].Value);
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/570/2?l=english&count=1");
+                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+                    var res = await _httpClient.SendAsync(req);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        var body = await res.Content.ReadAsStringAsync();
+                        var match = Regex.Match(body, @"""total_inventory_count"":\s*(\d+)");
+                        if (match.Success) dotaCount = int.Parse(match.Groups[1].Value);
+                    }
+                }
+                catch { }
+
+                // Update accounts DB
+                var list = LoadAccountsList();
+                var target = list.Find(a => a.SteamId == steamId);
+                if (target != null)
+                {
+                    if (!string.IsNullOrEmpty(persona) && persona != steamId) target.PersonaName = persona;
+                    if (!string.IsNullOrEmpty(avatar) && !avatar.Contains("fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb")) target.AvatarUrl = avatar;
+                    target.VacBanned = vacBanned;
+                    target.VacStatus = vacStatus;
+                    target.Cs2ItemsCount = cs2Count;
+                    target.DotaItemsCount = dotaCount;
+                    SaveAccountsList(list);
+                }
+
+                return JsonSerializer.Serialize(new
+                {
+                    success = true,
+                    steamId,
+                    persona,
+                    avatar,
+                    vacStatus,
+                    cs2Count,
+                    dotaCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return JsonSerializer.Serialize(new { success = false, error = ex.Message });
             }
         }
 
@@ -689,7 +997,7 @@ namespace SharpBuy_Launcher
                 }
 
                 var fullToken = token.Contains("----") ? token : $"{parsed.SteamId}----{token}";
-                var (persona, avatar, vacBanned, _) = await FetchSteamProfileDetailedAsync(parsed.SteamId);
+                var (persona, avatar, vacBanned, vacStatus, _, _) = await FetchSteamProfileDetailedAsync(parsed.SteamId);
                 var warranty = await FetchWarrantyFromServerAsync(fullToken);
 
                 list.Insert(0, new SavedAccount
@@ -704,7 +1012,8 @@ namespace SharpBuy_Launcher
                     ExpSeconds = parsed.SecondsRemaining,
                     IsAlive = true,
                     StatusMessage = warranty.Eligible ? "Warranty active" : "Imported",
-                    VacBanned = vacBanned
+                    VacBanned = vacBanned,
+                    VacStatus = vacStatus
                 });
 
                 existingIds.Add(parsed.SteamId);
