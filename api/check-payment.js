@@ -4,7 +4,6 @@ import { ethers } from 'ethers';
 import { initiateDropshipPurchase, checkAndFulfillSupplierOrder, redeemShefuKey } from './_utils/shefu-dropship.js';
 import { saveOrderToDb, getAllOrders } from './_utils/orders-db.js';
 import { claimLocalStockToken } from './_utils/local-stock-manager.js';
-import { sendOrderEmail } from './_utils/email-sender.js';
 
 // ============================================================================
 // SHARPBUY SECURE CRYPTO PAYMENT VERIFIER & DISPATCHER
@@ -455,18 +454,26 @@ export default async function handler(req, res) {
             );
 
             if (checkRes && checkRes.delivered && checkRes.token) {
+              const deliveredData = {
+                quantity: 1,
+                tokens: [checkRes.token],
+                tokenData: checkRes.token,
+                status: 'DELIVERED',
+                launcherUrl: '/SharpBuy_Launcher.exe',
+                launcherName: 'SharpBuy_Launcher.exe'
+              };
+              fulfilledOrdersCache.set(orderId, {
+                txHash: existingOrder.txHash || txHash,
+                supplierOrderId: effectiveSupplierOrderId,
+                delivery: deliveredData,
+                status: 'DELIVERED'
+              });
               return res.status(200).json({
                 paid: true,
                 status: 'DELIVERED',
                 txHash: existingOrder.txHash || txHash || ('0xBSC_' + orderId),
-                delivery: {
-                  quantity: 1,
-                  tokens: [checkRes.token],
-                  tokenData: checkRes.token,
-                  status: 'DELIVERED',
-                  launcherUrl: '/SharpBuy_Launcher.exe',
-                  launcherName: 'SharpBuy_Launcher.exe'
-                },
+                supplierOrderId: effectiveSupplierOrderId,
+                delivery: deliveredData,
                 orderId
               });
             }
@@ -632,6 +639,8 @@ export default async function handler(req, res) {
       return res.status(200).json({
         paid: true,
         txHash,
+        status: realDelivery.status,
+        supplierOrderId: createdSupplierOrderId,
         delivery: realDelivery,
         orderId
       });

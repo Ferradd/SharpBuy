@@ -32,6 +32,33 @@ export function getAllOrders() {
 /**
  * Saves a new order into the database with full audit trail
  */
+function resolveOrderStatus(tokens, explicitStatus) {
+  if (explicitStatus) return explicitStatus;
+  const first = Array.isArray(tokens) ? tokens[0] : tokens;
+  if (first === 'PROCURING') return 'PROCURING';
+  if (typeof first === 'string' && first.startsWith('ERR_')) return 'FAILED';
+  return 'PAID_DELIVERED';
+}
+
+export function getOrderById(orderId) {
+  return getAllOrders().find(o => o.orderId === orderId) || null;
+}
+
+export function getOrderDeliveryFromDb(orderId) {
+  const order = getOrderById(orderId);
+  if (!order) return null;
+  return {
+    orderId: order.orderId,
+    email: order.email,
+    tokens: order.tokens,
+    deliveryToken: order.tokens?.[0],
+    status: order.status,
+    supplierOrderId: order.supplierOrderId || null,
+    productName: order.productName,
+    amountRub: order.amountRub
+  };
+}
+
 export function saveOrderToDb(orderData) {
   try {
     const orders = getAllOrders();
@@ -49,10 +76,13 @@ export function saveOrderToDb(orderData) {
     const warrantyExpiresAt = existingRecord?.warrantyExpiresAt
       || new Date(now.getTime() + warrantyHours * 60 * 60 * 1000).toISOString();
     const firstActivatedAt = existingRecord?.firstActivatedAt || now.toISOString();
+    const tokens = Array.isArray(orderData.tokens)
+      ? orderData.tokens
+      : [orderData.tokenData || orderData.deliveryToken].filter(Boolean);
 
     const record = {
       orderId: orderData.orderId,
-      email: orderData.email,
+      email: orderData.email || orderData.buyerEmail,
       productId: orderData.productId || 'nfa_prime',
       productName: orderData.productName,
       quantity: orderData.quantity || 1,
@@ -60,13 +90,15 @@ export function saveOrderToDb(orderData) {
       cryptoAmount: orderData.cryptoAmount,
       currency: orderData.currency || orderData.currencyName,
       txHash: orderData.txHash || '0xBLOCKCHAIN_TX',
-      tokens: Array.isArray(orderData.tokens) ? orderData.tokens : [orderData.tokenData].filter(Boolean),
+      tokens,
+      supplierOrderId: orderData.supplierOrderId || existingRecord?.supplierOrderId || null,
       createdAt: orderData.createdAt || existingRecord?.createdAt || now.toISOString(),
       paidAt: existingRecord?.paidAt || now.toISOString(),
       firstActivatedAt: firstActivatedAt,
       warrantyExpiresAt: warrantyExpiresAt,
       warrantyHours: warrantyHours,
-      status: 'PAID_DELIVERED',
+      status: resolveOrderStatus(tokens, orderData.status),
+      emailSentAt: existingRecord?.emailSentAt || orderData.emailSentAt || null,
       customerIp: orderData.customerIp || '127.0.0.1',
       notes: orderData.notes || 'Automated Instant Delivery'
     };
@@ -99,6 +131,21 @@ export function saveOrderToDb(orderData) {
   } catch (err) {
     console.error('Error saving order to db:', err);
     return null;
+  }
+}
+
+export function markOrderEmailSent(orderId) {
+  try {
+    const orders = getAllOrders();
+    const existingIndex = orders.findIndex(o => o.orderId === orderId);
+    if (existingIndex < 0) return;
+    orders[existingIndex].emailSentAt = new Date().toISOString();
+    const serialized = JSON.stringify(orders, null, 2);
+    try { fs.writeFileSync(DB_FILE, serialized, 'utf-8'); } catch (e) {}
+    try { fs.writeFileSync(DB_FALLBACK, serialized, 'utf-8'); } catch (e) {}
+    try { fs.writeFileSync(DESKTOP_ORDERS_LOG, serialized, 'utf-8'); } catch (e) {}
+  } catch (err) {
+    console.error('Error marking email sent:', err);
   }
 }
 

@@ -1,4 +1,4 @@
-import { getOrderDeliveryFromDb } from './orders-db.js';
+import { getOrderDeliveryFromDb } from './_utils/orders-db.js';
 
 export const fulfilledOrdersCache = new Map();
 export const sentEmailOrders = new Set();
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
     // 2. Check local database
     const dbDelivery = getOrderDeliveryFromDb(orderId);
-    if (dbDelivery && dbDelivery.status && dbDelivery.status.includes('DELIVERED')) {
+    if (dbDelivery && dbDelivery.tokens?.[0] && dbDelivery.tokens[0] !== 'PROCURING' && dbDelivery.status?.includes('DELIVERED')) {
       return res.status(200).json({
         paid: true,
         status: 'DELIVERED',

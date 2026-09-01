@@ -231,8 +231,12 @@ export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, use
 
         try {
           await updateOrderDeliveryInDb(orderId, finalToken);
-          await sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, [finalToken]);
-          console.log(`[AutoDropship] Sent email for ${orderId}!`);
+          const emailResult = await sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, [finalToken]);
+          if (emailResult.success) {
+            console.log(`[AutoDropship] Sent email for ${orderId}!`);
+          } else {
+            console.error(`[AutoDropship] Email failed for ${orderId}:`, emailResult.error);
+          }
         } catch (e) {
           console.error(`[AutoDropship] Email dispatch error:`, e);
         }

@@ -1,11 +1,36 @@
+import { getOrderById, markOrderEmailSent } from './orders-db.js';
+
+const sentEmailOrders = new Set();
+
 export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, tokens) {
-  const resendKey = process.env.RESEND_API_KEY || Buffer.from('cmVfWjY3MVZRa2ZfS0FhdWRWUGJZZUJoQ2dxbWpBQlRXZ2dQ', 'base64').toString('utf8');
+  if (!userEmail || !userEmail.includes('@')) {
+    console.error(`[Email] Invalid recipient for order ${orderId}: ${userEmail}`);
+    return { success: false, error: 'invalid_email' };
+  }
+
+  if (sentEmailOrders.has(orderId)) {
+    console.log(`[Email] Skipping duplicate send for order ${orderId}`);
+    return { success: true, skipped: true };
+  }
+
+  const existingOrder = getOrderById(orderId);
+  if (existingOrder?.emailSentAt) {
+    sentEmailOrders.add(orderId);
+    console.log(`[Email] Already sent for order ${orderId} at ${existingOrder.emailSentAt}`);
+    return { success: true, skipped: true };
+  }
+
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    console.error(`[Email] RESEND_API_KEY missing — cannot send order ${orderId}`);
+    return { success: false, error: 'missing_resend_key' };
+  }
 
   const tokensList = Array.isArray(tokens) ? tokens : [tokens];
   const tokensHtml = tokensList.map((t, idx) => `
     <div style="background: #090a0d; border: 1px solid rgba(232, 88, 58, 0.35); border-radius: 12px; padding: 16px; margin-bottom: 14px;">
       <div style="font-size: 11px; font-weight: 800; color: #e8583a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-        🔑 ${tokens.length > 1 ? `АККАУНТ / ТОКЕН #${idx + 1}` : 'ВАШ ТОКЕН ВХОДА (NFA STEAM)'}:
+        🔑 ${tokensList.length > 1 ? `АККАУНТ / ТОКЕН #${idx + 1}` : 'ВАШ ТОКЕН ВХОДА (NFA STEAM)'}:
       </div>
       <div style="background: #14161d; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #34d399; word-break: break-all; line-height: 1.5;">
         ${t}
@@ -13,17 +38,18 @@ export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount,
     </div>
   `).join('');
 
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${resendKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from: 'SharpBuy Orders <orders@sharpbuy.org>',
-      to: [userEmail],
-      subject: `Чек и токен заказа #${orderId} - SharpBuy`,
-      html: `
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: 'SharpBuy Orders <orders@sharpbuy.org>',
+        to: [userEmail],
+        subject: `Чек и токен заказа #${orderId} - SharpBuy`,
+        html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -69,7 +95,6 @@ export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount,
                 </ol>
               </div>
 
-              <!-- 🛡️ Блок Гарантии SharpBuy Care и Кнопка Замены -->
               <div style="background: rgba(232, 88, 58, 0.08); border: 1px solid rgba(232, 88, 58, 0.3); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
                 <div style="font-size: 14px; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
                   🛡️ ГАРАНТИЯ SHARPBUY CARE (3 ЧАСА)
@@ -77,7 +102,7 @@ export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount,
                 <div style="font-size: 12px; color: #a4b1cd; line-height: 1.5; margin-bottom: 16px;">
                   Если с аккаунтом возникла проблема в течение 3 часов — наш робот мгновенно проверит доступ и выдаст вам автоматическую замену в 1 клик:
                 </div>
-                <a href="https://sharpbuy.org/#nfa-warranty?token=${encodeURIComponent(tokens[0] || '')}" style="display: inline-block; background: #e8583a; color: #ffffff; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; padding: 12px 26px; border-radius: 8px; box-shadow: 0 4px 20px rgba(232, 88, 58, 0.4);">
+                <a href="https://sharpbuy.org/#nfa-warranty?token=${encodeURIComponent(tokensList[0] || '')}" style="display: inline-block; background: #e8583a; color: #ffffff; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; padding: 12px 26px; border-radius: 8px; box-shadow: 0 4px 20px rgba(232, 88, 58, 0.4);">
                   ЗАПРОСИТЬ ЗАМЕНУ ПО ГАРАНТИИ &rarr;
                 </a>
               </div>
@@ -92,6 +117,22 @@ export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount,
         </body>
         </html>
       `
-    })
-  });
+      })
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      console.error(`[Email] Resend API error for order ${orderId} (${res.status}):`, data);
+      return { success: false, error: data?.message || `http_${res.status}` };
+    }
+
+    sentEmailOrders.add(orderId);
+    markOrderEmailSent(orderId);
+    console.log(`[Email] Sent order ${orderId} to ${userEmail} (resend id: ${data.id || 'n/a'})`);
+    return { success: true, id: data.id };
+  } catch (err) {
+    console.error(`[Email] Network error for order ${orderId}:`, err.message);
+    return { success: false, error: err.message };
+  }
 }

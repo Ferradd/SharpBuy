@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { claimLocalStockToken } from './_utils/local-stock-manager.js';
 import { sendOrderEmail } from './_utils/email-sender.js';
-import { saveOrderToDb } from './orders-db.js';
+import { saveOrderToDb } from './_utils/orders-db.js';
 import { fulfilledOrdersCache, sentEmailOrders } from './check-anypay-payment.js'; // We will create this
 
 const ANYPAY_PROJECT_ID = process.env.ANYPAY_PROJECT_ID || '18241';
@@ -81,7 +81,7 @@ export default async function handler(req, res) {
         currency: 'RUB',
         paymentMethod: 'SBP / Bank Card (AnyPay)',
         paymentAddress: 'AnyPay Tx: ' + transaction_id,
-        buyerEmail,
+        email: buyerEmail,
         txHash: 'AP_' + transaction_id,
         tokens: [token],
         deliveryToken: token,
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
     if (buyerEmail && sentEmailOrders && !sentEmailOrders.has(orderId)) {
       sentEmailOrders.add(orderId);
       try {
-        await sendOrderEmail(
+        const emailResult = await sendOrderEmail(
           orderId,
           buyerEmail,
           amount,
@@ -106,7 +106,12 @@ export default async function handler(req, res) {
           1,
           [token]
         );
+        if (!emailResult.success) {
+          sentEmailOrders.delete(orderId);
+          console.error('[AnyPay] Email dispatch failed:', emailResult.error);
+        }
       } catch (emErr) {
+        sentEmailOrders.delete(orderId);
         console.error('[AnyPay] Email dispatch error:', emErr);
       }
     }

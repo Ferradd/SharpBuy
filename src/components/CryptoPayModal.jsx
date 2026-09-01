@@ -200,6 +200,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             };
 
             setOrder({ orderId, email, productName: product.cleanTitle || product.title, amountRub: priceRub });
+            saveOrderToHistory(walletOrderForPolling, data.delivery, 'PROCURING');
             setStep('PROCURING');
 
             if (pollerRef.current) clearInterval(pollerRef.current);
@@ -470,7 +471,13 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             try { localStorage.setItem('sb_sid_' + currentOrder.orderId, data.supplierOrderId); } catch(e) {}
           }
           if (data.paid && data.delivery) {
-            if (data.delivery.tokens && data.delivery.tokens[0] && data.delivery.tokens[0] !== 'PROCURING') {
+            const token = data.delivery.tokens?.[0];
+            if (token === 'PROCURING') {
+              setStep('PROCURING');
+              saveOrderToHistory(currentOrder, data.delivery, 'PROCURING');
+              return;
+            }
+            if (token && token !== 'PROCURING') {
               try { localStorage.removeItem('sb_sid_' + currentOrder.orderId); } catch(e) {}
             }
             handlePaymentSuccess(data.delivery, currentOrder);
@@ -515,6 +522,30 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
   };
 
+  const saveOrderToHistory = (currentOrder, deliveryData, status = 'DELIVERED') => {
+    const orderRecord = {
+      orderId: currentOrder?.orderId || order?.orderId || ('SHARP-' + Date.now().toString(36).toUpperCase()),
+      email: currentOrder?.email || email,
+      productName: isEn ? (product?.englishTitle || product?.cleanTitle || product?.title) : (product?.cleanTitle || product?.title),
+      amountRub: currentOrder?.priceRub || product?.price || 50,
+      tokens: deliveryData?.tokens || ['PROCURING'],
+      status,
+      createdAt: new Date().toISOString(),
+      warrantyHours: 3
+    };
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('sharpbuy_user_orders') || '[]');
+      const existingIdx = existing.findIndex(o => o.orderId === orderRecord.orderId);
+      if (existingIdx >= 0) {
+        existing[existingIdx] = { ...existing[existingIdx], ...orderRecord };
+      } else {
+        existing.unshift(orderRecord);
+      }
+      localStorage.setItem('sharpbuy_user_orders', JSON.stringify(existing));
+    } catch (e) {}
+  };
+
   const handlePaymentSuccess = (deliveryData, currentOrder) => {
     setDelivery(deliveryData);
     setStep('SUCCESS');
@@ -522,27 +553,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     // If we have actual tokens delivered, save to user order history and stop polling
     if (deliveryData.tokens && deliveryData.tokens[0] && deliveryData.tokens[0] !== 'PROCURING') {
       if (pollerRef.current) clearInterval(pollerRef.current);
-
-      const orderRecord = {
-        orderId: currentOrder?.orderId || order?.orderId || ('SHARP-' + Date.now().toString(36).toUpperCase()),
-        email: currentOrder?.email || email,
-        productName: isEn ? (product?.englishTitle || product?.cleanTitle || product?.title) : (product?.cleanTitle || product?.title),
-        amountRub: currentOrder?.priceRub || product?.price || 50,
-        tokens: deliveryData.tokens,
-        createdAt: new Date().toISOString(),
-        warrantyHours: 3
-      };
-
-      try {
-        const existing = JSON.parse(localStorage.getItem('sharpbuy_user_orders') || '[]');
-        const existingIdx = existing.findIndex(o => o.orderId === orderRecord.orderId);
-        if (existingIdx >= 0) {
-          existing[existingIdx] = { ...existing[existingIdx], ...orderRecord };
-        } else {
-          existing.unshift(orderRecord);
-        }
-        localStorage.setItem('sharpbuy_user_orders', JSON.stringify(existing));
-      } catch (e) {}
+      saveOrderToHistory(currentOrder, deliveryData, 'DELIVERED');
     }
   };
 
