@@ -17,9 +17,6 @@ import keepaliveHandler from './api/keepalive.js';
 import accountLibraryHandler from './api/account-library.js';
 import syncShefuStockHandler from './api/sync-shefu-stock.js';
 import arbitrageCronHandler from './api/arbitrage-cron.js';
-import createCrystalPayHandler from './api/create-crystalpay-payment.js';
-import checkCrystalPayHandler from './api/check-crystalpay-payment.js';
-import crystalPayWebhookHandler from './api/crystalpay-webhook.js';
 import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,9 +35,18 @@ app.all('/api/get-orders', (req, res) => getOrdersHandler(req, res));
 app.all('/api/get-user-wallet', (req, res) => getUserWalletHandler(req, res));
 app.post('/api/create-order', (req, res) => createOrderHandler(req, res));
 app.post('/api/check-payment', (req, res) => checkPaymentHandler(req, res));
-app.post('/api/create-crystalpay-payment', (req, res) => createCrystalPayHandler(req, res));
-app.post('/api/check-crystalpay-payment', (req, res) => checkCrystalPayHandler(req, res));
-app.all('/api/crystalpay-webhook', (req, res) => crystalPayWebhookHandler(req, res));
+app.post('/api/create-anypay-payment', async (req, res) => {
+  const handler = await import('./api/create-anypay-payment.js');
+  return handler.default(req, res);
+});
+app.post('/api/check-anypay-payment', async (req, res) => {
+  const handler = await import('./api/check-anypay-payment.js');
+  return handler.default(req, res);
+});
+app.all('/api/anypay-webhook', async (req, res) => {
+  const handler = await import('./api/anypay-webhook.js');
+  return handler.default(req, res);
+});
 app.post('/api/warranty-check', (req, res) => warrantyCheckHandler(req, res));
 app.post('/api/steam-verify', (req, res) => steamVerifyHandler(req, res));
 app.all('/api/token-ingest', (req, res) => tokenIngestHandler(req, res));

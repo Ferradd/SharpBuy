@@ -252,7 +252,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
       try {
         setIsChecking(true);
         const priceRub = (product.price || 50) * quantity;
-        const res = await fetch(getApiUrl('/api/create-crystalpay-payment'), {
+        const res = await fetch(getApiUrl('/api/create-anypay-payment'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -332,7 +332,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     if (pollerRef.current) clearInterval(pollerRef.current);
     pollerRef.current = setInterval(async () => {
       try {
-        const res = await fetch(getApiUrl('/api/check-crystalpay-payment'), {
+        const res = await fetch(getApiUrl('/api/check-anypay-payment'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ invoiceId, orderId })
@@ -359,7 +359,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     if (!crystalPayInvoice) return;
     setIsChecking(true);
     try {
-      const res = await fetch(getApiUrl('/api/check-crystalpay-payment'), {
+      const res = await fetch(getApiUrl('/api/check-anypay-payment'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
