@@ -5,7 +5,7 @@ import { saveOrderToDb } from './orders-db.js';
 import { fulfilledOrdersCache, sentEmailOrders } from './check-anypay-payment.js'; // We will create this
 
 const ANYPAY_PROJECT_ID = process.env.ANYPAY_PROJECT_ID || '18241';
-const ANYPAY_SECRET = process.env.ANYPAY_SECRET || 'S7A3yCFee529OXb9GlbyNR78mUHx4ZigAbzFeqc';
+const ANYPAY_SECRET = process.env.ANYPAY_SECRET || '6Q9Pw4m6QPPhDlYWmSaq2ZoD8RzQczsQdWD1Ydi';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end('Method not allowed');

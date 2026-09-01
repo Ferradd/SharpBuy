@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 const ANYPAY_PROJECT_ID = process.env.ANYPAY_PROJECT_ID || '18241';
-const ANYPAY_SECRET = process.env.ANYPAY_SECRET || 'S7A3yCFee529OXb9GlbyNR78mUHx4ZigAbzFeqc';
+const ANYPAY_SECRET = process.env.ANYPAY_SECRET || '6Q9Pw4m6QPPhDlYWmSaq2ZoD8RzQczsQdWD1Ydi';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -34,15 +34,17 @@ export default async function handler(req, res) {
       amountRub = Math.round(150 * qty);
     }
 
-    const pay_id = 'SHARP-AP-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-    const amount = amountRub.toFixed(2); // AnyPay expects formatted numeric string
+    // Pay ID must be pure numeric for AnyPay (digits 0-9)
+    const pay_id = Date.now().toString().substring(0, 14);
+    const amount = amountRub.toFixed(2);
     const currency = 'RUB';
-    const desc = `SharpBuy: ${(productName || 'Steam Account').substring(0, 40)} x${qty}`;
-    const success_url = 'https://sharpbuy.org/';
-    const fail_url = 'https://sharpbuy.org/';
+    const desc = `SharpBuy: ${(productName || 'Steam Account').substring(0, 30)}`;
+    const success_url = 'https://sharpbuy.org/success';
+    const fail_url = 'https://sharpbuy.org/fail';
 
-    const signString = [ANYPAY_PROJECT_ID, pay_id, amount, currency, desc, success_url, fail_url, ANYPAY_SECRET].join(':');
-    const sign = crypto.createHash('sha256').update(signString).digest('hex');
+    // SHA256: merchant_id:pay_id:amount:currency:desc:success_url:fail_url:secret_key
+    const arr_sign = [ANYPAY_PROJECT_ID, pay_id, amount, currency, desc, success_url, fail_url, ANYPAY_SECRET];
+    const sign = crypto.createHash('sha256').update(arr_sign.join(':')).digest('hex');
 
     const params = new URLSearchParams({
       merchant_id: ANYPAY_PROJECT_ID,
@@ -53,7 +55,7 @@ export default async function handler(req, res) {
       success_url,
       fail_url,
       sign,
-      email: email.trim() // Pass email to prepopulate if possible
+      email: email.trim()
     });
 
     const url = 'https://anypay.io/merchant?' + params.toString();
