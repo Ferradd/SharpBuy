@@ -49,7 +49,11 @@ export async function redeemShefuKey(licenseKey) {
   try {
     const res = await fetch('https://nfa.shefu223.shop/api/nfa-redeem', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({ license: cleanKey })
     });
 
@@ -71,7 +75,11 @@ export async function redeemShefuKey(licenseKey) {
         try {
           const statusRes = await fetch('https://nfa.shefu223.shop/api/nfa-redeem-status', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+              'Accept': 'application/json'
+            },
             body: JSON.stringify({ claim_id: claimId })
           });
           const statusData = await statusRes.json();
