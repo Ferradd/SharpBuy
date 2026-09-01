@@ -888,6 +888,14 @@ namespace SharpBuy_Launcher
                     var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
                     req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
                     var res = await _httpClient.SendAsync(req);
+                    
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        var req2 = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/profiles/{steamId}/inventory/json/730/2");
+                        req2.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                        res = await _httpClient.SendAsync(req2);
+                    }
+
                     if (res.IsSuccessStatusCode)
                     {
                         var body = await res.Content.ReadAsStringAsync();
@@ -996,12 +1004,15 @@ namespace SharpBuy_Launcher
                     if (!string.IsNullOrEmpty(avatar) && !avatar.Contains("fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb")) target.AvatarUrl = avatar;
                     target.VacBanned = vacBanned;
                     target.VacStatus = vacStatus;
-                    target.Cs2ItemsCount = cs2Count;
-                    target.Cs2InventoryWorthUsd = cs2WorthUsd;
-                    target.Cs2MedalsCount = medalsCount;
-                    target.Cs2KnivesCount = knivesCount;
-                    target.TopValuableItem = topItem;
-                    target.DotaItemsCount = dotaCount;
+                    if (cs2Count > 0 || cs2WorthUsd > 0)
+                    {
+                        target.Cs2ItemsCount = cs2Count;
+                        target.Cs2InventoryWorthUsd = cs2WorthUsd;
+                        target.Cs2MedalsCount = medalsCount;
+                        target.Cs2KnivesCount = knivesCount;
+                        target.TopValuableItem = topItem;
+                    }
+                    if (dotaCount > 0) target.DotaItemsCount = dotaCount;
                     SaveAccountsList(list);
                 }
 

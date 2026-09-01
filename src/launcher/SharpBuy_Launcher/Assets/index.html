@@ -731,6 +731,45 @@
     cursor: not-allowed;
   }
 
+  .cs2-total-banner {
+    transition: all 0.2s;
+  }
+  .cs2-total-banner:hover {
+    border-color: rgba(234, 179, 8, 0.6) !important;
+    transform: translateY(-1px);
+  }
+
+  .sort-pill {
+    padding: 5px 9px;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .sort-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+  .sort-pill.active {
+    background: rgba(234, 179, 8, 0.2) !important;
+    border-color: rgba(234, 179, 8, 0.55) !important;
+    color: #facc15 !important;
+  }
+
+  .cs2-inv-badge {
+    background: rgba(234, 179, 8, 0.14) !important;
+    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+    color: #facc15 !important;
+    font-weight: 700 !important;
+  }
+
   .confirm-overlay {
     display: none;
     position: fixed;
@@ -2364,6 +2403,27 @@
         </button>
       </div>
 
+      <!-- CS2 Value Summary Banner -->
+      <div class="cs2-total-banner" id="cs2TotalBanner" style="margin: 6px 14px 4px 14px; padding: 8px 12px; background: linear-gradient(135deg, rgba(234, 179, 8, 0.12), rgba(249, 115, 22, 0.06)); border: 1px solid rgba(234, 179, 8, 0.35); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: default;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:16px;">💰</span>
+          <div>
+            <div style="font-size:10px; font-weight:800; color:#facc15; letter-spacing:0.5px; text-transform:uppercase;">ОБЩИЙ ИНВЕНТАРЬ CS2</div>
+            <div style="font-size:10px; color:#94a3b8;" id="cs2TotalItemsLabel">0 скинов на 0 аккаунтах</div>
+          </div>
+        </div>
+        <div style="font-size:14px; font-weight:800; color:#fbbf24; font-family:'JetBrains Mono', monospace;" id="cs2TotalWorthLabel">$0.00</div>
+      </div>
+
+      <!-- Sorting Filter Pills -->
+      <div class="drawer-sort-bar" style="display:flex; gap:5px; padding: 4px 14px 6px 14px; overflow-x:auto; scrollbar-width:none;">
+        <button class="sort-pill active" id="sort-worth" onclick="setAccountSort('worth')">🔥 По цене ($)</button>
+        <button class="sort-pill" id="sort-items" onclick="setAccountSort('items')">🎒 По скинам</button>
+        <button class="sort-pill" id="sort-knives" onclick="setAccountSort('knives')">🔪 Ножи</button>
+        <button class="sort-pill" id="sort-medals" onclick="setAccountSort('medals')">🎖️ Медали</button>
+        <button class="sort-pill" id="sort-recent" onclick="setAccountSort('recent')">🕒 Новые</button>
+      </div>
+
       <div class="accounts-list-section" id="accountsListSection">
         <div class="accounts-list-viewport" id="accountsListViewport">
           <div class="accounts-list-container" id="accountsList">
@@ -2630,10 +2690,21 @@
       }
     }
 
+    let accountSortMode = 'worth';
+
+    function setAccountSort(mode) {
+      accountSortMode = mode;
+      document.querySelectorAll('.sort-pill').forEach(function(el) {
+        el.classList.toggle('active', el.id === 'sort-' + mode);
+      });
+      lastAccountsRenderKey = '';
+      renderAccountsList(true);
+    }
+
     function getAccountsRenderKey() {
       if (!savedAccountsCache || savedAccountsCache.length === 0) return '';
-      return savedAccountsCache.map(function(a) {
-        return [a.SteamId, a.PersonaName, a.AvatarUrl, a.IsAlive, a.AccountName, a.VacBanned, a.VacStatus, a.Cs2ItemsCount, a.DotaItemsCount, a.OwnerActive, a.LastCheckedAt, a.ExpSeconds, a.StatusMessage].join('|');
+      return accountSortMode + '::' + savedAccountsCache.map(function(a) {
+        return [a.SteamId, a.PersonaName, a.AvatarUrl, a.IsAlive, a.AccountName, a.VacBanned, a.VacStatus, a.Cs2ItemsCount, a.Cs2InventoryWorthUsd, a.Cs2KnivesCount, a.Cs2MedalsCount, a.DotaItemsCount, a.OwnerActive, a.LastCheckedAt, a.ExpSeconds, a.StatusMessage].join('|');
       }).join('||');
     }
 
@@ -2666,11 +2737,49 @@
       if (!savedAccountsCache || savedAccountsCache.length === 0) {
         container.innerHTML = '<div class="empty-history">No saved accounts yet.<br>Log in to any account and it will appear here automatically with a real avatar for one-click login!</div>';
         updateAccountsListExpandUi();
+        const worthEl = document.getElementById('cs2TotalWorthLabel');
+        const itemsEl = document.getElementById('cs2TotalItemsLabel');
+        if (worthEl) worthEl.innerText = '$0.00';
+        if (itemsEl) itemsEl.innerText = '0 скинов на 0 аккаунтах';
         return;
       }
 
+      // Calculate totals across all accounts
+      let totalCs2Worth = 0;
+      let totalCs2Items = 0;
+      let totalAccountsWithSkins = 0;
+
+      savedAccountsCache.forEach(function(a) {
+        const w = a.Cs2InventoryWorthUsd || 0;
+        const it = a.Cs2ItemsCount || 0;
+        totalCs2Worth += w;
+        totalCs2Items += it;
+        if (it > 0) totalAccountsWithSkins++;
+      });
+
+      const totalWorthEl = document.getElementById('cs2TotalWorthLabel');
+      const totalItemsEl = document.getElementById('cs2TotalItemsLabel');
+      if (totalWorthEl) totalWorthEl.innerText = '$' + totalCs2Worth.toFixed(2);
+      if (totalItemsEl) totalItemsEl.innerText = totalCs2Items + ' скинов на ' + totalAccountsWithSkins + ' из ' + savedAccountsCache.length + ' аккаунтов';
+
+      // Sort accounts according to active sort pill
+      const sortedAccounts = savedAccountsCache.slice().sort(function(a, b) {
+        if (accountSortMode === 'worth') {
+          return (b.Cs2InventoryWorthUsd || 0) - (a.Cs2InventoryWorthUsd || 0);
+        } else if (accountSortMode === 'items') {
+          return (b.Cs2ItemsCount || 0) - (a.Cs2ItemsCount || 0);
+        } else if (accountSortMode === 'knives') {
+          return (b.Cs2KnivesCount || 0) - (a.Cs2KnivesCount || 0);
+        } else if (accountSortMode === 'medals') {
+          return (b.Cs2MedalsCount || 0) - (a.Cs2MedalsCount || 0);
+        } else if (accountSortMode === 'recent') {
+          return (b.AddedAt || 0) - (a.AddedAt || 0);
+        }
+        return 0;
+      });
+
       let html = '';
-      savedAccountsCache.forEach(function(acc, index) {
+      sortedAccounts.forEach(function(acc, index) {
         const meta = buildWarrantyBadge(acc);
         const warrantyBadge = meta.warrantyBadge;
         const isWarrantyActive = meta.isWarrantyActive;
