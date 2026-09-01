@@ -87,16 +87,28 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
   try {
     console.log(`[AutoDropship] Starting purchase for ${productSlug}...`);
 
-    const orderRes = await fetch('https://shefu223.shop/api/nfa-checkout-crypto', {
+    const dropshipApiUrl = `https://shefu223.shop/api/nfa-buy-api`;
+    const orderRes = await fetch(dropshipApiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({
-        items: [{ product: productSlug, quantity: 1 }],
-        email: 'iliykuzin2@gmail.com'
+        product_slug: productSlug,
+        customer_email: buyerEmail
       })
     });
 
-    const orderData = await orderRes.json();
+    let orderData = {};
+    try {
+      orderData = await orderRes.json();
+    } catch (e) {
+      console.error('[AutoDropship] Failed to parse shefu response. Status:', orderRes.status);
+      return null;
+    }
+
     if (!orderData.url || !orderData.order_id) {
       console.warn('[AutoDropship] Failed to create shefu order:', orderData);
       return null;
@@ -117,7 +129,9 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
       method: 'POST',
       headers: {
         'x-api-key': NOWPAYMENTS_API_KEY,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         iid: iid,
@@ -165,7 +179,11 @@ export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, use
   try {
     const dlRes = await fetch('https://shefu223.shop/api/nfa-downloads', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({ nfa_order: supplierOrderId })
     });
 
