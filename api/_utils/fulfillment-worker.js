@@ -8,7 +8,7 @@ import { claimLocalStockToken } from './local-stock-manager.js';
 import { sendOrderEmail } from './email-sender.js';
 
 const STUCK_ALERT_MS = 8 * 60 * 1000;
-const STOCK_FALLBACK_MS = 90 * 1000; // 90s — deliver from warehouse if shefu still pending
+const STOCK_FALLBACK_MS = 30 * 1000; // 30s — deliver from warehouse if shefu still pending
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'iliykuzin2@gmail.com';
 const alertedOrders = new Set();
 
