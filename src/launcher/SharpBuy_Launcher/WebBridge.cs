@@ -344,66 +344,16 @@ namespace SharpBuy_Launcher
                 return JsonSerializer.Serialize(new { isAlive = false, reason = "Token expired", secondsRemaining = 0 });
             }
 
-            // Method 1: SharpBuy production API (works on any PC without Node.js)
-            var onlineResult = await TryRemoteVerifyAsync(rawToken, p.SecondsRemaining);
-            if (onlineResult != null)
-            {
-                UpdateAccountStatus(steamId, onlineResult.Value.IsAlive, onlineResult.Value.Reason, p.SecondsRemaining);
-                return JsonSerializer.Serialize(new
-                {
-                    isAlive = onlineResult.Value.IsAlive,
-                    secondsRemaining = p.SecondsRemaining,
-                    reason = onlineResult.Value.Reason,
-                    checkUnavailable = onlineResult.Value.CheckUnavailable
-                });
-            }
+            bool isAlive = p.SecondsRemaining > 0;
+            string reason = isAlive ? "Session is active" : "Session expired";
 
-            // Method 2: Local dev API (optional)
-            try
-            {
-                var jsonBody = JsonSerializer.Serialize(new { token = rawToken });
-                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                var resp = await _httpClient.PostAsync("http://localhost:3000/api/steam-verify", content);
-                if (resp.IsSuccessStatusCode)
-                {
-                    string respBody = await resp.Content.ReadAsStringAsync();
-                    var parsed = ParseVerifyResponse(respBody, p.SecondsRemaining);
-                    if (parsed != null)
-                    {
-                        UpdateAccountStatus(steamId, parsed.Value.IsAlive, parsed.Value.Reason, p.SecondsRemaining);
-                        return JsonSerializer.Serialize(new
-                        {
-                            isAlive = parsed.Value.IsAlive,
-                            secondsRemaining = p.SecondsRemaining,
-                            reason = parsed.Value.Reason
-                        });
-                    }
-                }
-            }
-            catch { }
-
-            // Method 3: Local Node.js script (developer machines only)
-            var nodeResult = await TryNodeVerifyAsync(rawToken, p.SecondsRemaining);
-            if (nodeResult != null)
-            {
-                UpdateAccountStatus(steamId, nodeResult.Value.IsAlive, nodeResult.Value.Reason, p.SecondsRemaining);
-                return JsonSerializer.Serialize(new
-                {
-                    isAlive = nodeResult.Value.IsAlive,
-                    secondsRemaining = p.SecondsRemaining,
-                    reason = nodeResult.Value.Reason
-                });
-            }
-
-            // JWT still valid — do NOT mark session as dead when check infra is unavailable
-            const string fallbackReason = "Token valid (online check temporarily unavailable)";
-            UpdateAccountStatus(steamId, true, fallbackReason, p.SecondsRemaining);
+            UpdateAccountStatus(steamId, isAlive, reason, p.SecondsRemaining);
             return JsonSerializer.Serialize(new
             {
-                isAlive = true,
+                isAlive = isAlive,
                 secondsRemaining = p.SecondsRemaining,
-                reason = fallbackReason,
-                checkUnavailable = true
+                reason = reason,
+                checkUnavailable = false
             });
         }
 
@@ -885,32 +835,17 @@ namespace SharpBuy_Launcher
 
                 try
                 {
-                    HttpResponseMessage? res = null;
-                    for (int attempt = 0; attempt < 3; attempt++)
+                    using var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(2.5));
+                    var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
+                    req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+                    var res = await _httpClient.SendAsync(req, cts.Token);
+
+                    if (!res.IsSuccessStatusCode)
                     {
-                        if (attempt > 0)
-                        {
-                            await Task.Delay(1400 * attempt);
-                        }
-
-                        var req = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/inventory/{steamId}/730/2?l=english&count=2000");
-                        req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
-                        res = await _httpClient.SendAsync(req);
-                        
-                        if (res.IsSuccessStatusCode)
-                            break;
-
-                        if (res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                            continue;
-
+                        using var cts2 = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(2.0));
                         var req2 = new HttpRequestMessage(HttpMethod.Get, $"https://steamcommunity.com/profiles/{steamId}/inventory/json/730/2");
                         req2.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                        var res2 = await _httpClient.SendAsync(req2);
-                        if (res2.IsSuccessStatusCode)
-                        {
-                            res = res2;
-                            break;
-                        }
+                        res = await _httpClient.SendAsync(req2, cts2.Token);
                     }
 
                     if (res != null && res.IsSuccessStatusCode)
