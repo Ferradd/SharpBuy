@@ -13,9 +13,10 @@ const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC || Buffer.from(DEFAULT_M
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY || '2K2CBE4-26W4FDE-NHNT9Z3-5W5ST8B';
 const BSC_RPCS = [
   process.env.BSC_RPC_URL,
-  'https://bsc-rpc.publicnode.com',
+  'https://bsc-dataseed1.binance.org',
+  'https://bsc-dataseed2.binance.org',
   'https://bsc-dataseed1.defibit.io/',
-  'https://bsc-dataseed.binance.org/'
+  'https://bsc-dataseed.bnbchain.org'
 ].filter(Boolean);
 
 async function getWorkingBscProvider() {
@@ -28,7 +29,7 @@ async function getWorkingBscProvider() {
       console.warn(`[BSC_RPC] Provider ${url} failed:`, e.message);
     }
   }
-  return new ethers.JsonRpcProvider('https://bsc-rpc.publicnode.com', 56, { staticNetwork: true });
+  return new ethers.JsonRpcProvider('https://bsc-dataseed1.binance.org', 56, { staticNetwork: true });
 }
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 
@@ -105,7 +106,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
   try {
     console.log(`[AutoDropship] Starting purchase for ${productSlug}...`);
 
-    const dropshipApiUrl = `https://shefu223.shop/api/nfa-buy-api`;
+    const dropshipApiUrl = `https://shefu223.shop/api/nfa-checkout-crypto`;
     const orderRes = await fetch(dropshipApiUrl, {
       method: 'POST',
       headers: { 
@@ -114,8 +115,8 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        product_slug: productSlug,
-        customer_email: buyerEmail
+        items: [{ product: productSlug, quantity: 1 }],
+        email: buyerEmail
       })
     });
 
@@ -175,12 +176,11 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const amountWei = ethers.parseUnits(payData.pay_amount.toString(), 18);
     const tx = await usdtContract.transfer(payData.pay_address, amountWei);
     console.log(`[AutoDropship] USDT Sent to supplier! TxHash: ${tx.hash}`);
-    
-    await tx.wait(1);
 
     return {
       success: true,
-      supplierOrderId
+      supplierOrderId,
+      txHash: tx.hash
     };
   } catch (err) {
     console.error('[AutoDropship] Purchase exception:', err);

@@ -632,6 +632,7 @@ export default async function handler(req, res) {
       // ========================================================================
       let isProcuring = false;
       let createdSupplierOrderId = null;
+      let dropshipError = null;
 
       console.log(`[PaymentConfirmed] Local stock empty, initiating dropship purchase for ${orderId}...`);
       try {
@@ -640,12 +641,16 @@ export default async function handler(req, res) {
           isProcuring = true;
           createdSupplierOrderId = dropshipRes.supplierOrderId;
           console.log(`[PaymentConfirmed] Dropship order created: ${createdSupplierOrderId}`);
+        } else if (dropshipRes && !dropshipRes.success) {
+          dropshipError = dropshipRes.error;
         }
       } catch (e) {
         console.error(`[PaymentConfirmed] Dropship init exception for ${orderId}:`, e);
+        dropshipError = e.message;
       }
 
-      const finalTokens = isProcuring ? ['PROCURING'] : ['ERR_SUPPLIER_FAIL'];
+      const failReason = dropshipError ? `ERR_SUPPLIER_FAIL: ${dropshipError}` : 'ERR_SUPPLIER_FAIL';
+      const finalTokens = isProcuring ? ['PROCURING'] : [failReason];
 
       const realDelivery = {
         quantity: neededQty,
