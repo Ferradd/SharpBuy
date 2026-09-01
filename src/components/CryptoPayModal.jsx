@@ -441,6 +441,9 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     if (pollerRef.current) clearInterval(pollerRef.current);
     pollerRef.current = setInterval(async () => {
       try {
+        let supplierOrderId = currentOrder.supplierOrderId;
+        try { supplierOrderId = localStorage.getItem('sb_sid_' + currentOrder.orderId) || supplierOrderId; } catch(e) {}
+
         const res = await fetch(getApiUrl('/api/check-payment'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -456,13 +459,20 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             productId: product?.id || 'premier',
             productName: currentOrder.productName || product?.title,
             initialBalance: currentOrder.initialBalance,
-            createdAtTime: currentOrder.createdAtTime || Math.floor(Date.now() / 1000)
+            createdAtTime: currentOrder.createdAtTime || Math.floor(Date.now() / 1000),
+            supplierOrderId
           })
         });
 
         if (res.ok) {
           const data = await res.json();
+          if (data.supplierOrderId) {
+            try { localStorage.setItem('sb_sid_' + currentOrder.orderId, data.supplierOrderId); } catch(e) {}
+          }
           if (data.paid && data.delivery) {
+            if (data.delivery.tokens && data.delivery.tokens[0] && data.delivery.tokens[0] !== 'PROCURING') {
+              try { localStorage.removeItem('sb_sid_' + currentOrder.orderId); } catch(e) {}
+            }
             handlePaymentSuccess(data.delivery, currentOrder);
           }
         }

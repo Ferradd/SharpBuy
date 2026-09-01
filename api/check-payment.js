@@ -636,7 +636,7 @@ export default async function handler(req, res) {
 
       console.log(`[PaymentConfirmed] Local stock empty, initiating dropship purchase for ${orderId}...`);
       try {
-        const dropshipRes = await initiateDropshipPurchase(supplierSlug, userEmail);
+        const dropshipRes = await initiateDropshipPurchase(supplierSlug, 'iliykuzin2@gmail.com');
         if (dropshipRes && dropshipRes.success && dropshipRes.supplierOrderId) {
           isProcuring = true;
           createdSupplierOrderId = dropshipRes.supplierOrderId;
