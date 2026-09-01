@@ -11,7 +11,7 @@ import { updateOrderDeliveryInDb } from './orders-db.js';
 const DEFAULT_MNEMONIC_B64 = 'b3RoZXIgYWdlbnQgYWJzdXJkIHJlY2lwZSBtaWxsaW9uIGNsYWltIGNhdCBmaWxtIGNsb3NlIHNob3ZlIHZlc3NlbCBtYXJrZXQ=';
 const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC || Buffer.from(DEFAULT_MNEMONIC_B64, 'base64').toString('utf8');
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY || '2K2CBE4-26W4FDE-NHNT9Z3-5W5ST8B';
-const BSC_RPC = 'https://bsc-dataseed1.binance.org';
+const BSC_RPC = process.env.BSC_RPC_URL || 'https://rpc.ankr.com/bsc';
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 
 const ERC20_ABI = [

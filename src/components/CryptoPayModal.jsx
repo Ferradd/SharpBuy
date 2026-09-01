@@ -176,6 +176,11 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             setOrder(orderRecord);
             setTimeout(() => setStep('SUCCESS'), 600);
 
+          } else if (realToken === 'ERR_SUPPLIER_FAIL') {
+            // ── ОШИБКА ЗАКУПКИ — показываем пользователю ──
+            setDelivery(data.delivery);
+            setOrder({ orderId, email, productName: product.cleanTitle || product.title, amountRub: priceRub });
+            setStep('SUCCESS'); // Reusing SUCCESS screen but it will render the error token
           } else {
             // ── Статус PROCURING: запускаем поллинг каждые 3 сек до получения токена ──
             const savedSupplierOrderId = data.supplierOrderId || null;
