@@ -1080,7 +1080,6 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
                 </div>
               </>
             )}
-          </div>
 
             {/* Download All TXT Button for multiple accounts */}
             {tokensList.length > 1 && (
