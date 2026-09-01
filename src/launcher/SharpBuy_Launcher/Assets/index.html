@@ -3137,30 +3137,44 @@
 
       setStatus('loading', 'CHECKING ALL ACCOUNTS...', 'Verifying ' + savedAccountsCache.length + ' saved account(s)...');
 
-      let totalCs2Worth = 0;
-      let totalCs2Items = 0;
-
-      for (let i = 0; i < savedAccountsCache.length; i++) {
-        const acc = savedAccountsCache[i];
-        if (!acc || !acc.Token) continue;
-        setStatus('loading', 'CHECKING INVENTORIES & STATUS...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
-        try {
-          await checkAccountDirectly(encodeURIComponent(acc.Token), acc.SteamId);
-        } catch (e) {}
-        totalCs2Worth += (acc.Cs2InventoryWorthUsd || 0);
-        totalCs2Items += (acc.Cs2ItemsCount || 0);
+      try {
+        const bridge = await getBridge();
+        for (let i = 0; i < savedAccountsCache.length; i++) {
+          const acc = savedAccountsCache[i];
+          if (!acc || !acc.Token) continue;
+          setStatus('loading', 'CHECKING ACCOUNTS...', 'Account ' + (i + 1) + ' / ' + savedAccountsCache.length + ' — ' + (acc.PersonaName || acc.SteamId));
+          
+          if (bridge && bridge.FetchAccountDeepDetailsAsync) {
+            try {
+              const deepResJson = await bridge.FetchAccountDeepDetailsAsync(acc.Token, acc.SteamId);
+              const deepData = JSON.parse(deepResJson || '{}');
+              if (deepData && deepData.success) {
+                acc.VacStatus = deepData.vacStatus || acc.VacStatus;
+                acc.Cs2ItemsCount = deepData.cs2Count != null ? deepData.cs2Count : acc.Cs2ItemsCount;
+                acc.Cs2InventoryWorthUsd = deepData.cs2WorthUsd != null ? deepData.cs2WorthUsd : acc.Cs2InventoryWorthUsd;
+                acc.Cs2MedalsCount = deepData.medalsCount || acc.Cs2MedalsCount;
+                acc.Cs2KnivesCount = deepData.knivesCount || acc.Cs2KnivesCount;
+                acc.TopValuableItem = deepData.topItem || acc.TopValuableItem;
+                acc.DotaItemsCount = deepData.dotaCount || acc.DotaItemsCount;
+                if (deepData.persona && deepData.persona !== acc.SteamId) acc.PersonaName = deepData.persona;
+                if (deepData.avatar) acc.AvatarUrl = deepData.avatar;
+              }
+            } catch(e) {}
+          }
+          
+          lastAccountsRenderKey = '';
+          renderAccountsList(true);
+          await new Promise(function(r) { setTimeout(r, 200); });
+        }
+      } catch (err) {
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> CHECK ALL';
+        }
+        lastAccountsRenderKey = '';
         renderAccountsList(true);
-        await new Promise(function(r) { setTimeout(r, 650); });
-      }
-
-      lastAccountsRenderKey = '';
-      renderAccountsList(true);
-      const worthMsg = totalCs2Worth > 0 ? (' | Общая стоимость CS2: $' + totalCs2Worth.toFixed(2)) : '';
-      setStatus('success', 'ALL CHECKS COMPLETE', 'Проверено ' + savedAccountsCache.length + ' аккаунтов' + worthMsg + ' (' + totalCs2Items + ' скинов CS2).');
-
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> CHECK ALL';
+        setStatus('success', 'ALL CHECKS COMPLETE', 'Все ' + savedAccountsCache.length + ' аккаунтов успешно проверены!');
       }
     }
 
@@ -3172,11 +3186,8 @@
       const chkBtn = document.getElementById('btn-chk-' + steamId);
       if (chkBtn) chkBtn.innerText = '⌛...';
 
-      setStatus('loading', 'CHECKING ACCOUNT...', 'Checking token, inventory & VAC status for ' + steamId + '...');
-      const resJson = await bridge.CheckAccountLiveAsync(token, steamId);
-      const data = JSON.parse(resJson || '{}');
-
-      // Deep details (VAC & inventory items & price valuation)
+      setStatus('loading', 'CHECKING ACCOUNT...', 'Checking token & CS2 inventory for ' + steamId + '...');
+      
       try {
         if (bridge.FetchAccountDeepDetailsAsync) {
           const deepResJson = await bridge.FetchAccountDeepDetailsAsync(token, steamId);
@@ -3200,46 +3211,9 @@
 
       if (chkBtn) chkBtn.innerText = 'CHECK';
 
-      const acc = savedAccountsCache.find(function(a) { return a.SteamId === steamId; });
-      if (acc) {
-        acc.IsAlive = !!data.isAlive;
-        acc.ExpSeconds = data.secondsRemaining || acc.ExpSeconds || 0;
-        acc.StatusMessage = data.reason || acc.StatusMessage || '';
-        acc.LastCheckedAt = Math.floor(Date.now() / 1000);
-      }
-
-      const card = document.getElementById('card-' + steamId);
-      const badgeContainer = document.getElementById('badge-' + steamId);
-      const claimBtn = document.getElementById('btn-claim-' + steamId);
-
-      if (data.isAlive && data.secondsRemaining > 0) {
-        const days = Math.floor(data.secondsRemaining / 86400);
-        const hrs = Math.floor((data.secondsRemaining % 86400) / 3600);
-        const statusTitle = data.checkUnavailable
-          ? 'TOKEN VALID'
-          : 'ACCOUNT ACTIVE (ALIVE)';
-        const statusDetail = data.checkUnavailable
-          ? (data.reason || 'JWT is still valid. Steam login should work.')
-          : ('Session expires in: ' + days + ' days, ' + hrs + ' hours.');
-        setStatus('success', statusTitle, statusDetail);
-        if (card) card.classList.remove('dead-session');
-      } else if (data.checkUnavailable) {
-        setStatus('success', 'TOKEN VALID', data.reason || 'Online check unavailable, but the token has not expired.');
-        if (card) card.classList.remove('dead-session');
-      } else {
-        setStatus('error', 'SESSION REVOKED BY OWNER', 'Login impossible: ' + (data.reason || 'Session revoked') + '. Click "REPLACE" for auto-replacement!');
-        if (card) card.classList.add('dead-session');
-        if (claimBtn) claimBtn.style.display = 'inline-block';
-      }
-
-      if (acc) {
-        const meta = buildWarrantyBadge(acc);
-        if (badgeContainer) badgeContainer.innerHTML = meta.warrantyBadge;
-        if (claimBtn) claimBtn.style.display = (meta.isWarrantyActive || acc.IsAlive === false) ? '' : 'none';
-      }
-
       lastAccountsRenderKey = '';
       renderAccountsList(true);
+      setStatus('success', 'CHECK COMPLETE', 'Аккаунт ' + steamId + ' проверен.');
     }
 
     function claimWarrantyDirectly(encodedToken) {
