@@ -1,5 +1,37 @@
 [
   {
+    "id": "stock_76561199886800351",
+    "steamId": "76561199886800351",
+    "category": "prime",
+    "totalValuationUSD": 0,
+    "itemCount": 0,
+    "topItems": "",
+    "tokenData": "76561199886800351----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTg4NjgwMDM1MSIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE3OTY4Mzc5MDksICJuYmYiOiAxNzY5ODc2NjMxLCAiaWF0IjogMTc3ODUxNjYzMSwgImp0aSI6ICIwMDA4XzI4MjQxMDM0Xzc4OTZCIiwgIm9hdCI6IDE3Nzg1MTY2MzEsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI5NS41My43OS4xMjYiLCAiaXBfY29uZmlybWVyIjogIjE4NS4xODEuNjEuMTMwIiB9.8xGvDQjb2UmaioT5XU5Ybd9irg414vWcGzC-QoijMRy331n0WjA2neFQe7Mn8v3FXy0evAIDFsFrUoBPSPYWCA",
+    "isSold": true,
+    "soldToOrderId": "INSTANT-TEST-1788281090677",
+    "soldToEmail": "iliykuzin3@gmail.com",
+    "soldAt": null,
+    "addedAt": "2026-09-01T16:44:37.586Z",
+    "claimed": true,
+    "claimedAt": "2026-09-01T16:44:50.680Z",
+    "claimedByOrder": "INSTANT-TEST-1788281090677",
+    "customerEmail": "iliykuzin3@gmail.com"
+  },
+  {
+    "id": "stock_76561199886591382",
+    "steamId": "76561199886591382",
+    "category": "prime",
+    "totalValuationUSD": 0,
+    "itemCount": 0,
+    "topItems": "",
+    "tokenData": "76561199886591382----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTg4NjU5MTM4MiIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDQ5MjgxMTMsICJuYmYiOiAxNzYyMTc2MzE2LCAiaWF0IjogMTc3MDgxNjMxNiwgImp0aSI6ICIwMDA3XzI3QjU2MTU0XzY1QUREIiwgIm9hdCI6IDE3NzA4MTYzMTYsICJnZW4iOiAxLCAicGVyIjogMSwgImlwX3N1YmplY3QiOiAiMTg4LjE0Ni4xMjguNDQiLCAiaXBfY29uZmlybWVyIjogIjE4OC4xNDYuMTI4LjQ0IiB9.kFEWZdE7GMJCOPTIYEGdMomzcDlLYYrPXFkUsGJui4Q6ELmrcgklTpij9caiKowPPVdRbeLiR1qR6WDChcDrDg",
+    "isSold": false,
+    "soldToOrderId": null,
+    "soldToEmail": null,
+    "soldAt": null,
+    "addedAt": "2026-09-01T16:44:37.586Z"
+  },
+  {
     "id": "stock_76561199241484983",
     "steamId": "76561199241484983",
     "category": "premier",
@@ -35,11 +67,15 @@
     "itemCount": 0,
     "topItems": "",
     "tokenData": "76561199216635588----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5OTIxNjYzNTU4OCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDIzMjAxNjEsICJuYmYiOiAxNzc1NDg4NTExLCAiaWF0IjogMTc4NDEyODUxMSwgImp0aSI6ICIwMDE4XzI4ODA1OTBCX0MwMjlGIiwgIm9hdCI6IDE3ODQxMjg1MTEsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMzQuMTkuMTU1LjE1OCIsICJpcF9jb25maXJtZXIiOiAiMTM0LjE5LjE1NS4xNTgiIH0.8BYxXcDcZa5t9G8sbAQREFv1CyJq-mtwsLnz2E2kzABTskClRJlen6nbseeoUYz5_SGdDtBK7t8G_NRGfUh4AQ",
-    "isSold": false,
-    "soldToOrderId": null,
-    "soldToEmail": null,
+    "isSold": true,
+    "soldToOrderId": "ORDER-TEST-123",
+    "soldToEmail": "iliykuzin3@gmail.com",
     "soldAt": null,
-    "addedAt": "2026-08-25T19:31:47.343Z"
+    "addedAt": "2026-08-25T19:31:47.343Z",
+    "claimed": true,
+    "claimedAt": "2026-09-01T16:44:23.157Z",
+    "claimedByOrder": "ORDER-TEST-123",
+    "customerEmail": "iliykuzin3@gmail.com"
   },
   {
     "id": "stock_76561199697754827",

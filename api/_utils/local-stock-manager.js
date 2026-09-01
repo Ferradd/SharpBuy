@@ -45,20 +45,35 @@ export function claimLocalStockToken(productId = '', productName = '', orderId =
   try {
     const stockItems = getAllStockItems();
     if (stockItems && Array.isArray(stockItems) && stockItems.length > 0) {
-      const idx = stockItems.findIndex(i => !i.claimed && i.token);
+      // Find item matching category or available item
+      const p = (productId + ' ' + productName).toLowerCase();
+      const isPrimeRequested = p.includes('prime') && !p.includes('premier') && !p.includes('15') && !p.includes('20');
+      
+      let idx = -1;
+      if (isPrimeRequested) {
+        idx = stockItems.findIndex(i => (!i.isSold && !i.claimed) && (i.category === 'prime') && (i.token || i.tokenData));
+      }
+      if (idx === -1) {
+        idx = stockItems.findIndex(i => (!i.isSold && !i.claimed) && (i.token || i.tokenData));
+      }
+
       if (idx !== -1) {
         const item = stockItems[idx];
+        const tokenToDeliver = item.token || item.tokenData;
+        item.isSold = true;
         item.claimed = true;
         item.claimedAt = new Date().toISOString();
         item.claimedByOrder = orderId;
+        item.soldToOrderId = orderId;
+        item.soldToEmail = customerEmail;
         item.customerEmail = customerEmail;
         saveStockItems(stockItems);
-        console.log(`[LOCAL STOCK] ✅ Claimed warehouse token for order ${orderId}`);
-        return item.token;
+        console.log(`[LOCAL STOCK] ✅ Claimed warehouse token (${item.steamId || item.id}) for order ${orderId}`);
+        return tokenToDeliver;
       }
     }
   } catch (e) {
-    console.error('[LOCAL STOCK] Claim error:', e);
+    console.error('Error claiming local stock token:', e);
   }
   return null;
 }
