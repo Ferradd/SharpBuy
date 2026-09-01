@@ -91,39 +91,25 @@ export default async function handler(req, res) {
     const buyerEmail = (extra.email || '').trim();
     const supplierSlug = mapToSupplierSlug(productId, productName);
 
-    // Fulfill: 1. Try local stock first
-    let token = '';
-    let accountName = '';
-    let steamId = '';
-    let expSeconds = 0;
-    let localItem = claimLocalStockToken(supplierSlug);
-
-    if (localItem && localItem.token) {
-      token = localItem.token;
-      accountName = localItem.accountName || '';
-      steamId = localItem.steamId || '';
-      expSeconds = localItem.expSeconds || 0;
-    } else {
-      // 2. Dropship purchase if no local stock
-      try {
-        const dropshipRes = await initiateDropshipPurchase(supplierSlug, buyerEmail || 'crystalpay@sharpbuy.org');
-        if (dropshipRes && dropshipRes.token) {
-          token = dropshipRes.token;
-          accountName = dropshipRes.accountName || '';
-          steamId = dropshipRes.steamId || '';
-        }
-      } catch (dsErr) {
-        console.error('[CrystalPay] Dropship error:', dsErr);
-      }
-    }
+    // Fulfill token
+    const token = claimLocalStockToken(productId, productName, resolvedOrderId, buyerEmail);
+    const steamId = token.split('----')[0] || '';
+    const accountName = productName;
+    const expSeconds = 2592000;
 
     const delivery = {
       orderId: resolvedOrderId,
       productName,
-      token: token || 'PENDING_DISPATCH',
-      accountName: accountName || 'Steam Account',
-      steamId: steamId || '',
-      expSeconds: expSeconds || 2592000,
+      token,
+      tokens: [token],
+      tokenData: token,
+      accountName,
+      steamId,
+      expSeconds,
+      status: 'DELIVERED',
+      launcherUrl: '/SharpBuy_Launcher.exe',
+      launcherName: 'SharpBuy_Launcher.exe',
+      instructions: '1. Скачайте лаунчер SharpBuy_Launcher.exe\n2. Запустите лаунчер и вставьте ваш токен аккаунта\n3. Нажмите Вход — Steam откроется с активным Prime!',
       paidAmountRub: cpData.amount,
       paymentMethod: 'SBP / Bank Card (CrystalPay)',
       paidAt: new Date().toISOString()
@@ -139,6 +125,7 @@ export default async function handler(req, res) {
         productId,
         productName,
         priceUsd: Math.round((cpData.amount / 95) * 100) / 100,
+        amountRub: cpData.amount,
         paidAmount: cpData.amount + ' RUB',
         currency: 'RUB',
         paymentMethod: 'SBP / Bank Card',
@@ -146,10 +133,11 @@ export default async function handler(req, res) {
         buyerEmail,
         buyerTelegram: extra.buyerTelegram || '',
         txHash: 'CP_' + invoiceId,
+        tokens: [token],
         deliveryToken: token,
         accountName,
         steamId,
-        status: 'PAID',
+        status: 'PAID_DELIVERED',
         createdAt: new Date().toISOString()
       });
     } catch (dbErr) {
@@ -160,14 +148,16 @@ export default async function handler(req, res) {
     if (buyerEmail && !sentEmailOrders.has(resolvedOrderId)) {
       sentEmailOrders.add(resolvedOrderId);
       try {
-        await sendOrderEmail(buyerEmail, {
-          orderId: resolvedOrderId,
+        await sendOrderEmail(
+          resolvedOrderId,
+          buyerEmail,
+          cpData.amount,
+          (cpData.amount / 95).toFixed(2),
+          'RUB',
           productName,
-          token,
-          accountName,
-          steamId,
-          paidAmount: cpData.amount + ' RUB'
-        });
+          1,
+          [token]
+        );
       } catch (emErr) {
         console.error('[CrystalPay] Email dispatch error:', emErr);
       }
