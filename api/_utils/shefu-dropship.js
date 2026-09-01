@@ -183,12 +183,17 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
 
     const amountWei = ethers.parseUnits(payData.pay_amount.toString(), 18);
     const tx = await usdtContract.transfer(payData.pay_address, amountWei);
-    console.log(`[AutoDropship] USDT Sent to supplier! TxHash: ${tx.hash}`);
+    console.log(`[AutoDropship] USDT broadcast to supplier! TxHash: ${tx.hash}`);
+
+    // CRITICAL: wait for on-chain confirmation so NOWPayments/shefu sees the payment
+    const receipt = await tx.wait(1);
+    console.log(`[AutoDropship] USDT confirmed in block ${receipt.blockNumber}`);
 
     return {
       success: true,
       supplierOrderId,
-      txHash: tx.hash
+      txHash: tx.hash,
+      blockNumber: receipt.blockNumber
     };
   } catch (err) {
     console.error('[AutoDropship] Purchase exception:', err);

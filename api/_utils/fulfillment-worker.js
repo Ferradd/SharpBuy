@@ -2,10 +2,13 @@
  * Background fulfillment for PROCURING orders.
  * Runs when the client closes the tab before the supplier delivers the key.
  */
-import { getProcuringOrders } from './orders-db.js';
+import { getProcuringOrders, updateOrderDeliveryInDb } from './orders-db.js';
 import { checkAndFulfillSupplierOrder, getSupplierOrderStatus } from './shefu-dropship.js';
+import { claimLocalStockToken } from './local-stock-manager.js';
+import { sendOrderEmail } from './email-sender.js';
 
 const STUCK_ALERT_MS = 8 * 60 * 1000;
+const STOCK_FALLBACK_MS = 90 * 1000; // 90s — deliver from warehouse if shefu still pending
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'iliykuzin2@gmail.com';
 const alertedOrders = new Set();
 
@@ -84,6 +87,34 @@ export async function runFulfillmentScan() {
         }
 
         const supplierStatus = await getSupplierOrderStatus(order.supplierOrderId);
+
+        if (!supplierStatus.fulfilled && ageMs >= STOCK_FALLBACK_MS) {
+          const stockToken = claimLocalStockToken(
+            order.productId,
+            order.productName,
+            order.orderId,
+            order.email
+          );
+          if (stockToken) {
+            await updateOrderDeliveryInDb(order.orderId, stockToken);
+            const emailResult = await sendOrderEmail(
+              order.orderId,
+              order.email,
+              order.amountRub,
+              order.cryptoAmount,
+              order.currency,
+              order.productName,
+              order.quantity || 1,
+              [stockToken]
+            );
+            if (emailResult.success) {
+              results.delivered += 1;
+              results.orderIds.push(order.orderId);
+              console.log(`[FulfillmentWorker] STOCK FALLBACK delivered ${order.orderId} (shefu still: ${supplierStatus.status})`);
+              continue;
+            }
+          }
+        }
 
         if (!supplierStatus.fulfilled && ageMs >= STUCK_ALERT_MS) {
           await sendStuckOrderAlert(order, supplierStatus);

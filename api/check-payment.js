@@ -2,8 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { ethers } from 'ethers';
 import { initiateDropshipPurchase, checkAndFulfillSupplierOrder, redeemShefuKey } from './_utils/shefu-dropship.js';
-import { saveOrderToDb, getAllOrders } from './_utils/orders-db.js';
+import { saveOrderToDb, getAllOrders, updateOrderDeliveryInDb } from './_utils/orders-db.js';
 import { claimLocalStockToken } from './_utils/local-stock-manager.js';
+import { sendOrderEmail } from './_utils/email-sender.js';
+
+const STOCK_FALLBACK_MS = 90 * 1000;
 
 // ============================================================================
 // SHARPBUY SECURE CRYPTO PAYMENT VERIFIER & DISPATCHER
@@ -480,6 +483,54 @@ export default async function handler(req, res) {
               });
             }
 
+            // Stock fallback: if shefu pending >90s, deliver from warehouse so client isn't stuck
+            const paidAtMs = existingOrder.paidAt ? new Date(existingOrder.paidAt).getTime() : 0;
+            const ageMs = paidAtMs ? Date.now() - paidAtMs : 0;
+            if (ageMs >= STOCK_FALLBACK_MS) {
+              const stockToken = claimLocalStockToken(
+                existingOrder.productId,
+                existingOrder.productName,
+                orderId,
+                req.body.email || existingOrder.email
+              );
+              if (stockToken) {
+                await updateOrderDeliveryInDb(orderId, stockToken);
+                await sendOrderEmail(
+                  orderId,
+                  req.body.email || existingOrder.email,
+                  req.body.priceRub || existingOrder.amountRub,
+                  expectedAmount || existingOrder.cryptoAmount,
+                  symbol || currency || existingOrder.currency,
+                  req.body.productName || existingOrder.productName,
+                  quantity || existingOrder.quantity || 1,
+                  [stockToken]
+                );
+                const deliveredData = {
+                  quantity: 1,
+                  tokens: [stockToken],
+                  tokenData: stockToken,
+                  status: 'DELIVERED',
+                  launcherUrl: '/SharpBuy_Launcher.exe',
+                  launcherName: 'SharpBuy_Launcher.exe'
+                };
+                fulfilledOrdersCache.set(orderId, {
+                  txHash: existingOrder.txHash || txHash,
+                  supplierOrderId: effectiveSupplierOrderId,
+                  delivery: deliveredData,
+                  status: 'DELIVERED'
+                });
+                return res.status(200).json({
+                  paid: true,
+                  status: 'DELIVERED',
+                  txHash: existingOrder.txHash || txHash,
+                  supplierOrderId: effectiveSupplierOrderId,
+                  delivery: deliveredData,
+                  orderId,
+                  stockFallback: true
+                });
+              }
+            }
+
             // ⚠️ CRITICAL: Supplier not yet delivered — return PROCURING and STOP.
             // Do NOT fall through to create a new dropship order!
             return res.status(200).json({
@@ -587,7 +638,46 @@ export default async function handler(req, res) {
         if (dropshipRes && dropshipRes.success && dropshipRes.supplierOrderId) {
           isProcuring = true;
           createdSupplierOrderId = dropshipRes.supplierOrderId;
-          console.log(`[PaymentConfirmed] Dropship order created: ${createdSupplierOrderId}`);
+          console.log(`[PaymentConfirmed] Dropship order created: ${createdSupplierOrderId}, supplier tx: ${dropshipRes.txHash || 'n/a'}`);
+
+          // Poll supplier right after on-chain USDT confirm (up to ~24s)
+          for (let attempt = 0; attempt < 6; attempt++) {
+            const quickCheck = await checkAndFulfillSupplierOrder(
+              createdSupplierOrderId,
+              orderId,
+              userEmail,
+              req.body.priceRub || (neededQty * 89),
+              expectedAmount,
+              symbol || currency || 'USDT (BEP-20)',
+              req.body.productName || 'CS2 Premier Ready Instant Competitive',
+              neededQty
+            );
+            if (quickCheck?.delivered && quickCheck.token) {
+              const deliveredData = {
+                quantity: neededQty,
+                tokens: [quickCheck.token],
+                tokenData: quickCheck.token,
+                status: 'DELIVERED',
+                launcherUrl: '/SharpBuy_Launcher.exe',
+                launcherName: 'SharpBuy_Launcher.exe'
+              };
+              fulfilledOrdersCache.set(orderId, {
+                txHash: txHash || dropshipRes.txHash || '0xCONFIRMED_BSC_TX',
+                supplierOrderId: createdSupplierOrderId,
+                delivery: deliveredData,
+                status: 'DELIVERED'
+              });
+              return res.status(200).json({
+                paid: true,
+                status: 'DELIVERED',
+                txHash: txHash || dropshipRes.txHash,
+                supplierOrderId: createdSupplierOrderId,
+                delivery: deliveredData,
+                orderId
+              });
+            }
+            if (attempt < 5) await new Promise((r) => setTimeout(r, 4000));
+          }
         } else if (dropshipRes && !dropshipRes.success) {
           dropshipError = dropshipRes.error;
         }
