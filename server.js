@@ -49,6 +49,12 @@ app.all('/api/account-library', (req, res) => accountLibraryHandler(req, res));
 app.all('/api/sync-shefu-stock', (req, res) => syncShefuStockHandler(req, res));
 app.all('/api/arbitrage-cron', (req, res) => arbitrageCronHandler(req, res));
 
+// AnyPay Verification Route
+app.get('/anypay-verification.txt', (req, res) => {
+  res.type('text/plain');
+  res.send('99565dd75d69594592785b7711e3');
+});
+
 // Serve the compiled frontend (includes public/ assets copied by Vite)
 app.use(express.static(path.join(__dirname, 'dist')));
 
