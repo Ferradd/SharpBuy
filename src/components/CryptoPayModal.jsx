@@ -35,7 +35,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
   const [selectedCrypto, setSelectedCrypto] = useState('USDT_BEP20');
   const [quantity, setQuantity] = useState(1);
   const [order, setOrder] = useState(null);
-  const [crystalPayInvoice, setCrystalPayInvoice] = useState(null);
+  const [anyPayInvoice, setAnyPayInvoice] = useState(null);
   const [timeLeft, setTimeLeft] = useState(900); // 15 min
   const [isChecking, setIsChecking] = useState(false);
   const [copiedField, setCopiedField] = useState('');
@@ -68,7 +68,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     } else {
       setStep('SETUP');
       setOrder(null);
-      setCrystalPayInvoice(null);
+      setAnyPayInvoice(null);
       setDelivery(null);
       setProcureStage(1);
       setProcureProgress(15);
@@ -267,23 +267,23 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
         const data = await res.json();
         if (!data.success) {
-          alert(data.error || 'Ошибка создания платежа CrystalPay');
+          alert(data.error || 'Ошибка создания платежа AnyPay');
           setIsChecking(false);
           return;
         }
 
-        setCrystalPayInvoice(data);
+        setAnyPayInvoice(data);
         setStep('PAYING_SBP');
         setTimeLeft(3600);
 
-        if (data.paymentUrl) {
-          window.open(data.paymentUrl, '_blank');
+        if (data.url || data.paymentUrl) {
+          window.open(data.url || data.paymentUrl, '_blank');
         }
 
-        startCrystalPayPolling(data.invoiceId, data.orderId, priceRub);
+        startAnyPayPolling(data.invoiceId || data.orderId, data.orderId, priceRub);
       } catch (err) {
-        console.error('CrystalPay order error:', err);
-        alert(isEn ? 'Connection error with CrystalPay' : 'Ошибка соединения с CrystalPay');
+        console.error('AnyPay order error:', err);
+        alert(isEn ? 'Connection error with AnyPay' : 'Ошибка соединения с AnyPay');
       } finally {
         setIsChecking(false);
       }
@@ -328,7 +328,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
   };
 
-  const startCrystalPayPolling = (invoiceId, orderId, priceRub) => {
+  const startAnyPayPolling = (invoiceId, orderId, priceRub) => {
     if (pollerRef.current) clearInterval(pollerRef.current);
     pollerRef.current = setInterval(async () => {
       try {
@@ -355,31 +355,31 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }, 3000);
   };
 
-  const checkCrystalPayManual = async () => {
-    if (!crystalPayInvoice) return;
+  const checkAnyPayManual = async () => {
+    if (!anyPayInvoice) return;
     setIsChecking(true);
     try {
       const res = await fetch(getApiUrl('/api/check-anypay-payment'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          invoiceId: crystalPayInvoice.invoiceId,
-          orderId: crystalPayInvoice.orderId
+          invoiceId: anyPayInvoice.orderId,
+          orderId: anyPayInvoice.orderId
         })
       });
       const data = await res.json();
       if (data.paid && data.delivery) {
         if (pollerRef.current) clearInterval(pollerRef.current);
         const currentOrder = {
-          orderId: crystalPayInvoice.orderId,
+          orderId: anyPayInvoice.orderId,
           productName: product?.cleanTitle || product?.title || 'Steam Account',
           email,
-          priceRub: crystalPayInvoice.amount,
+          priceRub: anyPayInvoice.amountRub,
           paymentMethod: 'SBP / Bank Card'
         };
         handlePaymentSuccess(data.delivery, currentOrder);
       } else {
-        alert(isEn ? 'Payment not yet detected by CrystalPay. Please complete payment in your banking app and wait a moment.' : 'Оплата пока не зафиксирована. Пожалуйста, завершите платеж в приложении банка и подождите несколько секунд.');
+        alert(isEn ? 'Payment not yet detected by AnyPay. Please complete payment in your banking app and wait a moment.' : 'Оплата пока не зафиксирована. Пожалуйста, завершите платеж в приложении банка и подождите несколько секунд.');
       }
     } catch (e) {
       alert(isEn ? 'Error checking payment status' : 'Ошибка проверки статуса платежа');
@@ -816,7 +816,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
         )}
 
         {/* ── STEP 2: SBP / BANK CARDS CRYSTALPAY INVOICE ── */}
-        {step === 'PAYING_SBP' && crystalPayInvoice && (
+        {step === 'PAYING_SBP' && anyPayInvoice && (
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
               <div className="flex items-center gap-3">
@@ -825,12 +825,12 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
                 </div>
                 <div>
                   <div className="font-mono text-[10px] text-white/40">{isEn ? 'SBP / RUSSIAN BANK CARDS' : 'СБП / КАРТЫ РФ (МИР, VISA, MC)'}</div>
-                  <div className="font-sans font-bold text-sm text-white">CrystalPay #{crystalPayInvoice.invoiceId}</div>
+                  <div className="font-sans font-bold text-sm text-white">AnyPay #{anyPayInvoice.orderId}</div>
                 </div>
               </div>
               <div className="text-right font-mono">
                 <div className="text-[10px] text-white/40">{isEn ? 'SUM TO PAY:' : 'К ОПЛАТЕ:'}</div>
-                <div className="text-base font-black text-[#10b981]">{crystalPayInvoice.amount} ₽</div>
+                <div className="text-base font-black text-[#10b981]">{anyPayInvoice.amountRub} ₽</div>
               </div>
             </div>
 
@@ -847,7 +847,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
               </div>
 
               <a
-                href={crystalPayInvoice.paymentUrl}
+                href={anyPayInvoice.url}
                 target="_blank"
                 rel="noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#10b981] to-[#059669] py-3 font-mono text-xs font-black uppercase text-white hover:shadow-[0_0_25px_rgba(16,185,129,0.45)] transition-all cursor-pointer"
@@ -864,7 +864,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => checkCrystalPayManual()}
+                onClick={() => checkAnyPayManual()}
                 disabled={isChecking}
                 className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-xs font-bold text-white hover:bg-white/10 transition-all cursor-pointer"
               >
