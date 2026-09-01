@@ -1,7 +1,11 @@
 import { ethers } from 'ethers';
 
-const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC || 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
-const MERCHANT_WALLET_ADDR = '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9';
+const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC;
+if (!MERCHANT_MNEMONIC) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
+const MERCHANT_WALLET_ADDR = '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1';
 const BSC_RPC = 'https://bsc-dataseed1.binance.org';
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 const ERC20_ABI = [

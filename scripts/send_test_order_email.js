@@ -90,11 +90,16 @@ const htmlBody = `
 `;
 
 async function main() {
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    console.error('Set RESEND_API_KEY in environment');
+    process.exit(1);
+  }
   console.log('Sending 4x account order email via Resend from orders@sharpbuy.org to iliykuzin2@gmail.com...');
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer re_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd',
+      'Authorization': `Bearer ${resendKey}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({

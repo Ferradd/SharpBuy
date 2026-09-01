@@ -1,18 +1,18 @@
 {
   "wallets": {
     "USDT_BEP20": {
-      "address": "0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9",
+      "address": "0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1",
       "network": "BSC (BEP-20)",
       "symbol": "USDT",
       "name": "USDT (BEP-20 / BSC)",
-      "explorerUrl": "https://bscscan.com/address/0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9"
+      "explorerUrl": "https://bscscan.com/address/0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1"
     },
     "USDT_POLYGON": {
-      "address": "0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9",
+      "address": "0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1",
       "network": "Polygon",
       "symbol": "USDT",
       "name": "USDT (Polygon)",
-      "explorerUrl": "https://polygonscan.com/address/0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9"
+      "explorerUrl": "https://polygonscan.com/address/0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1"
     },
     "LTC": {
       "address": "Lg3tZk9Y7Fh8M2j1X4vBnKpQmRsTvW5xYa",

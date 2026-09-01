@@ -10,7 +10,11 @@ const provider = new ethers.JsonRpcProvider(BSC_RPC);
 const fallbackMnemonic = 'example fun hollow ceiling alter recipe plate decide expire hood own chimney';
 
 // The main merchant wallet (which has BNB for gas)
-const merchantMnemonic = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const merchantMnemonic = process.env.MERCHANT_MNEMONIC;
+if (!merchantMnemonic) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
 const merchantWallet = ethers.Wallet.fromPhrase(merchantMnemonic, provider);
 
 async function recover() {

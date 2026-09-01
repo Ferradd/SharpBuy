@@ -97,7 +97,10 @@ export default async function handler(req, res) {
     `;
 
     // 1. Priority 1: Resend HTTP API (Fastest serverless delivery via sharpbuy.org domain)
-    const resendKey = process.env.RESEND_API_KEY || 're_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd';
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey) {
+      return res.status(503).json({ error: 'RESEND_API_KEY not configured' });
+    }
     if (resendKey) {
       const resendResp = await fetch('https://api.resend.com/emails', {
         method: 'POST',

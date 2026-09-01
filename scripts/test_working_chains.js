@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-const MERCHANT_EVM = '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9';
+const MERCHANT_EVM = '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1';
 
 const POLYGON_RPCS = [
   'https://polygon-bor-rpc.publicnode.com',

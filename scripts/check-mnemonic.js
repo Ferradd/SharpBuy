@@ -1,7 +1,11 @@
 import { ethers } from 'ethers';
 
 const m1 = 'example fun hollow ceiling alter recipe plate decide expire hood own chimney';
-const m2 = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const m2 = process.env.MERCHANT_MNEMONIC;
+if (!m2) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
 
 for (let i = 0; i < 100; i++) {
   const w1 = ethers.HDNodeWallet.fromPhrase(m1, "", "m/44'/60'/0'/0/" + i);

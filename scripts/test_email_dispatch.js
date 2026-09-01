@@ -1,5 +1,9 @@
 async function testResend() {
-  const resendKey = 're_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd';
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    console.error('Set RESEND_API_KEY in environment');
+    process.exit(1);
+  }
   console.log('Testing Resend email dispatch...');
 
   try {

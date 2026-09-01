@@ -136,7 +136,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderId,
-            address: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
+            address: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
             expectedAmount: (priceRub / 92).toFixed(4),
             symbol: 'USDT',
             currency: 'WALLET_BALANCE',
@@ -185,7 +185,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
             const walletOrderForPolling = {
               orderId,
-              address: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
+              address: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
               cryptoAmount: (priceRub / 92).toFixed(4),
               symbol: 'USDT',
               currency: 'WALLET_BALANCE',
@@ -208,7 +208,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     orderId,
-                    address: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
+                    address: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
                     expectedAmount: (priceRub / 92).toFixed(4),
                     symbol: 'USDT',
                     currency: 'WALLET_BALANCE',
@@ -390,11 +390,11 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
 
   const generateClientFallbackOrder = async (prod, userEmail, currId, qty) => {
     const addresses = {
-      USDT_BEP20: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
-      BNB_BSC: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
-      USDT_POLYGON: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
-      USDT_ARBITRUM: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
-      USDT_BASE: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9',
+      USDT_BEP20: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
+      BNB_BSC: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
+      USDT_POLYGON: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
+      USDT_ARBITRUM: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
+      USDT_BASE: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1',
       LTC: 'Lg3tZk9Y7Fh8M2j1X4vBnKpQmRsTvW5xYa',
       SOL: '82Kj9sM4v1x7F3J5n8P0w2Y4z6T9r1E3sSharpBuy1',
       TON: 'EQBsharpbuy_official_treasury_001_ton_bsc',

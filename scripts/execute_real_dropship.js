@@ -1,6 +1,10 @@
 import { ethers } from 'ethers';
 
-const MERCHANT_MNEMONIC = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC;
+if (!MERCHANT_MNEMONIC) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
 const BSC_RPC = 'https://bsc-dataseed1.binance.org';
 const USDT_BSC_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
 

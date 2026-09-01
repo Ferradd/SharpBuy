@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 async function testTransferEventCheck() {
   const BSC_RPC = 'https://bsc-dataseed1.binance.org';
   const USDT_CONTRACT = '0x55d398326f99059fF775485246999027B3197955';
-  const MERCHANT_ADDR = '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9';
+  const MERCHANT_ADDR = '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1';
   const provider = new ethers.JsonRpcProvider(BSC_RPC);
 
   const currentBlock = await provider.getBlockNumber();

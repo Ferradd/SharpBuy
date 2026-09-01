@@ -1,5 +1,9 @@
 async function sendHighContrastReceipt() {
-  const resendKey = 're_KpbJCCGo_JHB2BrFReEGJaeZHhK3KFowd';
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    console.error('Set RESEND_API_KEY in environment');
+    process.exit(1);
+  }
   const orderId = 'SHARP-PREMIER-' + Math.floor(100000 + Math.random() * 900000);
   const userEmail = 'iliykuzin2@gmail.com';
   const token = '76561198985782230----eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODk4NTc4MjIzMCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE4MDM3MjQyNzQsICJuYmYiOiAxNzc2ODUzNzk4LCAiaWF0IjogMTc4NTQ5Mzc5OCwgImp0aSI6ICIwMDAyXzI4OTJDRjk0XzgxMTgwIiwgIm9hdCI6IDE3ODU0OTM3OTgsICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICIxMjIuMjI2LjE0OC4xNzQiLCAiaXBfY29uZmlybWVyIjogIjIwNi4yMzcuMTE0LjEwMCIgfQ.NW4t61zSJK92lCn_JUkqMztNo5ksCcikk4iwcwW0AW6w5y3_aIl5594gD-S587wk-nPAL1amRj2ECSU2xw8HAQ';

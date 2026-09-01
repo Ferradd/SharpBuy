@@ -11,8 +11,8 @@ import { sendOrderEmail } from './_utils/email-sender.js';
 // ============================================================================
 
 const VALID_MERCHANT_ADDRESSES = {
-  USDT_BEP20: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9'.toLowerCase(),
-  USDT_POLYGON: '0x7d46F8e21780Db5eA129d9Fc9cF73D56Ae1172c9'.toLowerCase(),
+  USDT_BEP20: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1'.toLowerCase(),
+  USDT_POLYGON: '0xA1eF73118f071624BA0D8Ac73387B088DfBfafA1'.toLowerCase(),
   LTC: 'Lg3tZk9Y7Fh8M2j1X4vBnKpQmRsTvW5xYa',
   BTC: 'bc1qsharpbuy82k9m4v1x7f3j5n8p0w2y4z6t9r1e3s'
 };
@@ -293,7 +293,7 @@ export default async function handler(req, res) {
       } else if (symbol === 'USDT' || currency === 'USDT_BEP20') {
         // USDT on BSC BEP-20
         const balanceData = '0x70a08231' + cleanAddr.toLowerCase().replace('0x', '').padStart(64, '0');
-        const isMainWallet = cleanAddr.toLowerCase() === '0x7d46f8e21780db5ea129d9fc9cf73d56ae1172c9';
+        const isMainWallet = cleanAddr.toLowerCase() === '0xa1ef73118f071624ba0d8ac73387b088dfbfafa1';
         const rawInit = parseFloat(req.body.initialBalance);
         const initBal = Number.isFinite(rawInit) ? rawInit : 0;
 
@@ -543,7 +543,7 @@ export default async function handler(req, res) {
       }
 
       // Automatically sweep funds from child wallet to main wallet only if using legacy child wallet
-      const isMainWallet = (req.body.address || '').toLowerCase() === '0x7d46f8e21780db5ea129d9fc9cf73d56ae1172c9';
+      const isMainWallet = (req.body.address || '').toLowerCase() === '0xa1ef73118f071624ba0d8ac73387b088dfbfafa1';
       if (!isMainWallet && req.body.orderIndex !== undefined && req.body.address) {
         sweepChildWallet(req.body.orderIndex, req.body.address).catch(e => console.error(e));
       }

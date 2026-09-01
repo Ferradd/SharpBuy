@@ -1,6 +1,10 @@
 import { ethers } from 'ethers';
 
-const mnemonic = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const mnemonic = process.env.MERCHANT_MNEMONIC;
+if (!mnemonic) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
 
 function deriveWallet() {
   const wallet = ethers.Wallet.fromPhrase(mnemonic);

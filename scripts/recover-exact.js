@@ -6,7 +6,11 @@ const ERC20_ABI = ['function balanceOf(address owner) view returns (uint256)', '
 const provider = new ethers.JsonRpcProvider(BSC_RPC);
 
 const fallbackMnemonic = 'example fun hollow ceiling alter recipe plate decide expire hood own chimney';
-const merchantMnemonic = 'load forum stomach worry abandon harsh error glory kiss kind trial relax';
+const merchantMnemonic = process.env.MERCHANT_MNEMONIC;
+if (!merchantMnemonic) {
+  console.error('Set MERCHANT_MNEMONIC in environment');
+  process.exit(1);
+}
 const merchantWallet = ethers.Wallet.fromPhrase(merchantMnemonic, provider);
 
 // Data from orders_database.json & MEXC

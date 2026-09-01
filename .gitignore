@@ -60,7 +60,7 @@ scripts/evaluated_totals.json
 .env*
 !.env.example
 .env.vercel.prod
-wallet/sharpbuy_merchant_wallets.txt
+wallet/
 account/credentials.txt
 data/.token_ingest_secret
 data/steam.txt

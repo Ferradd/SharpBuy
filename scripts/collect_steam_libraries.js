@@ -1,16 +1,17 @@
 /**
  * SharpBuy — Collect full game libraries for all accounts in steam.txt
- * Output: C:\Users\iliyk\Desktop\steam_libraries.txt (+ JSON backup)
+ * Output: SharpBuy/data/steam_libraries.txt (+ JSON backup)
  */
 
 import fs from 'fs';
+import path from 'path';
 import SteamUser from 'steam-user';
 import { SteamSessionEngine } from '../src/tools/steamAuditor/SteamSessionEngine.js';
 import { GamesInventoryCollector } from '../src/tools/steamAuditor/Collectors/GamesInventoryCollector.js';
 
-const STEAM_TXT = 'C:\\Users\\iliyk\\Desktop\\steam.txt';
-const OUTPUT_TXT = 'C:\\Users\\iliyk\\Desktop\\steam_libraries.txt';
-const OUTPUT_JSON = 'C:\\Users\\iliyk\\Desktop\\steam_libraries.json';
+const STEAM_TXT = path.join(process.cwd(), 'data', 'steam.txt');
+const OUTPUT_TXT = path.join(process.cwd(), 'data', 'steam_libraries.txt');
+const OUTPUT_JSON = path.join(process.cwd(), 'data', 'steam_libraries.json');
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
