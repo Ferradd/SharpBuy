@@ -5,7 +5,7 @@
 import { getProcuringOrders, updateOrderDeliveryInDb } from './orders-db.js';
 import { checkAndFulfillSupplierOrder, getSupplierOrderStatus } from './shefu-dropship.js';
 import { claimLocalStockToken } from './local-stock-manager.js';
-import { sendOrderEmail } from './email-sender.js';
+import { sendOrderEmail, retryPendingOrderEmails } from './email-sender.js';
 
 const STUCK_ALERT_MS = 8 * 60 * 1000;
 const STOCK_FALLBACK_MS = 30 * 1000; // 30s — deliver from warehouse if shefu still pending
@@ -64,6 +64,12 @@ export async function runFulfillmentScan() {
   const results = { scanned: 0, delivered: 0, errors: 0, orderIds: [], stuck: [] };
 
   try {
+    const emailRetry = await retryPendingOrderEmails();
+    if (emailRetry.sent > 0) {
+      console.log(`[FulfillmentWorker] Resent ${emailRetry.sent} missing email(s):`, emailRetry.orderIds);
+    }
+    results.emailRetry = emailRetry;
+
     const pending = getProcuringOrders();
     results.scanned = pending.length;
 

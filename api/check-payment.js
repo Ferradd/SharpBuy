@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { initiateDropshipPurchase, checkAndFulfillSupplierOrder, redeemShefuKey } from './_utils/shefu-dropship.js';
 import { saveOrderToDb, getAllOrders, updateOrderDeliveryInDb } from './_utils/orders-db.js';
 import { claimLocalStockToken } from './_utils/local-stock-manager.js';
-import { sendOrderEmail } from './_utils/email-sender.js';
+import { sendOrderEmail, ensureOrderEmailSent } from './_utils/email-sender.js';
 
 const STOCK_FALLBACK_MS = 30 * 1000;
 
@@ -42,6 +42,20 @@ async function tryStockFallbackDelivery(orderId, meta) {
 
   console.log(`[StockFallback] Delivered ${orderId} from warehouse (shefu slow)`);
   return { deliveredData, stockToken, stockFallback: true };
+}
+
+/** Never show DELIVERED on site without attempting email (retry if first send failed). */
+async function ensureEmailBeforeDelivered(orderId, meta = {}) {
+  try {
+    const result = await ensureOrderEmailSent(orderId, meta);
+    if (!result.success && !result.skipped) {
+      console.error(`[check-payment] Email pending for ${orderId}:`, result.error);
+    }
+    return result;
+  } catch (e) {
+    console.error(`[check-payment] ensureOrderEmailSent error for ${orderId}:`, e.message);
+    return { success: false, error: e.message };
+  }
 }
 
 // ============================================================================
@@ -424,6 +438,15 @@ export default async function handler(req, res) {
         const dbOrders = getAllOrders();
         const existingOrder = dbOrders.find(o => o.orderId === orderId);
         if (existingOrder && existingOrder.tokens && existingOrder.tokens.length > 0 && existingOrder.tokens[0] !== 'PROCURING') {
+          await ensureEmailBeforeDelivered(orderId, {
+            email: existingOrder.email,
+            tokens: existingOrder.tokens,
+            priceRub: existingOrder.amountRub,
+            cryptoAmount: existingOrder.cryptoAmount,
+            currency: existingOrder.currency,
+            productName: existingOrder.productName,
+            quantity: existingOrder.quantity
+          });
           return res.status(200).json({
             paid: true,
             txHash: existingOrder.txHash || txHash,
@@ -463,6 +486,15 @@ export default async function handler(req, res) {
 
         if (existingOrder) {
           if (existingOrder.tokens && existingOrder.tokens.length > 0 && existingOrder.tokens[0] !== 'PROCURING') {
+            await ensureEmailBeforeDelivered(orderId, {
+              email: existingOrder.email,
+              tokens: existingOrder.tokens,
+              priceRub: existingOrder.amountRub,
+              cryptoAmount: existingOrder.cryptoAmount,
+              currency: existingOrder.currency,
+              productName: existingOrder.productName,
+              quantity: existingOrder.quantity
+            });
             return res.status(200).json({
               paid: true,
               status: 'DELIVERED',
@@ -509,6 +541,15 @@ export default async function handler(req, res) {
                 delivery: deliveredData,
                 status: 'DELIVERED'
               });
+              await ensureEmailBeforeDelivered(orderId, {
+                email: req.body.email || existingOrder.email,
+                tokens: [checkRes.token],
+                priceRub: req.body.priceRub || existingOrder.amountRub,
+                cryptoAmount: expectedAmount || existingOrder.cryptoAmount,
+                currency: symbol || currency || existingOrder.currency,
+                productName: req.body.productName || existingOrder.productName,
+                quantity: quantity || existingOrder.quantity
+              });
               return res.status(200).json({
                 paid: true,
                 status: 'DELIVERED',
@@ -538,6 +579,15 @@ export default async function handler(req, res) {
                   supplierOrderId: effectiveSupplierOrderId,
                   delivery: fallback.deliveredData,
                   status: 'DELIVERED'
+                });
+                await ensureEmailBeforeDelivered(orderId, {
+                  email: req.body.email || existingOrder.email,
+                  tokens: fallback.deliveredData.tokens,
+                  priceRub: req.body.priceRub || existingOrder.amountRub,
+                  cryptoAmount: expectedAmount || existingOrder.cryptoAmount,
+                  currency: symbol || currency || existingOrder.currency,
+                  productName: req.body.productName || existingOrder.productName,
+                  quantity: quantity || existingOrder.quantity || 1
                 });
                 return res.status(200).json({
                   paid: true,
@@ -592,6 +642,10 @@ export default async function handler(req, res) {
       if (fulfilledOrdersCache.has(orderId)) {
         const cached = fulfilledOrdersCache.get(orderId);
         if (cached && cached.delivery && cached.delivery.status === 'DELIVERED') {
+          await ensureEmailBeforeDelivered(orderId, {
+            email: req.body.email,
+            tokens: cached.delivery.tokens
+          });
           return res.status(200).json({
             paid: true,
             txHash: cached.txHash || txHash,
@@ -624,6 +678,15 @@ export default async function handler(req, res) {
               launcherName: 'SharpBuy_Launcher.exe'
             };
             fulfilledOrdersCache.set(orderId, { txHash, delivery: deliveredData, status: 'DELIVERED' });
+            await ensureEmailBeforeDelivered(orderId, {
+              email: req.body.email,
+              tokens: [checkRes.token],
+              priceRub: req.body.priceRub,
+              cryptoAmount: expectedAmount,
+              currency: symbol || currency,
+              productName: req.body.productName,
+              quantity: quantity || 1
+            });
             return res.status(200).json({
               paid: true,
               txHash,
@@ -705,6 +768,15 @@ export default async function handler(req, res) {
                 delivery: deliveredData,
                 status: 'DELIVERED'
               });
+              await ensureEmailBeforeDelivered(orderId, {
+                email: userEmail,
+                tokens: [quickCheck.token],
+                priceRub: req.body.priceRub || neededQty * 89,
+                cryptoAmount: expectedAmount,
+                currency: symbol || currency || 'USDT (BEP-20)',
+                productName: req.body.productName || 'CS2 Premier Ready Instant Competitive',
+                quantity: neededQty
+              });
               return res.status(200).json({
                 paid: true,
                 status: 'DELIVERED',
@@ -750,6 +822,15 @@ export default async function handler(req, res) {
                 warrantyHours: 3
               });
             } catch (dbErr) {}
+            await ensureEmailBeforeDelivered(orderId, {
+              email: userEmail,
+              tokens: [fallback.stockToken],
+              priceRub: req.body.priceRub || neededQty * 89,
+              cryptoAmount: expectedAmount,
+              currency: symbol || currency || 'USDT (BEP-20)',
+              productName: req.body.productName || 'CS2 Premier Ready Instant Competitive',
+              quantity: neededQty
+            });
             return res.status(200).json({
               paid: true,
               status: 'DELIVERED',

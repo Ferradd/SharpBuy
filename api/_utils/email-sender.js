@@ -1,6 +1,83 @@
-import { getOrderById, markOrderEmailSent } from './orders-db.js';
+import { getOrderById, markOrderEmailSent, getAllOrders } from './orders-db.js';
 
 const sentEmailOrders = new Set();
+
+/**
+ * Send email if this delivered order never got one (retry on every poll / background scan).
+ */
+export async function ensureOrderEmailSent(orderId, overrides = {}) {
+  const order = getOrderById(orderId);
+  if (!order) {
+    if (overrides.email && overrides.tokens?.length) {
+      return sendOrderEmail(
+        orderId,
+        overrides.email,
+        overrides.priceRub ?? overrides.amountRub ?? 0,
+        overrides.cryptoAmount ?? '',
+        overrides.currency ?? 'USDT',
+        overrides.productName ?? 'SharpBuy Order',
+        overrides.quantity ?? 1,
+        overrides.tokens
+      );
+    }
+    return { success: false, error: 'order_not_found' };
+  }
+
+  if (order.emailSentAt || sentEmailOrders.has(orderId)) {
+    return { success: true, skipped: true };
+  }
+
+  const tokens = overrides.tokens || order.tokens;
+  const first = Array.isArray(tokens) ? tokens[0] : tokens;
+  if (!first || first === 'PROCURING' || String(first).startsWith('ERR_')) {
+    return { success: false, error: 'no_deliverable_token' };
+  }
+
+  return sendOrderEmail(
+    orderId,
+    overrides.email || order.email,
+    overrides.priceRub ?? overrides.amountRub ?? order.amountRub,
+    overrides.cryptoAmount ?? order.cryptoAmount,
+    overrides.currency ?? order.currency,
+    overrides.productName ?? order.productName,
+    overrides.quantity ?? order.quantity ?? 1,
+    Array.isArray(tokens) ? tokens : [tokens]
+  );
+}
+
+/** Orders delivered on site but email never sent — recover automatically */
+export function getOrdersNeedingEmail() {
+  return getAllOrders().filter((o) => {
+    const token = o.tokens?.[0];
+    return (
+      o.status === 'PAID_DELIVERED' &&
+      !o.emailSentAt &&
+      token &&
+      token !== 'PROCURING' &&
+      !String(token).startsWith('ERR_') &&
+      o.email &&
+      o.email.includes('@')
+    );
+  });
+}
+
+export async function retryPendingOrderEmails() {
+  const pending = getOrdersNeedingEmail();
+  const results = { scanned: pending.length, sent: 0, failed: 0, orderIds: [] };
+
+  for (const order of pending) {
+    const res = await ensureOrderEmailSent(order.orderId);
+    if (res.success && !res.skipped) {
+      results.sent += 1;
+      results.orderIds.push(order.orderId);
+    } else if (!res.success) {
+      results.failed += 1;
+      console.error(`[Email] Retry failed for ${order.orderId}:`, res.error);
+    }
+  }
+
+  return results;
+}
 
 export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, tokens) {
   if (!userEmail || !userEmail.includes('@')) {
