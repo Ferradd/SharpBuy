@@ -13,7 +13,6 @@ import createOrderHandler from './api/create-order.js';
 import checkPaymentHandler from './api/check-payment.js';
 import warrantyCheckHandler from './api/warranty-check.js';
 import steamVerifyHandler from './api/steam-verify.js';
-import steamCs2BansHandler from './api/steam-cs2-bans.js';
 import authHandler from './api/auth.js';
 import getOrdersHandler from './api/get-orders.js';
 import getUserWalletHandler from './api/get-user-wallet.js';
@@ -46,7 +45,6 @@ app.post('/api/check-payment', (req, res) => checkPaymentHandler(req, res));
 // AnyPay integration removed - using direct crypto payments only
 app.post('/api/warranty-check', (req, res) => warrantyCheckHandler(req, res));
 app.post('/api/steam-verify', (req, res) => steamVerifyHandler(req, res));
-app.all('/api/steam-cs2-bans', (req, res) => steamCs2BansHandler(req, res));
 app.all('/api/email-health', async (req, res) => {
   const handler = await import('./api/email-health.js');
   return handler.default(req, res);
