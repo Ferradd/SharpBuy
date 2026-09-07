@@ -172,6 +172,21 @@ export function getOrdersMissingEmail() {
   }
 }
 
+export function getOrdersNeedingSupplierReplace() {
+  try {
+    const orders = getAllOrders();
+    return orders.filter(o => 
+      o.supplierOrderId && 
+      o.tokens && 
+      o.tokens.length > 0 && 
+      o.tokens[0].startsWith('ERR_SUPPLIER_FAIL')
+    );
+  } catch (e) {
+    console.error('Error getting orders needing supplier replace:', e);
+    return [];
+  }
+}
+
 export function updateOrderDeliveryInDb(orderId, token) {
   try {
     const orders = getAllOrders();
