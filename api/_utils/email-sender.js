@@ -276,3 +276,35 @@ export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount,
 
   return result;
 }
+
+export async function ensureOrderEmailSent(orderId, options = {}) {
+  const order = getOrderById(orderId);
+  if (!order) {
+    return { success: false, error: 'order_not_found' };
+  }
+
+  if (!order.tokens || order.tokens.length === 0) {
+    return { success: false, error: 'no_tokens' };
+  }
+
+  if (order.tokens[0] === 'PROCURING') {
+    return { success: false, error: 'order_not_delivered' };
+  }
+
+  const userEmail = options.email || order.email;
+  if (!userEmail) {
+    return { success: false, error: 'no_email' };
+  }
+
+  return await sendOrderEmail(
+    orderId,
+    userEmail,
+    order.amountRub,
+    order.cryptoAmount,
+    order.currency,
+    order.productName,
+    order.quantity || 1,
+    order.tokens,
+    { force: options.force === true }
+  );
+}
