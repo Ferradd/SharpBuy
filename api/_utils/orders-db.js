@@ -157,6 +157,21 @@ export function markOrderEmailSent(orderId) {
   }
 }
 
+export function getOrdersMissingEmail() {
+  try {
+    const orders = getAllOrders();
+    return orders.filter(o => 
+      o.tokens && 
+      o.tokens.length > 0 && 
+      o.tokens[0] !== 'PROCURING' && 
+      !o.emailSentAt
+    );
+  } catch (e) {
+    console.error('Error getting orders missing email:', e);
+    return [];
+  }
+}
+
 export function updateOrderDeliveryInDb(orderId, token) {
   try {
     const orders = getAllOrders();
