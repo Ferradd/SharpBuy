@@ -21,7 +21,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Valid email required' });
   }
 
-  const isOwner = email === 'iliykuzin2@gmail.com' || email === 'admin@sharpbuy.org';
+  const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'iliykuzin2@gmail.com';
+  const isOwner = email === ADMIN_EMAIL || email === 'admin@sharpbuy.org';
 
   try {
     const provider = new ethers.JsonRpcProvider(BSC_RPC);

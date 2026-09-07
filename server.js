@@ -3,12 +3,17 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
 
 // Load our API handlers
 import createOrderHandler from './api/create-order.js';
 import checkPaymentHandler from './api/check-payment.js';
 import warrantyCheckHandler from './api/warranty-check.js';
 import steamVerifyHandler from './api/steam-verify.js';
+import steamCs2BansHandler from './api/steam-cs2-bans.js';
 import authHandler from './api/auth.js';
 import getOrdersHandler from './api/get-orders.js';
 import getUserWalletHandler from './api/get-user-wallet.js';
@@ -17,6 +22,7 @@ import keepaliveHandler from './api/keepalive.js';
 import accountLibraryHandler from './api/account-library.js';
 import syncShefuStockHandler from './api/sync-shefu-stock.js';
 import arbitrageCronHandler from './api/arbitrage-cron.js';
+import testEmailHandler from './api/test-email.js';
 import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
 import { startFulfillmentCron } from './api/_utils/fulfillment-worker.js';
 
@@ -36,25 +42,20 @@ app.all('/api/get-orders', (req, res) => getOrdersHandler(req, res));
 app.all('/api/get-user-wallet', (req, res) => getUserWalletHandler(req, res));
 app.post('/api/create-order', (req, res) => createOrderHandler(req, res));
 app.post('/api/check-payment', (req, res) => checkPaymentHandler(req, res));
-app.post('/api/create-anypay-payment', async (req, res) => {
-  const handler = await import('./api/create-anypay-payment.js');
-  return handler.default(req, res);
-});
-app.post('/api/check-anypay-payment', async (req, res) => {
-  const handler = await import('./api/check-anypay-payment.js');
-  return handler.default(req, res);
-});
-app.all('/api/anypay-webhook', async (req, res) => {
-  const handler = await import('./api/anypay-webhook.js');
-  return handler.default(req, res);
-});
+// AnyPay integration removed - using direct crypto payments only
 app.post('/api/warranty-check', (req, res) => warrantyCheckHandler(req, res));
 app.post('/api/steam-verify', (req, res) => steamVerifyHandler(req, res));
+app.all('/api/steam-cs2-bans', (req, res) => steamCs2BansHandler(req, res));
+app.all('/api/email-health', async (req, res) => {
+  const handler = await import('./api/email-health.js');
+  return handler.default(req, res);
+});
 app.all('/api/token-ingest', (req, res) => tokenIngestHandler(req, res));
 app.all('/api/keepalive', (req, res) => keepaliveHandler(req, res));
 app.all('/api/account-library', (req, res) => accountLibraryHandler(req, res));
 app.all('/api/sync-shefu-stock', (req, res) => syncShefuStockHandler(req, res));
 app.all('/api/arbitrage-cron', (req, res) => arbitrageCronHandler(req, res));
+app.all('/api/test-email', (req, res) => testEmailHandler(req, res));
 
 // Verification Routes
 app.get('/anypay-verification.txt', (req, res) => {

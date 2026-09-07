@@ -10,7 +10,7 @@ import { updateOrderDeliveryInDb } from './orders-db.js';
 
 const DEFAULT_MNEMONIC_B64 = 'b3RoZXIgYWdlbnQgYWJzdXJkIHJlY2lwZSBtaWxsaW9uIGNsYWltIGNhdCBmaWxtIGNsb3NlIHNob3ZlIHZlc3NlbCBtYXJrZXQ=';
 const MERCHANT_MNEMONIC = process.env.MERCHANT_MNEMONIC || Buffer.from(DEFAULT_MNEMONIC_B64, 'base64').toString('utf8');
-const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY || '2K2CBE4-26W4FDE-NHNT9Z3-5W5ST8B';
+const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY;
 const BSC_RPCS = [
   process.env.BSC_RPC_URL,
   'https://bsc-dataseed1.binance.org',
@@ -110,7 +110,7 @@ export async function redeemShefuKey(licenseKey) {
 /**
  * 2. Fully autonomous purchase on shefu223.shop via NOWPayments & BSC USDT
  */
-export async function initiateDropshipPurchase(productSlug = 'premier', buyerEmail = 'iliykuzin2@gmail.com') {
+export async function initiateDropshipPurchase(productSlug = 'premier', buyerEmail) {
   try {
     console.log(`[AutoDropship] Starting purchase for ${productSlug}...`);
 
@@ -144,6 +144,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const supplierOrderId = orderData.order_id;
     console.log(`[AutoDropship] Created supplier order: ${supplierOrderId}`);
 
+    // Get payment address from NOWPayments
     const urlObj = new URL(orderData.url);
     const iid = urlObj.searchParams.get('iid');
     if (!iid) return { success: false, error: `No iid found in shefu url: ${orderData.url}` };
@@ -152,12 +153,13 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
       console.warn('[AutoDropship] NOWPAYMENTS_API_KEY not set');
       return { success: false, error: 'NOWPAYMENTS_API_KEY not set' };
     }
+
     const payRes = await fetch('https://api.nowpayments.io/v1/invoice-payment', {
       method: 'POST',
       headers: {
         'x-api-key': NOWPAYMENTS_API_KEY,
         'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0 Safari/537.36',
         'Accept': 'application/json'
       },
       body: JSON.stringify({
@@ -177,6 +179,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
       return { success: false, error: 'MERCHANT_MNEMONIC not set' };
     }
 
+    // Send USDT to supplier payment address
     const provider = await getWorkingBscProvider();
     const wallet = ethers.Wallet.fromPhrase(MERCHANT_MNEMONIC, provider);
     const usdtContract = new ethers.Contract(USDT_BSC_CONTRACT, ERC20_ABI, wallet);
@@ -185,7 +188,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
     const tx = await usdtContract.transfer(payData.pay_address, amountWei);
     console.log(`[AutoDropship] USDT broadcast to supplier! TxHash: ${tx.hash}`);
 
-    // CRITICAL: wait for on-chain confirmation so NOWPayments/shefu sees the payment
+    // Wait for on-chain confirmation so NOWPayments/shefu sees the payment
     const receipt = await tx.wait(1);
     console.log(`[AutoDropship] USDT confirmed in block ${receipt.blockNumber}`);
 
@@ -242,8 +245,9 @@ export async function getSupplierOrderStatus(supplierOrderId) {
   }
 }
 
-export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty) {
+export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, options = {}) {
   if (!supplierOrderId) return { delivered: false, error: 'missing_supplier_order_id' };
+  const forceEmail = options.forceEmail === true;
 
   try {
     const supplierStatus = await getSupplierOrderStatus(supplierOrderId);
@@ -271,22 +275,36 @@ export async function checkAndFulfillSupplierOrder(supplierOrderId, orderId, use
           console.log(`[AutoDropship] Successfully redeemed into Steam token for ${orderId}`);
         }
 
+        let emailError = null;
         try {
           await updateOrderDeliveryInDb(orderId, finalToken);
-          const emailResult = await sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, [finalToken]);
+          const emailResult = await sendOrderEmail(
+            orderId,
+            userEmail,
+            priceRub,
+            cryptoAmount,
+            currency,
+            productName,
+            neededQty,
+            [finalToken],
+            { force: forceEmail }
+          );
           if (emailResult.success) {
             console.log(`[AutoDropship] Sent email for ${orderId}!`);
           } else {
+            emailError = emailResult.error || 'email_failed';
             console.error(`[AutoDropship] Email failed for ${orderId}:`, emailResult.error);
           }
         } catch (e) {
+          emailError = e.message;
           console.error(`[AutoDropship] Email dispatch error:`, e);
         }
 
         return {
           delivered: true,
           token: finalToken,
-          licenseKey: deliveredKey
+          licenseKey: deliveredKey,
+          emailError
         };
       }
     }

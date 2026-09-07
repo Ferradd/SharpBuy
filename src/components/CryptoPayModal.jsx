@@ -31,7 +31,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
   const isEn = lang === 'en';
   const [step, setStep] = useState('SETUP');
   const [email, setEmail] = useState('');
-  const [paymentMode, setPaymentMode] = useState('sbp'); // 'sbp', 'crypto', 'balance', 'owner_wallet'
+  const [paymentMode, setPaymentMode] = useState('crypto'); // 'crypto', 'balance', 'owner_wallet' (sbp removed)
   const [selectedCrypto, setSelectedCrypto] = useState('USDT_BEP20');
   const [quantity, setQuantity] = useState(1);
   const [order, setOrder] = useState(null);
@@ -295,46 +295,10 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
       return;
     }
 
-    // ── SBP / RUSSIAN BANK CARDS (CRYSTALPAY) MODE ──
+    // ── SBP / RUSSIAN BANK CARDS REMOVED - using crypto only ──
     if (paymentMode === 'sbp') {
-      try {
-        setIsChecking(true);
-        const priceRub = (product.price || 50) * quantity;
-        const res = await fetch(getApiUrl('/api/create-anypay-payment'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productId: product.id,
-            productName: isEn ? (product.englishTitle || product.cleanTitle || product.title) : (product.cleanTitle || product.title),
-            priceRub,
-            quantity,
-            email,
-            buyerTelegram: user?.telegram || ''
-          })
-        });
-
-        const data = await res.json();
-        if (!data.success) {
-          alert(data.error || 'Ошибка создания платежа AnyPay');
-          setIsChecking(false);
-          return;
-        }
-
-        setAnyPayInvoice(data);
-        setStep('PAYING_SBP');
-        setTimeLeft(3600);
-
-        if (data.url || data.paymentUrl) {
-          window.open(data.url || data.paymentUrl, '_blank');
-        }
-
-        startAnyPayPolling(data.invoiceId || data.orderId, data.orderId, priceRub);
-      } catch (err) {
-        console.error('AnyPay order error:', err);
-        alert(isEn ? 'Connection error with AnyPay' : 'Ошибка соединения с AnyPay');
-      } finally {
-        setIsChecking(false);
-      }
+      alert(isEn ? 'Bank card payment temporarily unavailable. Please use crypto or balance.' : 'Оплата картой временно недоступна. Используйте криптовалюту или баланс.');
+      setPaymentMode('crypto');
       return;
     }
 
@@ -383,6 +347,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
     }
   };
 
+  // AnyPay functions removed - SBP payment no longer supported
   const startAnyPayPolling = (invoiceId, orderId, priceRub) => {
     if (pollerRef.current) clearInterval(pollerRef.current);
     pollerRef.current = setInterval(async () => {
@@ -767,20 +732,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
               <label className="mb-1 block font-mono text-[11px] text-white/70">
                 {isEn ? 'Payment method:' : 'Способ оплаты:'}
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                <div
-                  onClick={() => setPaymentMode('sbp')}
-                  className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-xl border transition-all cursor-pointer ${
-                    paymentMode === 'sbp'
-                      ? 'border-[#10b981] bg-[#10b981]/15 font-bold text-white shadow-[0_0_12px_rgba(16,185,129,0.3)]'
-                      : 'border-white/[0.08] bg-black/40 text-white/60 hover:border-white/20'
-                  }`}
-                >
-                  <span className="text-xs">⚡</span>
-                  <span className="text-[11px] font-sans font-bold leading-tight">{isEn ? 'SBP / Cards' : 'СБП / Карты'}</span>
-                  <span className="text-[9px] font-mono text-[#10b981] font-bold">0% РФ 🇷🇺</span>
-                </div>
-
+              <div className="grid grid-cols-2 gap-2">
                 <div
                   onClick={() => setPaymentMode('crypto')}
                   className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-xl border transition-all cursor-pointer ${
@@ -869,7 +821,7 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
           </form>
         )}
 
-        {/* ── STEP 1.5: LIVE PROCURING & AUTOMATED PROVISIONING SCREEN ── */}
+        {/* ── SBP PAYMENT SCREEN REMOVED - not supported anymore ── */}
         {step === 'PROCURING' && (
           <div className="space-y-6 py-4 text-center">
             {/* Animated Radar Icon */}
@@ -957,72 +909,6 @@ export const CryptoPayModal = ({ product, isOpen, onClose }) => {
                 ? 'Payment received. Waiting for supplier to release the account (usually 1–5 min, sometimes up to 15). Token + email arrive automatically.'
                 : 'Оплата получена. Ждём выдачу аккаунта от поставщика (обычно 1–5 мин, иногда до 15). Токен и email придут автоматически.'}
             </p>
-          </div>
-        )}
-
-        {/* ── STEP 2: SBP / BANK CARDS CRYSTALPAY INVOICE ── */}
-        {step === 'PAYING_SBP' && anyPayInvoice && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] text-white text-xl shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                  ⚡
-                </div>
-                <div>
-                  <div className="font-mono text-[10px] text-white/40">{isEn ? 'SBP / RUSSIAN BANK CARDS' : 'СБП / КАРТЫ РФ (МИР, VISA, MC)'}</div>
-                  <div className="font-sans font-bold text-sm text-white">AnyPay #{anyPayInvoice.orderId}</div>
-                </div>
-              </div>
-              <div className="text-right font-mono">
-                <div className="text-[10px] text-white/40">{isEn ? 'SUM TO PAY:' : 'К ОПЛАТЕ:'}</div>
-                <div className="text-base font-black text-[#10b981]">{anyPayInvoice.amountRub} ₽</div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/[0.08] bg-black/50 p-4 text-center space-y-4">
-              <div className="space-y-1">
-                <div className="font-sans font-bold text-sm text-white">
-                  {isEn ? 'Payment window opened in a new tab' : 'Страница оплаты открыта в новой вкладке'}
-                </div>
-                <div className="font-mono text-xs text-white/60">
-                  {isEn 
-                    ? 'Complete payment via SBP QR-code or any Russian Bank Card.'
-                    : 'Оплатите по QR-коду СБП через приложение любого банка РФ или банковской картой.'}
-                </div>
-              </div>
-
-              <a
-                href={anyPayInvoice.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#10b981] to-[#059669] py-3 font-mono text-xs font-black uppercase text-white hover:shadow-[0_0_25px_rgba(16,185,129,0.45)] transition-all cursor-pointer"
-              >
-                <span>{isEn ? 'OPEN PAYMENT PAGE ↗' : 'ПЕРЕЙТИ К ОПЛАТЕ СБП / КАРТОЙ ↗'}</span>
-              </a>
-
-              <div className="flex items-center justify-center gap-2 font-mono text-xs text-amber-300 bg-amber-400/10 border border-amber-400/20 py-2 px-3 rounded-xl animate-pulse">
-                <span>⏳</span>
-                <span>{isEn ? 'Waiting for payment confirmation from bank...' : 'Ожидание зачисления средств... Автовыдача через 3 сек.'}</span>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => checkAnyPayManual()}
-                disabled={isChecking}
-                className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-xs font-bold text-white hover:bg-white/10 transition-all cursor-pointer"
-              >
-                {isChecking ? (isEn ? 'CHECKING...' : 'ПРОВЕРКА...') : (isEn ? 'VERIFY PAYMENT' : 'ПРОВЕРИТЬ ОПЛАТУ')}
-              </button>
-              <button
-                type="button"
-                onClick={() => { if (pollerRef.current) clearInterval(pollerRef.current); setStep('SETUP'); }}
-                className="rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 font-mono text-xs text-white/50 hover:text-white transition-all cursor-pointer"
-              >
-                {isEn ? 'Back' : 'Назад'}
-              </button>
-            </div>
           </div>
         )}
 

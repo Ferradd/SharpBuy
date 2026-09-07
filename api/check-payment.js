@@ -3,46 +3,10 @@ import path from 'path';
 import { ethers } from 'ethers';
 import { initiateDropshipPurchase, checkAndFulfillSupplierOrder, redeemShefuKey } from './_utils/shefu-dropship.js';
 import { saveOrderToDb, getAllOrders, updateOrderDeliveryInDb } from './_utils/orders-db.js';
-import { claimLocalStockToken } from './_utils/local-stock-manager.js';
 import { sendOrderEmail } from './_utils/email-sender.js';
 
-const STOCK_FALLBACK_MS = 30 * 1000;
-
-async function tryStockFallbackDelivery(orderId, meta) {
-  const stockToken = claimLocalStockToken(
-    meta.productId,
-    meta.productName,
-    orderId,
-    meta.email
-  );
-  if (!stockToken) return null;
-
-  await updateOrderDeliveryInDb(orderId, stockToken);
-  await sendOrderEmail(
-    orderId,
-    meta.email,
-    meta.priceRub,
-    meta.cryptoAmount,
-    meta.currency,
-    meta.productName,
-    meta.quantity || 1,
-    [stockToken]
-  );
-
-  const deliveredData = {
-    quantity: meta.quantity || 1,
-    tokens: [stockToken],
-    tokenData: stockToken,
-    status: 'DELIVERED',
-    launcherUrl: '/SharpBuy_Launcher.exe',
-    launcherName: 'SharpBuy_Launcher.exe',
-    instructions:
-      '1. Скачайте лаунчер SharpBuy_Launcher.exe\n2. Запустите лаунчер и вставьте ваш токен аккаунта\n3. Нажмите Вход — Steam откроется с активным Prime!'
-  };
-
-  console.log(`[StockFallback] Delivered ${orderId} from warehouse (shefu slow)`);
-  return { deliveredData, stockToken, stockFallback: true };
-}
+// Stock/warehouse fallback is DISABLED for dropship products.
+// Fake warehouse accounts must never be handed out while shefu is still fulfilling.
 
 // ============================================================================
 // SHARPBUY SECURE CRYPTO PAYMENT VERIFIER & DISPATCHER
@@ -352,16 +316,14 @@ export default async function handler(req, res) {
               const currentBalance = Number(BigInt(rpcJson.result)) / 1e18;
               
               let isThresholdMet = false;
-              if (isMainWallet) {
-                if (initBal > 0) {
-                  isThresholdMet = (currentBalance >= (initBal + expAmt - 0.02));
-                } else {
-                  // Without baseline we cannot detect a new deposit — prevents false positives
-                  isThresholdMet = false;
-                  console.warn(`[PaymentCheck] Order ${orderId}: missing initialBalance — cannot verify USDT deposit`);
-                }
+              if (isMainWallet && initBal > 0) {
+                // Simplified delta tracking for main wallet
+                isThresholdMet = (currentBalance >= (initBal + expAmt - 0.02));
+                console.log(`[PaymentCheck] Main wallet delta: ${currentBalance} >= ${initBal + expAmt - 0.02} = ${isThresholdMet}`);
               } else {
-                isThresholdMet = (currentBalance >= (expAmt - 0.05));
+                // For child wallets or without baseline, simple threshold
+                isThresholdMet = (currentBalance >= (expAmt - 0.01));
+                console.log(`[PaymentCheck] Simple threshold: ${currentBalance} >= ${expAmt - 0.01} = ${isThresholdMet}`);
               }
               
               if (isThresholdMet) {
@@ -519,37 +481,8 @@ export default async function handler(req, res) {
               });
             }
 
-            // Stock fallback: if shefu pending >90s, deliver from warehouse so client isn't stuck
-            const paidAtMs = existingOrder.paidAt ? new Date(existingOrder.paidAt).getTime() : 0;
-            const ageMs = paidAtMs ? Date.now() - paidAtMs : 0;
-            if (ageMs >= STOCK_FALLBACK_MS) {
-              const fallback = await tryStockFallbackDelivery(orderId, {
-                productId: existingOrder.productId,
-                productName: existingOrder.productName,
-                email: req.body.email || existingOrder.email,
-                priceRub: req.body.priceRub || existingOrder.amountRub,
-                cryptoAmount: expectedAmount || existingOrder.cryptoAmount,
-                currency: symbol || currency || existingOrder.currency,
-                quantity: quantity || existingOrder.quantity || 1
-              });
-              if (fallback) {
-                fulfilledOrdersCache.set(orderId, {
-                  txHash: existingOrder.txHash || txHash,
-                  supplierOrderId: effectiveSupplierOrderId,
-                  delivery: fallback.deliveredData,
-                  status: 'DELIVERED'
-                });
-                return res.status(200).json({
-                  paid: true,
-                  status: 'DELIVERED',
-                  txHash: existingOrder.txHash || txHash,
-                  supplierOrderId: effectiveSupplierOrderId,
-                  delivery: fallback.deliveredData,
-                  orderId,
-                  stockFallback: true
-                });
-              }
-            }
+            // NEVER deliver warehouse/fake accounts while waiting on supplier.
+            // Keep PROCURING until shefu key is redeemed into a real Steam token.
 
             // ⚠️ CRITICAL: Supplier not yet delivered — return PROCURING and STOP.
             // Do NOT fall through to create a new dropship order!
@@ -606,12 +539,12 @@ export default async function handler(req, res) {
           const checkRes = await checkAndFulfillSupplierOrder(
             cached.supplierOrderId,
             orderId,
-            req.body.email || 'iliykuzin2@gmail.com',
-            req.body.priceRub || 89,
+            req.body.email || cached.email,
+            req.body.priceRub || cached.amountRub,
             expectedAmount,
-            symbol || currency || 'USDT (BEP-20)',
-            req.body.productName || 'CS2 Premier Ready',
-            quantity || 1
+            symbol || currency || cached.currency,
+            req.body.productName || cached.productName,
+            quantity || cached.quantity
           );
 
           if (checkRes && checkRes.delivered && checkRes.token) {
@@ -642,7 +575,10 @@ export default async function handler(req, res) {
       }
 
       const neededQty = Math.max(1, parseInt(quantity, 10) || 1);
-      const userEmail = req.body.email || 'iliykuzin3@gmail.com';
+      const userEmail = req.body.email;
+      if (!userEmail || !userEmail.includes('@')) {
+        return res.status(400).json({ error: 'Valid email is required for order fulfillment' });
+      }
       const supplierSlug = mapToSupplierSlug(req.body.productId, req.body.productName);
 
       // ========================================================================
@@ -654,7 +590,7 @@ export default async function handler(req, res) {
 
       console.log(`[PaymentConfirmed] Initiating direct dropship purchase from supplier for order ${orderId}...`);
       try {
-        const dropshipRes = await initiateDropshipPurchase(supplierSlug, 'iliykuzin2@gmail.com');
+        const dropshipRes = await initiateDropshipPurchase(supplierSlug, userEmail);
         if (dropshipRes && dropshipRes.success && dropshipRes.supplierOrderId) {
           isProcuring = true;
           createdSupplierOrderId = dropshipRes.supplierOrderId;
@@ -717,49 +653,7 @@ export default async function handler(req, res) {
             if (attempt < 5) await new Promise((r) => setTimeout(r, 4000));
           }
 
-          // Supplier paid but slow — deliver from warehouse immediately so client isn't stuck
-          const fallback = await tryStockFallbackDelivery(orderId, {
-            productId: req.body.productId,
-            productName: req.body.productName || 'CS2 Premier Ready Instant Competitive',
-            email: userEmail,
-            priceRub: req.body.priceRub || neededQty * 89,
-            cryptoAmount: expectedAmount,
-            currency: symbol || currency || 'USDT (BEP-20)',
-            quantity: neededQty
-          });
-          if (fallback) {
-            fulfilledOrdersCache.set(orderId, {
-              txHash: txHash || dropshipRes.txHash || '0xCONFIRMED_BSC_TX',
-              supplierOrderId: createdSupplierOrderId,
-              delivery: fallback.deliveredData,
-              status: 'DELIVERED'
-            });
-            try {
-              saveOrderToDb({
-                orderId,
-                email: userEmail,
-                productId: req.body.productId || 'premier',
-                productName: req.body.productName || 'CS2 Premier Ready Instant Competitive',
-                quantity: neededQty,
-                amountRub: req.body.priceRub || neededQty * 89,
-                cryptoAmount: expectedAmount,
-                currency: symbol || currency || 'USDT (BEP-20)',
-                txHash: txHash || dropshipRes.txHash || '0xCONFIRMED_BSC_TX',
-                tokens: [fallback.stockToken],
-                supplierOrderId: createdSupplierOrderId,
-                warrantyHours: 3
-              });
-            } catch (dbErr) {}
-            return res.status(200).json({
-              paid: true,
-              status: 'DELIVERED',
-              txHash: txHash || dropshipRes.txHash,
-              supplierOrderId: createdSupplierOrderId,
-              delivery: fallback.deliveredData,
-              orderId,
-              stockFallback: true
-            });
-          }
+          // No warehouse fallback. Wait for real supplier key (background worker + client poll).
         } else if (dropshipRes && !dropshipRes.success) {
           dropshipError = dropshipRes.error;
         }
