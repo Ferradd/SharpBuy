@@ -60,6 +60,7 @@ export default async function keepaliveHandler(req, res) {
     service: 'sharpbuy',
     visitor,
     fulfillment,
+    emailConfigured: Boolean(process.env.RESEND_API_KEY),
     uptimeSec: Math.floor(process.uptime()),
   });
 }
