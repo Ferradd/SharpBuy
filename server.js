@@ -21,9 +21,7 @@ import keepaliveHandler from './api/keepalive.js';
 import resendOrderEmailHandler from './api/resend-order-email.js';
 import accountLibraryHandler from './api/account-library.js';
 import syncShefuStockHandler from './api/sync-shefu-stock.js';
-import arbitrageCronHandler from './api/arbitrage-cron.js';
 import testEmailHandler from './api/test-email.js';
-import { startArbitrageCron } from './api/_utils/arbitrage-worker.js';
 import { startFulfillmentCron } from './api/_utils/fulfillment-worker.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -54,7 +52,6 @@ app.all('/api/keepalive', (req, res) => keepaliveHandler(req, res));
 app.post('/api/resend-order-email', (req, res) => resendOrderEmailHandler(req, res));
 app.all('/api/account-library', (req, res) => accountLibraryHandler(req, res));
 app.all('/api/sync-shefu-stock', (req, res) => syncShefuStockHandler(req, res));
-app.all('/api/arbitrage-cron', (req, res) => arbitrageCronHandler(req, res));
 app.all('/api/test-email', (req, res) => testEmailHandler(req, res));
 
 // Verification Routes
@@ -88,8 +85,6 @@ app.listen(PORT, () => {
   console.log(`🌐 Откройте в браузере: http://localhost:${PORT}`);
   console.log(`======================================================\n`);
 
-  // Start 5h 55m background arbitrage sniper
-  startArbitrageCron();
   // Deliver stuck PROCURING orders even if client closed checkout tab
   startFulfillmentCron(15_000);
 });
