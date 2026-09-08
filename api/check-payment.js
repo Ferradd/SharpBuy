@@ -3,7 +3,7 @@ import path from 'path';
 import { ethers } from 'ethers';
 import { initiateDropshipPurchase, checkAndFulfillSupplierOrder, redeemShefuKey } from './_utils/shefu-dropship.js';
 import { saveOrderToDb, getAllOrders, updateOrderDeliveryInDb } from './_utils/orders-db.js';
-import { sendOrderEmail } from './_utils/email-sender.js';
+import { sendOrderEmail, sendPreliminaryEmail } from './_utils/email-sender.js';
 
 // Stock/warehouse fallback is DISABLED for dropship products.
 // Fake warehouse accounts must never be handed out while shefu is still fulfilling.
@@ -613,6 +613,26 @@ export default async function handler(req, res) {
               warrantyHours: 3
             });
           } catch (dbErr) {}
+
+          // Send preliminary confirmation email to client immediately
+          try {
+            const preliminaryEmailResult = await sendPreliminaryEmail(
+              orderId,
+              userEmail,
+              req.body.priceRub || (neededQty * 89),
+              expectedAmount,
+              symbol || currency || 'USDT (BEP-20)',
+              req.body.productName || 'CS2 Premier Ready Instant Competitive',
+              neededQty
+            );
+            if (preliminaryEmailResult.success) {
+              console.log(`[PaymentConfirmed] Preliminary email sent to client for order ${orderId}`);
+            } else {
+              console.error(`[PaymentConfirmed] Preliminary email failed for ${orderId}:`, preliminaryEmailResult.error);
+            }
+          } catch (emailErr) {
+            console.error(`[PaymentConfirmed] Preliminary email dispatch error:`, emailErr);
+          }
 
           // Poll supplier right after on-chain USDT confirm (up to ~24s)
           for (let attempt = 0; attempt < 6; attempt++) {

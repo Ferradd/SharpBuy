@@ -79,6 +79,147 @@ async function sendWithRetry(apiCall, orderId, maxRetries = 3) {
   return { success: false, error: lastError || 'Max retries exceeded' };
 }
 
+export async function sendPreliminaryEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty) {
+  const startTime = Date.now();
+
+  logEmailEvent('info', orderId, 'Starting preliminary email send process', {
+    userEmail,
+    productName,
+    priceRub
+  });
+
+  if (!userEmail || !userEmail.includes('@')) {
+    logEmailEvent('error', orderId, 'Invalid recipient email', { userEmail });
+    return { success: false, error: 'invalid_email' };
+  }
+
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) {
+    logEmailEvent('error', orderId, 'RESEND_API_KEY not configured');
+    return { success: false, error: 'missing_resend_key' };
+  }
+
+  const apiCall = async () => {
+    const apiStartTime = Date.now();
+    
+    try {
+      logEmailEvent('info', orderId, 'Sending preliminary request to Resend API');
+      
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'SharpBuy Orders <orders@sharpbuy.org>',
+          to: [userEmail],
+          subject: `Заказ #${orderId} принят - обрабатывается - SharpBuy`,
+          html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 20px; background-color: #08090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #f3f1ec;">
+            <div style="max-width: 580px; margin: 0 auto; background-color: #101216; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+              
+              <div style="background: linear-gradient(135deg, #181b22, #0d0f13); padding: 30px 24px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <h1 style="margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 2px; color: #ffffff;">
+                  SHARP<span style="color: #e8583a;">BUY</span>.ORG
+                </h1>
+                <p style="margin: 6px 0 0 0; font-size: 12px; color: #8a94a6; text-transform: uppercase; letter-spacing: 1px;">
+                  Премиум Маркетплейс Игровых Товаров
+                </p>
+              </div>
+
+              <div style="padding: 24px;">
+                <div style="background: rgba(232, 88, 58, 0.08); border: 1px solid rgba(232, 88, 58, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                  <div style="font-size: 16px; font-weight: 800; color: #e8583a; margin-bottom: 4px;">
+                    ⏳ Заказ принят &middot; Обрабатывается
+                  </div>
+                  <div style="font-size: 13px; color: #c4cdd5;">
+                    Заказ: <strong style="color: #ffffff;">#${orderId}</strong> &middot; Сумма: <strong style="color: #e8583a;">${priceRub} ₽ (${cryptoAmount} ${currency})</strong>
+                  </div>
+                  <div style="font-size: 13px; color: #c4cdd5; margin-top: 4px;">
+                    Товар: <strong style="color: #ffffff;">${productName}</strong> (x${neededQty})
+                  </div>
+                </div>
+
+                <div style="background: #14171f; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                  <div style="font-size: 13px; font-weight: 800; color: #ffffff; margin-bottom: 12px;">
+                    ЧТО ПРОИСХОДИТ:
+                  </div>
+                  <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #a4b1cd; line-height: 1.7;">
+                    <li>✅ Ваша оплата успешно получена</li>
+                    <li>⏳ Мы заказываем товар у поставщика</li>
+                    <li>📧 Ключ активации придет на этот email в течение 1-3 минут</li>
+                    <li>🎮 После получения ключа вы сможете войти в Steam</li>
+                  </ol>
+                </div>
+
+                <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
+                  <div style="font-size: 14px; font-weight: 900; color: #34d399; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                    Ожидайте письмо с ключом
+                  </div>
+                  <div style="font-size: 12px; color: #a4b1cd;">
+                    Обычно занимает 1-3 минуты. Если письмо не пришло в течение 10 минут — проверьте папку Спам.
+                  </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08);">
+                  <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
+                    ID заказа: ${orderId}
+                  </div>
+                  <div style="font-size: 11px; color: #64748b;">
+                    SharpBuy.org &middot; Premium Gaming Marketplace
+                  </div>
+                </div>
+              </div>
+            </div>
+          </body>
+          </html>
+          `
+        })
+      });
+
+      const apiEndTime = Date.now();
+      const apiDuration = apiEndTime - apiStartTime;
+      
+      logEmailEvent('info', orderId, 'Resend API response received', {
+        status: res.status,
+        duration: apiDuration
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        logEmailEvent('error', orderId, 'Resend API error', {
+          status: res.status,
+          error: errorData
+        });
+        return { success: false, error: `API error: ${res.status}` };
+      }
+
+      const data = await res.json();
+      const totalDuration = Date.now() - startTime;
+      
+      logEmailEvent('info', orderId, 'Preliminary email sent successfully', {
+        resendId: data.id,
+        totalDuration
+      });
+
+      return { success: true, id: data.id, duration: totalDuration };
+      
+    } catch (error) {
+      logEmailEvent('error', orderId, 'Fetch error', { error: error.message });
+      return { success: false, error: error.message };
+    }
+  };
+
+  return await sendWithRetry(apiCall, orderId);
+}
+
 export async function sendOrderEmail(orderId, userEmail, priceRub, cryptoAmount, currency, productName, neededQty, tokens, options = {}) {
   const startTime = Date.now();
   const force = options.force === true;

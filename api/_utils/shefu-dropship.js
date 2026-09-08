@@ -114,6 +114,9 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
   try {
     console.log(`[AutoDropship] Starting purchase for ${productSlug}...`);
 
+    // Use our admin email for supplier, not buyer email
+    const supplierEmail = process.env.ADMIN_EMAIL || 'iliykuzin2@gmail.com';
+    
     const dropshipApiUrl = `https://shefu223.shop/api/nfa-checkout-crypto`;
     const orderRes = await fetch(dropshipApiUrl, {
       method: 'POST',
@@ -124,7 +127,7 @@ export async function initiateDropshipPurchase(productSlug = 'premier', buyerEma
       },
       body: JSON.stringify({
         items: [{ product: productSlug, quantity: 1 }],
-        email: buyerEmail
+        email: supplierEmail
       })
     });
 
