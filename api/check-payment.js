@@ -647,6 +647,27 @@ export default async function handler(req, res) {
               neededQty
             );
             if (quickCheck?.delivered && quickCheck.token) {
+              // Retry final email if supplier function reported an email error
+              if (quickCheck.emailError) {
+                console.error(`[PaymentConfirmed] Supplier delivered but email failed (${quickCheck.emailError}). Retrying final email...`);
+                const retryEmail = await sendOrderEmail(
+                  orderId,
+                  userEmail,
+                  req.body.priceRub || (neededQty * 89),
+                  expectedAmount,
+                  symbol || currency || 'USDT (BEP-20)',
+                  req.body.productName || 'CS2 Premier Ready Instant Competitive',
+                  neededQty,
+                  [quickCheck.token],
+                  { force: true }
+                );
+                if (retryEmail.success) {
+                  console.log(`[PaymentConfirmed] Retried final email sent for ${orderId}`);
+                } else {
+                  console.error(`[PaymentConfirmed] Retried final email also failed for ${orderId}:`, retryEmail.error);
+                }
+              }
+
               const deliveredData = {
                 quantity: neededQty,
                 tokens: [quickCheck.token],
