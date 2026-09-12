@@ -199,7 +199,7 @@ export const InstructionsPage = ({ onNavigate }) => {
                         {lang === 'ru' ? 'СКАЧАТЬ ДЛЯ MAC' : 'DOWNLOAD FOR MAC'}
                       </div>
                       <div className="font-mono text-[11px] text-white/50">
-                        {lang === 'ru' ? 'DMG · Apple Silicon · ~5 MB' : 'DMG · Apple Silicon · ~5 MB'}
+                        {lang === 'ru' ? 'DMG · Apple Silicon · ~87 MB (Electron + Chromium)' : 'DMG · Apple Silicon · ~87 MB (Electron + Chromium)'}
                       </div>
                     </div>
                   </div>
@@ -207,6 +207,21 @@ export const InstructionsPage = ({ onNavigate }) => {
                     &rarr;
                   </span>
                 </a>
+
+                <div className="rounded-xl border border-[#E8583A]/30 bg-[#E8583A]/5 p-3">
+                  <div className="flex items-start gap-2">
+                    <svg className="h-4 w-4 mt-0.5 shrink-0 text-[#E8583A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <div className="font-sans text-[10px] text-white/70 leading-relaxed">
+                      {lang === 'ru'
+                        ? 'Mac версия использует Electron с встроенным Chromium для полной совместимости с Windows. Размер ~87 MB (приложение ~234 MB) — это нормально для Electron.'
+                        : 'Mac version uses Electron with embedded Chromium for full Windows compatibility. Size ~87 MB (app ~234 MB) — normal for Electron.'}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

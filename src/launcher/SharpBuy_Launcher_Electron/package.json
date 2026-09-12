@@ -23,6 +23,7 @@
     "appId": "org.sharpbuy.launcher",
     "productName": "SharpBuy Launcher",
     "asar": true,
+    "compression": "maximum",
     "files": [
       "main.js",
       "preload.js",
@@ -44,7 +45,7 @@
       "target": ["dmg"],
       "icon": "build/icon.icns",
       "category": "public.app-category.utilities",
-      "artifactName": "SharpBuy Launcher-${version}-${arch}.${ext}"
+      "artifactName": "SharpBuy Launcher-${version}-macOS-${arch}.${ext}"
     },
     "dmg": {
       "title": "SharpBuy Launcher",

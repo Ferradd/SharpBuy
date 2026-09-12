@@ -1,16 +1,50 @@
-# React + Vite
+# SharpBuy NFA Launcher
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+SharpBuy - сервис для покупки и управления Steam NFA (Non-Full Access) аккаунтов.
 
-Currently, two official plugins are available:
+## macOS Launcher
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Для macOS доступен Electron-версия лаунчера со встроенным браузером:
 
-## React Compiler
+- **Размер**: ~234 MB (встроенный Chromium)
+- **Платформа**: macOS 12.0+
+- **Архитектура**: arm64 (Apple Silicon)
+- **Функционал**: Внедрение Steam токенов, управление аккаунтами, проверка валидности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Скачивание
 
-## Expanding the Oxlint configuration
+Скачайте DMG с сайта SharpBuy (https://sharpbuy.org) в разделе инструкции.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### Особенности
+
+- Использует Electron (Chromium + Node.js) для кроссплатформенности
+- Встроенный браузер обеспечивает полную совместимость с Windows версией
+- Шифрование AES-256-CBC для macOS Steam сессий
+- Полная визуализация как в Windows версии
+
+### Важно о размере
+
+Приложение весит ~234 MB из-за встроенного Chromium в Electron. Это стандартный размер для Electron приложений. Tauri альтернатива (~8 MB) была протестирована, но имеет проблемы с визуализацией.
+
+### Установка
+
+1. Скачайте DMG файл из Releases
+2. Откройте DMG файл
+3. Перетащите `SharpBuy Launcher.app` в папку Applications
+4. Запустите приложение
+
+### Разработка
+
+## Backend API
+- **Framework**: Next.js
+- **Runtime**: Node.js
+- **Database**: Vercel Blob
+- **Payments**: NowPayments (USDT BEP-20)
+
+## Launcher
+- **Windows**: C# + WebView2
+- **macOS**: Electron (JavaScript + Node.js)
+- **Backend**: SharpBuy API
+
+## License
+Private - All rights reserved

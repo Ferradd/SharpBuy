@@ -64,3 +64,18 @@ Switched from Tauri (5MB, not working) to Electron (~200MB):
 - Correct AES-256-CBC encryption
 - Full logic matching Windows version
 - HTML interface as intended
+
+## GitHub Distribution Phase
+Current task: Deploy working Electron launcher to GitHub and update website
+
+Progress:
+- [x] Built Electron DMG: `SharpBuy Launcher-1.0.0-macOS-arm64.dmg` (~87 MB)
+- [x] App size: ~234 MB (Chromium bundled)
+- [x] Updated README.md with download instructions
+- [ ] Create GitHub Release and upload DMG
+- [ ] Update website Mac download link to GitHub Release asset
+- [ ] Add Electron/Chromium size warning on website
+- [ ] Verify download URL works
+- [ ] Test website build
+
+User preference: Use working Electron app from Desktop, NOT the broken Tauri version.
