@@ -16,7 +16,7 @@
     "build:dmg": "npm run prebuild && electron-builder --mac dmg && node scripts/sign-app.js"
   },
   "devDependencies": {
-    "electron": "^33.2.1",
+    "electron": "^33.4.11",
     "electron-builder": "^25.1.8"
   },
   "build": {

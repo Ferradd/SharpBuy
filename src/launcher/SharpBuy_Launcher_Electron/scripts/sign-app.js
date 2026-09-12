@@ -8,12 +8,20 @@ const appPath = path.join(__dirname, '..', 'dist', 'mac-arm64', 'SharpBuy Launch
 console.log('Ad-hoc signing application...');
 
 try {
+  // Remove all extended attributes first
+  console.log('Removing extended attributes...');
+  execSync(`xattr -cr "${appPath}"`, { stdio: 'inherit' });
+
   // Use ad-hoc signing (no certificate needed)
   console.log('Signing application with ad-hoc identity...');
   execSync(
     `codesign --force --deep --sign - "${appPath}"`,
     { stdio: 'inherit' }
   );
+
+  // Remove provenance again after signing
+  console.log('Removing provenance after signing...');
+  execSync(`xattr -d com.apple.provenance "${appPath}" 2>/dev/null || true`, { stdio: 'inherit' });
 
   // Verify signature
   execSync(`codesign -v "${appPath}"`, { stdio: 'inherit' });

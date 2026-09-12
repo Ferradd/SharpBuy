@@ -104,3 +104,29 @@ Fix: Added electron-builder hook to remove attributes after build
 - Runs xattr -cr on .app before DMG creation
 - Commit: a0d5981
 Users can now open app without Gatekeeper blocking
+
+## Ad-hoc Code Signing
+Issue: Application still rejected by Gatekeeper (spctl --assess rejected)
+Fix: Added ad-hoc code signing with provenance removal
+- Created scripts/sign-app.js for ad-hoc signing
+- Integrated into build:dmg workflow
+- Removes all extended attributes before signing
+- Signs with ad-hoc identity (no certificate required)
+- Removes provenance after signing again
+- Commit: 25ec2e4
+
+## Current Issue
+Application builds and signs successfully but does not launch when opened via Finder or terminal:
+- Direct executable launch exits silently (exit code 0)
+- No visible window or process
+- No error messages in logs
+- Asar extraction shows correct main.js code
+- Electron version: 33.4.11 (Node v20.18.3)
+- Development mode fails with "app is undefined" error
+- Possibly Electron binary corruption or configuration issue
+
+## Next Steps
+- Investigate why Electron executable fails to launch
+- Check Electron binary integrity
+- Test with fresh Electron installation
+- Consider switching to prebuilt Electron binary instead of npm package
