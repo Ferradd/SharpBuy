@@ -1,11 +1,32 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import fs from 'fs'
+import path from 'path'
+
+// TEAM_001: Vite plugin to copy Electron DMG to dist if it exists
+function copyElectronDMG() {
+  return {
+    name: 'copy-electron-dmg',
+    closeBundle() {
+      const sourcePath = 'src/launcher/SharpBuy_Launcher_Electron/dist/SharpBuy Launcher-1.0.0-macOS-arm64.dmg'
+      const destPath = 'dist/SharpBuy_Launcher.dmg'
+
+      if (fs.existsSync(sourcePath)) {
+        fs.copyFileSync(sourcePath, destPath)
+        console.log(`Copied Electron DMG to dist/SharpBuy_Launcher.dmg`)
+      } else {
+        console.log(`Warning: Electron DMG not found at ${sourcePath}, skipping copy`)
+      }
+    }
+  }
+}
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
     react(),
+    copyElectronDMG(),
     {
       name: 'shefu-stock-dev-middleware',
       configureServer(server) {
