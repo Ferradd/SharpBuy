@@ -13,7 +13,7 @@
     "dev": "electron .",
     "prebuild": "npm run patch-ui && npm run icons",
     "build": "electron-builder --mac dir",
-    "build:dmg": "npm run prebuild && electron-builder --mac dmg"
+    "build:dmg": "npm run prebuild && electron-builder --mac dmg && node scripts/sign-app.js"
   },
   "devDependencies": {
     "electron": "^33.2.1",

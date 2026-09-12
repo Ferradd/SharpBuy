@@ -94,3 +94,13 @@ Fix: Added Vite plugin to conditionally copy DMG only if it exists
 - Linux/Render builds skip Mac launcher without failing
 - Local macOS builds include Electron DMG as before
 - Commit: f9375d0
+
+## Gatekeeper Fix
+Issue: macOS Gatekeeper blocked app with "damaged" error
+Cause: com.apple.provenance attribute on all files in app bundle
+Fix: Added electron-builder hook to remove attributes after build
+- Created scripts/clean-attributes.js
+- Configured afterAllArtifactBuild hook
+- Runs xattr -cr on .app before DMG creation
+- Commit: a0d5981
+Users can now open app without Gatekeeper blocking
