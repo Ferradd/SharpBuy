@@ -50,6 +50,7 @@
     "dmg": {
       "title": "SharpBuy Launcher",
       "icon": "build/icon.icns"
-    }
+    },
+    "afterAllArtifactBuild": "scripts/clean-attributes.js"
   }
 }
