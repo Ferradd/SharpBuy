@@ -20,7 +20,10 @@ type Aes256CbcDec = cbc::Decryptor<Aes256>;
 
 const DEFAULT_STEAM_APP: &str = "/Applications/Steam.app";
 
-static STEAM_PATH: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new(detect_steam_path()));
+static STEAM_PATH: Lazy<Mutex<String>> = Lazy::new(|| {
+    println!("Initializing STEAM_PATH static variable");
+    Mutex::new(detect_steam_path())
+});
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ParsedToken {
@@ -48,23 +51,35 @@ pub fn steam_data_dir() -> PathBuf {
 
 fn detect_steam_path() -> String {
     let global_app = Path::new(DEFAULT_STEAM_APP);
+    println!("Checking global Steam path: {}", DEFAULT_STEAM_APP);
     if global_app.exists() {
+        println!("Found Steam at global path");
         return DEFAULT_STEAM_APP.to_string();
     }
     
     let user_app = dirs::home_dir()
         .unwrap_or_else(|| PathBuf::from("."))
         .join("Applications/Steam.app");
-        
+    
+    println!("Checking user Steam path: {}", user_app.display());
     if user_app.exists() {
+        println!("Found Steam at user path");
         return user_app.to_string_lossy().to_string();
     }
 
+    println!("Steam not found, using default: {}", DEFAULT_STEAM_APP);
     DEFAULT_STEAM_APP.to_string()
 }
 
 pub fn get_steam_path() -> String {
-    STEAM_PATH.lock().unwrap().clone()
+    let path = STEAM_PATH.lock().unwrap().clone();
+    println!("Returning Steam path: {}", path);
+    // Force macOS path for debugging
+    if path.contains("Program Files") || path.contains("\\") {
+        println!("Detected Windows path, forcing macOS path");
+        return "/Applications/Steam.app".to_string();
+    }
+    path
 }
 
 pub fn set_steam_path(p: String) {
@@ -275,7 +290,7 @@ fn update_login_users_vdf(
 \t\t"RememberPassword"\t\t"1"
 \t\t"WantsOfflineMode"\t\t"0"
 \t\t"SkipOfflineModeWarning"\t\t"0"
-\t\t"AllowAutoLogin"\t\t"1"
+\t\t"AutoLogin"\t\t"1"
 \t\t"MostRecent"\t\t"1"
 \t\t"Timestamp"\t\t"{timestamp}"
 \t}}
@@ -285,7 +300,7 @@ fn update_login_users_vdf(
         if let Some(users_idx) = content.find("\"users\"") {
             if let Some(open_brace) = content[users_idx..].find('{').map(|i| users_idx + i) {
                 let block = format!(
-                    "\n\t\"{steam_id}\"\n\t{{\n\t\t\"AccountName\"\t\t\"{account_name}\"\n\t\t\"PersonaName\"\t\t\"{account_name}\"\n\t\t\"RememberPassword\"\t\t\"1\"\n\t\t\"WantsOfflineMode\"\t\t\"0\"\n\t\t\"SkipOfflineModeWarning\"\t\t\"0\"\n\t\t\"AllowAutoLogin\"\t\t\"1\"\n\t\t\"MostRecent\"\t\t\"1\"\n\t\t\"Timestamp\"\t\t\"{timestamp}\"\n\t}}"
+                    "\n\t\"{steam_id}\"\n\t{{\n\t\t\"AccountName\"\t\t\"{account_name}\"\n\t\t\"PersonaName\"\t\t\"{account_name}\"\n\t\t\"RememberPassword\"\t\t\"1\"\n\t\t\"WantsOfflineMode\"\t\t\"0\"\n\t\t\"SkipOfflineModeWarning\"\t\t\"0\"\n\t\t\"AutoLogin\"\t\t\"1\"\n\t\t\"MostRecent\"\t\t\"1\"\n\t\t\"Timestamp\"\t\t\"{timestamp}\"\n\t}}"
                 );
                 content.insert_str(open_brace + 1, &block);
             }
@@ -359,6 +374,7 @@ fn steam_encrypt_mac(jwt: &str, account_name: &str) -> Result<String, String> {
 }
 
 pub fn inject_token_and_launch(raw_token: &str) -> LaunchResult {
+    println!("Starting token injection...");
     let parsed = parse_token(raw_token);
     let fail = |message: &str| LaunchResult {
         success: false,
@@ -366,6 +382,8 @@ pub fn inject_token_and_launch(raw_token: &str) -> LaunchResult {
         steam_id: parsed.steam_id.clone(),
         account_name: parsed.account_name.clone(),
     };
+
+    println!("Token parsed: valid={}, account={}, steam_id={}", parsed.valid, parsed.account_name, parsed.steam_id);
 
     if !parsed.valid {
         return fail("Invalid token format.");
@@ -378,45 +396,67 @@ pub fn inject_token_and_launch(raw_token: &str) -> LaunchResult {
     let hours = (parsed.seconds_remaining % 86400) / 3600;
     let mins = (parsed.seconds_remaining % 3600) / 60;
 
+    println!("Killing Steam processes...");
     kill_steam_processes();
     thread::sleep(Duration::from_millis(500));
 
+    println!("Encrypting token...");
     let encrypted_jwt_hex = match steam_encrypt_mac(&parsed.eya, &parsed.account_name) {
-        Ok(v) => v,
-        Err(e) => return fail(&format!("Encryption failed: {e}")),
+        Ok(v) => {
+            println!("Encryption successful, length: {}", v.len());
+            v
+        },
+        Err(e) => {
+            println!("Encryption failed: {}", e);
+            return fail(&format!("Encryption failed: {e}"));
+        },
     };
 
     let cfg = config_dir();
+    println!("Updating config.vdf at: {:?}", cfg.join("config.vdf"));
     if let Err(e) = update_config_vdf(&cfg.join("config.vdf"), &parsed.account_name, &parsed.steam_id) {
+        println!("config.vdf update failed: {}", e);
         return fail(&format!("Failed to update config.vdf: {e}"));
     }
+    println!("config.vdf updated successfully");
 
     let now = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs() as i64)
         .unwrap_or(0);
+    println!("Updating loginusers.vdf...");
     if let Err(e) = update_login_users_vdf(
         &cfg.join("loginusers.vdf"),
         &parsed.steam_id,
         &parsed.account_name,
         now,
     ) {
+        println!("loginusers.vdf update failed: {}", e);
         return fail(&format!("Failed to update loginusers.vdf: {e}"));
     }
+    println!("loginusers.vdf updated successfully");
 
     let crc32_key = format!("{}1", compute_crc32(&parsed.account_name));
+    println!("Updating local.vdf with CRC32 key: {}", crc32_key);
     if let Err(e) = update_local_vdf(&local_vdf_path(), &crc32_key, &encrypted_jwt_hex) {
+        println!("local.vdf update failed: {}", e);
         return fail(&format!("Failed to update local.vdf: {e}"));
     }
+    println!("local.vdf updated successfully");
 
     let steam_path = get_steam_path();
+    println!("Checking Steam path: {}", steam_path);
     if !Path::new(&steam_path).exists() {
+        println!("Steam not found at: {}", steam_path);
         return fail(&format!("Steam not found at: {steam_path}"));
     }
 
+    println!("Launching Steam...");
     if let Err(e) = launch_steam_app() {
+        println!("Steam launch failed: {}", e);
         return fail(&format!("Failed to launch Steam: {e}"));
     }
+    println!("Steam launched successfully");
 
     LaunchResult {
         success: true,

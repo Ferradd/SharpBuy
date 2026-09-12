@@ -1,0 +1,54 @@
+{
+  "name": "sharpbuy-launcher",
+  "version": "1.0.0",
+  "description": "SharpBuy NFA Launcher for macOS",
+  "main": "main.js",
+  "author": "SharpBuy",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "patch-ui": "node scripts/patch-ui-path.js",
+    "icons": "node scripts/make-icons.js",
+    "predev": "npm run patch-ui",
+    "dev": "electron .",
+    "prebuild": "npm run patch-ui && npm run icons",
+    "build": "electron-builder --mac dir",
+    "build:dmg": "npm run prebuild && electron-builder --mac dmg"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "org.sharpbuy.launcher",
+    "productName": "SharpBuy Launcher",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "ui",
+        "to": "ui",
+        "filter": ["**/*"]
+      }
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities",
+      "artifactName": "SharpBuy Launcher-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "title": "SharpBuy Launcher",
+      "icon": "build/icon.icns"
+    }
+  }
+}

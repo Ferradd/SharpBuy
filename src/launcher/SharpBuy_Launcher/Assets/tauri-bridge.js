@@ -25,7 +25,10 @@
       LaunchSteam: async function (tokenInput) {
         try {
           setStatus('loading', 'LOGGING IN TO STEAM...', 'Encrypting session and launching Steam client.');
-          var raw = await invoke('launch_steam', { tokenInput: tokenInput });
+          var raw = await Promise.race([
+            invoke('launch_steam', { tokenInput: tokenInput }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout launching Steam')), 30000))
+          ]);
           var result = typeof raw === 'string' ? JSON.parse(raw) : raw;
           if (result.success) {
             onLoginSuccess(
